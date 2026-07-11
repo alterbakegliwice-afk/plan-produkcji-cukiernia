@@ -1,0 +1,227 @@
+[
+  {
+    "id": "aut-01",
+    "nazwa": "Pierre Hermé",
+    "rola": "Pâtissier, Paryż",
+    "slynie_z": "\"Picasso patisserie\"; makaroniki i kolekcje smaków (Ispahan, Infiniment); haute couture w cukiernictwie",
+    "praktyka": "Planowanie kolekcjami sezonowymi ogłaszanymi z wyprzedzeniem (jak dom mody). Jeden smak-matka (np. Ispahan: róża-liczi-malina) jest deklinowany na wiele form: makaronik, tarta, croissant, ciastko. Dzięki temu jedna decyzja smakowa zasila kilkanaście SKU, a produkcja korzysta z tych samych baz.",
+    "zastosowanie": "Oliwia planuje 4 kolekcje rocznie i deklinuje 2-3 smaki przewodnie na istniejące formy (tarta, monoporcja, drożdżówka) zamiast wymyślać 18 osobnych produktów.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-02",
+    "nazwa": "Cédric Grolet",
+    "rola": "Szef cukierni Le Meurice, Paryż",
+    "slynie_z": "Owoce-trompe-l'oeil, kultowe kolejki, butiki z limitowaną dzienną produkcją",
+    "praktyka": "Produkcja dzienna w ściśle limitowanych partiach — sprzedaż do wyczerpania zamiast produkcji \"na zapas\". Brygada pracuje w blokach: rano montaż i glazurowanie, dzień wcześniej wkłady i mrożenie. Krótka karta (kilkanaście pozycji), perfekcyjnie powtarzalna.",
+    "zastosowanie": "Alterbake ustala dzienne limity na topowe SKU i komunikuje \"do wyczerpania\" — kontrolowany niedosyt zamiast strat; wkłady i inserty robione dzień wcześniej.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-03",
+    "nazwa": "Philippe Conticini",
+    "rola": "Pâtissier, Paryż; współtwórca Pâtisserie des Rêves",
+    "slynie_z": "Redefinicja klasyki francuskiej (Paris-Brest z wkładem pralinowym), architektura smaku warstwami",
+    "praktyka": "Rozbijanie deseru na moduły (biszkopt, krem, wkład, chrupka, glazura) i standaryzowanie każdego modułu jako osobnej receptury bazowej z tolerancjami. Moduły są produkowane niezależnie, magazynowane i składane na koniec — planowanie dotyczy modułów, nie gotowych ciastek.",
+    "zastosowanie": "Oliwia prowadzi plan produkcji na poziomie modułów (kremy, wkłady, spody), a nie gotowych SKU — jeden arkusz baz pokrywa całą witrynę.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-04",
+    "nazwa": "Christophe Michalak",
+    "rola": "Pâtissier, Paryż; mistrz świata cukiernictwa 2005",
+    "slynie_z": "Demokratyzacja patisserie, format \"fast good\" — desery wysokiej klasy przygotowywane szybko i prosto",
+    "praktyka": "Świadome upraszczanie: eliminowanie kroków, które nie wnoszą smaku ani wyglądu, i projektowanie deserów pod realny czas pracy zespołu. Receptura ma być wykonalna przez przeciętnego cukiernika w przewidywalnym czasie, nie tylko przez mistrza.",
+    "zastosowanie": "Każdy nowy produkt Alterbake przechodzi test: czy pomoc kuchenna wykona go po jednym przeszkoleniu? Jeśli nie — upraszczamy albo produkt zostaje sezonowym specjałem mistrza.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-05",
+    "nazwa": "Dominique Ansel",
+    "rola": "Pâtissier-przedsiębiorca, Nowy Jork",
+    "slynie_z": "Cronut (2013) — najgłośniejsza premiera produktu w historii cukiernictwa; kultura dropów i limitów",
+    "praktyka": "Pipeline innowacji w rytmie kalendarza: nowy smak Cronuta co miesiąc, ogłaszany z wyprzedzeniem; dzienne limity produkcji utrzymujące jakość i popyt. Nowości testowane w małej skali w \"kuchni eksperymentalnej\" zanim wejdą do produkcji.",
+    "zastosowanie": "Alterbake wprowadza \"produkt miesiąca\" z zapowiedzią w social mediach i dziennym limitem — jeden slot w planie produkcji zarezerwowany na rotującą nowość.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-06",
+    "nazwa": "Antonio Bachour",
+    "rola": "Pâtissier, Miami; tło hotelowe (St. Regis, Fontainebleau)",
+    "slynie_z": "Produkcja wolumenowa bez utraty finezji; mistrz form silikonowych i glazur lustrzanych; Best Pastry Chef 2018/2022",
+    "praktyka": "Strategiczne mrożenie jako oś planowania: monoporcje i wkłady produkowane w dużych partiach do form silikonowych, mrożone, potem glazurowane i wykańczane w dniu sprzedaży. Rozdziela \"dni produkcji\" od \"dni wykańczania\", co wygładza obciążenie zespołu.",
+    "zastosowanie": "Oliwia planuje 1-2 \"dni mroźnicze\" w tygodniu (duże partie wkładów i monoporcji do zamrażarki), a codziennie tylko wykańczanie — piec i ręce mistrza wolne na pieczywo świeże.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-07",
+    "nazwa": "Amaury Guichon",
+    "rola": "Pâtissier-chocolatier, Las Vegas; Pastry Academy",
+    "slynie_z": "Rzeźby czekoladowe i wiralowe wideo procesu; szkoła ucząca techniki krok po kroku",
+    "praktyka": "Ekstremalna dokumentacja procesu: każdy etap rozpisany, sfilmowany i rozłożony na kroki możliwe do nauczenia. Skomplikowany projekt dzieli na fazy z punktami kontrolnymi, dzięki czemu wielodniowa praca jest planowalna i przejmowalna przez uczniów.",
+    "zastosowanie": "Alterbake nagrywa telefonem krótkie wideo wzorcowego wykonania każdej bazy — biblioteka szkoleniowa skraca wdrożenie nowej pomocy z tygodni do dni.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-08",
+    "nazwa": "Johan Martin",
+    "rola": "Pâtissier-konsultant i szkoleniowiec (Bellouet Conseil), Paryż",
+    "slynie_z": "Wiennoiserie na poziomie mistrzowskim — laminowane croissanty, brioszki, konsulting dla cukierni na całym świecie",
+    "praktyka": "Planowanie wsteczne wielodniowych procesów laminacji: od godziny wypieku liczy się do tyłu przez garowanie, formowanie, składania i odpoczynek ciasta w chłodni. Harmonogram laminacji jest szkieletem tygodnia — reszta produkcji dokleja się do niego.",
+    "zastosowanie": "Croissanty i drożdżówki Alterbake mają stały 2-dniowy harmonogram wsteczny (D-1: ciasto i laminacja, D: formowanie-garowanie-wypiek), wpisany na stałe w plan tygodnia.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-09",
+    "nazwa": "Yann Couvreur",
+    "rola": "Pâtissier, Paryż (sieć butików bez zaplecza pałacowego)",
+    "slynie_z": "Patisserie \"instantanée\" — desery bez konserwantów, składane na oczach klienta, krótkie serie",
+    "praktyka": "Świeżość jako parametr planistyczny: produkty projektowane pod maksymalnie krótki czas życia w witrynie, produkcja w kilku małych rzutach dziennie zamiast jednego dużego rano. Mniej strat, witryna zawsze wygląda na żywą.",
+    "zastosowanie": "Zamiast jednej porannej produkcji, Alterbake robi drugi mini-rzut ok. 11:00 (dopiek drożdżówek, dokładanie monoporcji) — witryna pełna po południu bez porannej nadprodukcji.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-10",
+    "nazwa": "Jordi Roca",
+    "rola": "Szef deserów El Celler de Can Roca, Girona; najlepszy cukiernik świata 2014",
+    "slynie_z": "Awangardowe desery (zapachy, perfumy jadalne); Rocambolesc — przełożenie fine diningu na format uliczny",
+    "praktyka": "Zorganizowana kreatywność: osobny czas i przestrzeń na eksperymenty (warsztat kreatywny La Masia), oddzielone od bieżącej produkcji. Pomysł przechodzi formalną ścieżkę: koncept → prototyp → degustacja zespołu → dopiero potem karta.",
+    "zastosowanie": "W Alterbake eksperymenty mają swój slot (np. wtorek 13-15) i nie wolno ich robić \"przy okazji\" w środku produkcji — chroni to i produkcję, i kreatywność.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-11",
+    "nazwa": "William Curley",
+    "rola": "Chocolatier-pâtissier, Londyn; wielokrotnie najlepszy chocolatier Wielkiej Brytanii",
+    "slynie_z": "Mała manufaktura czekolady i patisserie najwyższej jakości prowadzona kilkuosobowym zespołem",
+    "praktyka": "Model małego zespołu premium: wąski asortyment robiony perfekcyjnie, produkcja pralin w partiach tygodniowych (dojrzewanie ganache to element planu), cross-training całego zespołu, żeby nieobecność jednej osoby nie zatrzymała produkcji.",
+    "zastosowanie": "Oliwia utrzymuje macierz kompetencji: każda z 18 pozycji ma co najmniej 2 osoby umiejące ją wykonać; urlop czy L4 nie wywraca tygodnia.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-12",
+    "nazwa": "Claire Saffitz",
+    "rola": "Autorka i edukatorka (ex-Bon Appétit), Nowy Jork",
+    "slynie_z": "\"Dessert Person\"; metodyczne testowanie receptur i tłumaczenie, dlaczego coś działa",
+    "praktyka": "Testowanie iteracyjne z notacją zmian: każda próba receptury ma zapisane, co zmieniono i jaki był efekt; receptura jest \"gotowa\" dopiero po powtórzeniu wyniku. Publikowana receptura zawiera znaki sensoryczne (jak ma wyglądać, pachnieć, sprężynować) zamiast samych liczb.",
+    "zastosowanie": "Karta testu nowego produktu w Alterbake: data, zmiana, wynik, zdjęcie; produkt wchodzi do witryny po 2 powtarzalnych próbach, nie po jednej udanej.",
+    "kategoria": "jakosc"
+  },
+  {
+    "id": "aut-13",
+    "nazwa": "Chad Robertson",
+    "rola": "Piekarz, Tartine Bakery, San Francisco",
+    "slynie_z": "\"Tartine Bread\"; chleb sprzedawany prosto z pieca po południu; kult świeżości i fermentacji",
+    "praktyka": "Odwrócenie doby piekarskiej pod moment sprzedaży: wypiek zaplanowany tak, by chleb trafiał do klienta w szczycie swojej jakości, a nie w szczycie wygody produkcji. Cała fermentacja liczona wstecz od godziny sprzedaży; produkcja dokładnie w ilości, która się sprzeda.",
+    "zastosowanie": "Alterbake planuje wypieki pod godziny szczytu sprzedaży (poranny 7-9 i popołudniowy 15-17), zamiast piec wszystko przed otwarciem.",
+    "kategoria": "piekarstwo"
+  },
+  {
+    "id": "aut-14",
+    "nazwa": "Apollonia Poilâne",
+    "rola": "CEO Poilâne, Paryż (3. pokolenie)",
+    "slynie_z": "Skalowanie rzemiosła bez industrializacji: \"retro-innowacja\", manufaktura, w której każdy piekarz odpowiada za bochenek od początku do końca",
+    "praktyka": "Skalowanie przez replikację jednostki rzemieślniczej zamiast taśmy: więcej kompletnych stanowisk mistrzowskich, nie podział pracy na mikroczynności. Jakość audytowana codziennie przez właściciela (Apollonia degustuje chleb każdego dnia).",
+    "zastosowanie": "Gdy Alterbake urośnie, dokłada drugi kompletny zespół zmianowy (mistrz + pomoc), a nie tnie pracy na taśmę; codzienna degustacja witryny przez Oliwię jako rytuał jakości.",
+    "kategoria": "piekarstwo"
+  },
+  {
+    "id": "aut-15",
+    "nazwa": "Jeffrey Hamelman",
+    "rola": "Piekarz-edukator, King Arthur Baking; autor \"Bread\"",
+    "slynie_z": "Biblia zawodowego piekarstwa z harmonogramami produkcji i matematyką piekarską (baker's percentage)",
+    "praktyka": "Formalne harmonogramy dnia piekarni: rozpisanie każdego procesu na osi czasu z nakładaniem się etapów (gdy jedno ciasto fermentuje, drugie się formuje). Procenty piekarskie umożliwiają natychmiastowe przeliczanie partii w górę i w dół bez błędów.",
+    "zastosowanie": "Wszystkie receptury Alterbake przepisane na procenty względem mąki/bazy — Oliwia skaluje partię jednym mnożnikiem; dzień rozpisany na osi czasu z nakładkami procesów.",
+    "kategoria": "piekarstwo"
+  },
+  {
+    "id": "aut-16",
+    "nazwa": "Nancy Silverton",
+    "rola": "Piekarka-restauratorka, La Brea Bakery / Mozza, Los Angeles",
+    "slynie_z": "Skalowanie piekarni zakwasowej od butiku do dużej marki bez utraty charakteru; \"Breads from the La Brea Bakery\"",
+    "praktyka": "Standaryzacja żywych procesów: zakwas i fermentacja prowadzone według mierzalnych parametrów (temperatura, czas, wygląd, zapach), by dały się przekazać zespołowi i skalować. Rozdzielenie tego, co skalowalne (bazy, procesy), od tego, co butikowe (wykończenie).",
+    "zastosowanie": "Karty prowadzenia zakwasu i kremów z parametrami liczbowymi + znakami sensorycznymi wiszą przy stanowiskach — każda zmiana prowadzi je tak samo.",
+    "kategoria": "piekarstwo"
+  },
+  {
+    "id": "aut-17",
+    "nazwa": "Richard Bertinet",
+    "rola": "Piekarz-edukator, Bath (Wielka Brytania); The Bertinet Kitchen",
+    "slynie_z": "Szkoła piekarska, technika \"slap and fold\"; przekładanie rzemiosła na proste, nauczalne ruchy",
+    "praktyka": "Delegacja przez technikę, nie przez talent: rozbicie rzemiosła na kilka powtarzalnych ruchów i uczenie ich do automatyzmu. Nowa osoba dostaje jedną technikę do opanowania naraz, z jasnym kryterium \"umie / jeszcze nie umie\".",
+    "zastosowanie": "Onboarding pomocy w Alterbake: tydzień 1 — ważenie i wałkowanie, tydzień 2 — szprycowanie, tydzień 3 — wykańczanie; każdy etap z egzaminem praktycznym u Oliwii.",
+    "kategoria": "piekarstwo"
+  },
+  {
+    "id": "aut-18",
+    "nazwa": "Bo Friberg",
+    "rola": "Autor-edukator, \"The Professional Pastry Chef\" (California Culinary Academy)",
+    "slynie_z": "Najbardziej kompletny podręcznik zawodowego cukiernictwa; systematyka mise en place i planów pracy",
+    "praktyka": "Plan pracy jako dokument pisany przed rozpoczęciem produkcji: lista zadań w kolejności wykonania, z zaznaczeniem, co można robić równolegle i co czeka (chłodzenie, pieczenie). Mise en place rozumiane szeroko — przygotowanie sprzętu, form i głowy, nie tylko składników.",
+    "zastosowanie": "Wieczorem Oliwia (lub zmiana) wypisuje jutrzejszy plan dnia na tablicy: kolejność, kto, co równolegle — rano nikt nie zaczyna od zastanawiania się.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-19",
+    "nazwa": "Peter Greweling",
+    "rola": "Profesor CIA (Culinary Institute of America); autor \"Chocolates and Confections\"",
+    "slynie_z": "Naukowe podstawy cukiernictwa: aktywność wody, shelf life, krystalizacja — liczby zamiast intuicji",
+    "praktyka": "Dobór wielkości partii do trwałości produktu: partia ma sens tylko taka, jaką sprzedasz w oknie pełnej jakości (mierzonym aktywnością wody i warunkami przechowywania). Trwałość jest projektowana w recepturze, nie odkrywana po fakcie.",
+    "zastosowanie": "Każde SKU Alterbake ma przypisane okno jakości (np. beza 3 dni, krem dzień, praliny 3 tygodnie) i maksymalną partię wynikającą z rotacji — koniec z \"zrobimy więcej, bo się miesza raz\".",
+    "kategoria": "jakosc"
+  },
+  {
+    "id": "aut-20",
+    "nazwa": "École Ferrandi",
+    "rola": "Szkoła gastronomiczna, Paryż; podręcznik \"Pâtisserie\"",
+    "slynie_z": "\"Harvard gastronomii\" — kanoniczny program kształcenia cukierników i organizacja pracowni",
+    "praktyka": "Organizacja pracowni według stref procesów (strefa ciast, strefa kremów, strefa wykańczania, strefa mycia) i standard \"czystego przekazania\" stanowiska między osobami. Receptury dydaktyczne rozpisane z czasami i punktami krytycznymi, by były wykonywalne przez ucznia.",
+    "zastosowanie": "Alterbake wyznacza stałe strefy stanowisk i zasadę: stanowisko oddajesz czyste i zatowarowane — kolejna osoba zaczyna natychmiast, bez szukania i mycia.",
+    "kategoria": "patisserie"
+  },
+  {
+    "id": "aut-21",
+    "nazwa": "Frédéric Bau / École Valrhona",
+    "rola": "Pâtissier-twórca École Valrhona, Tain-l'Hermitage",
+    "slynie_z": "Wynalazca czekolady Dulcey; \"Gourmandise Raisonnée\" — redukcja cukru i tłuszczu bez utraty przyjemności",
+    "praktyka": "Receptury jako systemy proporcji, nie listy składników: Valrhona uczy tabel wymienności (jak zmiana czekolady o innej zawartości kakao przelicza się na resztę receptury). Innowacja prowadzona metodycznie — \"racjonalna przyjemność\" to program badawczy, nie hasło.",
+    "zastosowanie": "Alterbake trzyma tabelę wymienności surowców (czekolady, śmietanki, przeciery) — zmiana dostawcy czy braki nie zatrzymują produkcji, tylko uruchamiają przelicznik.",
+    "kategoria": "jakosc"
+  },
+  {
+    "id": "aut-22",
+    "nazwa": "Eliyahu Goldratt",
+    "rola": "Fizyk i teoretyk zarządzania; autor \"Celu\" (Teoria Ograniczeń)",
+    "slynie_z": "Teoria ograniczeń (TOC): przepustowość systemu wyznacza wąskie gardło; werbel-bufor-lina",
+    "praktyka": "Pięć kroków TOC: zidentyfikuj ograniczenie, wyciśnij z niego maksimum, podporządkuj mu resztę, dopiero potem inwestuj, i wracaj do kroku 1. Godzina stracona na wąskim gardle to godzina stracona dla całej firmy — planuje się od gardła, nie od początku procesu.",
+    "zastosowanie": "W Alterbake wąskim gardłem jest piec: plan dnia buduje się od harmonogramu pieca (nigdy pusty, nigdy czekający na wsad), a mikser i stoły podporządkowują się jego rytmowi.",
+    "kategoria": "strategia"
+  },
+  {
+    "id": "aut-23",
+    "nazwa": "Taiichi Ohno",
+    "rola": "Inżynier Toyoty; twórca Toyota Production System",
+    "slynie_z": "Lean: eliminacja 7 marnotrawstw (muda), przepływ jednej sztuki, kanban, produkcja ssana (pull)",
+    "praktyka": "Produkcja ciągniona przez popyt zamiast pchana przez plan: uzupełniaj to, co faktycznie ubyło, w małych partiach, i skracaj przezbrojenia, żeby małe partie były opłacalne. Marnotrawstwo to też czekanie ludzi, zbędny ruch po pracowni i nadprodukcja — najgorsza ze wszystkich.",
+    "zastosowanie": "Witryna Alterbake działa jak kanban: poziomy minimalne na półkach wyzwalają dopieki; układ pracowni ustawiony tak, by mistrz nie robił kilometrów między piecem a stołem.",
+    "kategoria": "strategia"
+  },
+  {
+    "id": "aut-24",
+    "nazwa": "W. Edwards Deming",
+    "rola": "Statystyk i teoretyk jakości; ojciec japońskiej rewolucji jakości",
+    "slynie_z": "Cykl PDCA (Plan-Do-Check-Act), 14 zasad zarządzania, myślenie systemowe o jakości",
+    "praktyka": "Większość błędów to wina systemu, nie ludzi: zamiast obwiniać pracownika za zakalec, poprawia się proces (recepturę, oznaczenia, kolejność). Decyzje na podstawie danych zbieranych stale, nie wrażeń; poprawa w małych cyklach PDCA zamiast wielkich rewolucji.",
+    "zastosowanie": "Cotygodniowy 15-minutowy przegląd liczb (straty, sell-through, reklamacje) i jedna poprawka procesu na tydzień — Alterbake poprawia system, nie szuka winnych.",
+    "kategoria": "jakosc"
+  },
+  {
+    "id": "aut-25",
+    "nazwa": "David Chang",
+    "rola": "Kucharz-przedsiębiorca, Momofuku, Nowy Jork",
+    "slynie_z": "Skalowanie od jednego baru ramen do grupy restauracyjnej; kultura mise en place i brutalnej szczerości operacyjnej",
+    "praktyka": "Mise en place jako filozofia zarządzania czasem i delegacją: przygotowanie jest pracą, a serwis tylko składaniem przygotowanego. Systemy i checklisty pozwalają młodym kucharzom prowadzić stacje od pierwszego dnia; szef projektuje system, nie gotuje wszystkiego sam.",
+    "zastosowanie": "Alterbake oddziela \"produkcję baz\" (przedpołudnie, checklisty) od \"składania i wykańczania\" (krótkie okna, precyzja) — pomoc prowadzi bazy samodzielnie według list od 1. dnia.",
+    "kategoria": "strategia"
+  }
+]

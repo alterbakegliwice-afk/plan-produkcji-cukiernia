@@ -1,0 +1,14 @@
+{
+  "name": "Alterbake · Planer Produkcji Cukierni",
+  "short_name": "Alterbake",
+  "description": "Planowanie produkcji cukierniczej: harmonogram pieców, receptury, skalowanie, delegowanie, sous chef.",
+  "lang": "pl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f3ec",
+  "theme_color": "#b4552d",
+  "icons": [
+    { "src": "ikona.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

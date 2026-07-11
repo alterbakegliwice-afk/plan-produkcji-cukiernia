@@ -1,0 +1,128 @@
+[
+  {
+    "id": "tr-01",
+    "nazwa": "Pistacja + \"Dubai chocolate\" (kadaif)",
+    "opis": "Globalny wiral tabliczki z kremem pistacjowym i chrupiącym kadaifem przeniósł się na croissanty, pączki i monoporcje; pistacja stała się smakiem numer 1 cukiernictwa.",
+    "sila": 5,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Nie kopiować tabliczki (rynek nasycony), tylko przenieść duet pistacja-kadaif na własne formy: pączek na Tłusty Czwartek, monoporcja, drożdżówka. Jeden krem pistacjowy jako baza zasila 3 SKU bez nowego slotu pieca.",
+    "przyklad": "Fix Dessert Chocolatier (Dubaj) — oryginał; w Polsce fala od cukierni rzemieślniczych po sieciówki"
+  },
+  {
+    "id": "tr-02",
+    "nazwa": "Hybrydy viennoiserie (crookie, croissant-formaty)",
+    "opis": "Krzyżówki na bazie ciasta croissantowego: crookie (croissant + ciastko cookie), płaskie croissanty, croissanty nadziewane premium. Jedno ciasto-matka, wiele wiralowych form.",
+    "sila": 4,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Idealne przy 2 piecach: laminowane ciasto już jest w produkcji, hybryda to tylko inne formowanie i nadzienie. Rotacyjny \"croissant miesiąca\" jako produkt-magnes bez zwiększania liczby baz.",
+    "przyklad": "Boulangerie Louvard (Paryż) — crookie; Cédric Grolet — croissanty premium"
+  },
+  {
+    "id": "tr-03",
+    "nazwa": "Mniej cukru, czystszy smak",
+    "opis": "Świadoma redukcja słodyczy w deserach premium — kwasowość owoców, gorycz kakao i sól jako kontrapunkty. Klient premium czyta \"mniej słodkie\" jako \"bardziej rzemieślnicze\".",
+    "sila": 4,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Przegląd 18 SKU pod kątem redukcji cukru o 10-20% tam, gdzie nie psuje struktury; komunikacja \"mniej słodkie niż myślisz\" przy witrynie. Zero kosztu, realna dyferencjacja.",
+    "przyklad": "Frédéric Bau / Valrhona — program \"Gourmandise Raisonnée\" (Francja)"
+  },
+  {
+    "id": "tr-04",
+    "nazwa": "Hiperlokalne i sezonowe owoce",
+    "opis": "Krótkie serie deserów z owocem od konkretnego lokalnego dostawcy, z nazwiskiem sadownika na wywieszce. Sezonowość jako marketing, nie ograniczenie.",
+    "sila": 4,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Śląsk/okolice: truskawka z konkretnego gospodarstwa, śliwka węgierka, rabarbar. Jedna \"tarta sezonowa\" jako stały slot w karcie ze zmiennym owocem — witryna żyje bez zmiany procesu produkcji.",
+    "przyklad": "Yann Couvreur (Paryż), Lune Croissanterie (Melbourne) — sezonowe rotacje"
+  },
+  {
+    "id": "tr-05",
+    "nazwa": "Torty vintage / płaskie torty dekorowane",
+    "opis": "Powrót retro-estetyki: lambeth piping, pastelowe kolory, kokardki, minimalistyczne płaskie torty z napisem. Silny popyt na urodziny, wieczory panieńskie, małe wesela.",
+    "sila": 4,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Segment zamówieniowy o wysokiej marży niewymagający pieca w dniu zamówienia (biszkopty z mrożnika). Limit 4-6 tortów na weekend, cennik od wzoru, portfolio na Instagramie.",
+    "przyklad": "trend globalny z Instagrama/TikToka; w Polsce pracownie butikowe w każdym większym mieście"
+  },
+  {
+    "id": "tr-06",
+    "nazwa": "Tekstura crunch jako obowiązek",
+    "opis": "Każdy deser musi mieć wyraźny element chrupiący: praliné feuilletine, kadaif, kruszonki, karmelizowane orzechy, sablé. Tekstura wyprzedziła dekorację jako kryterium jakości.",
+    "sila": 4,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Audyt 18 SKU: każdy ma mieć świadomy element chrupiący. Wystarczą 2-3 uniwersalne \"crunche\" robione raz w tygodniu w dużej partii (trzymają się doskonale w szczelnym pojemniku).",
+    "przyklad": "Antonio Bachour, Johan Martin — warstwa chrupiąca jako standard kompozycji"
+  },
+  {
+    "id": "tr-07",
+    "nazwa": "Przejrzystość składu i \"czysta etykieta\"",
+    "opis": "Klient pyta o skład: masło czy margaryna, prawdziwa wanilia, bez ulepszaczy. Cukiernie rzemieślnicze wygrywają otwartą komunikacją pełnego składu.",
+    "sila": 4,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Wywieszki przy witrynie: \"100% masła, bez mieszanek i ulepszaczy\" + pełny skład każdego SKU dostępny na kartach. Uzasadnia cenę premium względem sieciówek — koszt zerowy.",
+    "przyklad": "Poilâne (Paryż), polskie piekarnie rzemieślnicze nowej fali (np. nurt zakwasowy)"
+  },
+  {
+    "id": "tr-08",
+    "nazwa": "Desery roślinne (wege) jako pozycja stała",
+    "opis": "Nie osobna \"wege-karta\", lecz 1-2 pełnowartościowe desery roślinne w standardowej ofercie, na tyle dobre, że kupują je wszyscy. Techniki: aquafaba, tłuszcze roślinne, musy owocowe.",
+    "sila": 3,
+    "horyzont": "6mies",
+    "dopasowanie_alterbake": "Jedno SKU roślinne zrobione porządnie (np. tarta czekoladowa na kremie z gorzkiej czekolady i mleka owsianego) zamiast pięciu przeciętnych. Otwiera zamówienia na eventy, gdzie 'opcja wege' jest warunkiem.",
+    "przyklad": "Land&Monkeys (Paryż) — w pełni roślinna boulangerie-patisserie"
+  },
+  {
+    "id": "tr-09",
+    "nazwa": "Fermentacja w deserach",
+    "opis": "Zakwas w cieście na gofry/ciasta, miso w karmelu, koji, fermentowane owoce — głębia umami i kwasowości w słodkim. Trend z fine diningu schodzący do rzemiosła.",
+    "sila": 2,
+    "horyzont": "12mies",
+    "dopasowanie_alterbake": "Niski koszt wejścia, bo zakwas już jest w piekarni: babka na zakwasie, karmel z nutą miso jako składnik jednej monoporcji. Traktować jako eksperyment w pipeline, nie filar oferty.",
+    "przyklad": "Noma/René Redzepi (fermentacja), Tartine (San Francisco) — desery na zakwasie"
+  },
+  {
+    "id": "tr-10",
+    "nazwa": "Single-origin kakao i pochodzenie surowca",
+    "opis": "Czekolada z jednej plantacji/kraju z komunikacją pochodzenia (jak kawa speciality). Rosnąca świadomość cen kakao dodatkowo kieruje uwagę na jakość zamiast ilości.",
+    "sila": 3,
+    "horyzont": "6mies",
+    "dopasowanie_alterbake": "Przy rekordowych cenach kakao: mniej czekolady, ale lepszej i z historią. Jedno SKU \"czekoladowe z metryczką\" (kraj, plantacja, procent) w wyższej cenie zamiast walki o marżę na masowej kuwerturze.",
+    "przyklad": "William Curley (Londyn), polskie manufaktury bean-to-bar (np. nurt krakowski)"
+  },
+  {
+    "id": "tr-11",
+    "nazwa": "Mini-formaty i degustacyjne boxy",
+    "opis": "Zestawy 4-9 miniatur zamiast jednego dużego deseru: klient chce spróbować wszystkiego, box jest prezentowy i instagramowy, a cena za kg najwyższa w witrynie.",
+    "sila": 4,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Box degustacyjny z miniatur istniejących 18 SKU — zero nowych receptur, tylko mniejsze formy. Idealny na prezenty, do biur i na okazje (Dzień Matki, Walentynki); świetnie zagospodarowuje końcówki partii.",
+    "przyklad": "Bachour (Miami) — petit gâteaux boxy; polskie cukiernie butikowe"
+  },
+  {
+    "id": "tr-12",
+    "nazwa": "Kolaboracje i produkty limitowane",
+    "opis": "Cukiernia x palarnia kawy, x browar rzemieślniczy, x lokalny artysta — limitowany produkt tworzy szum, wymienia audiencje i nie obciąża stałej karty.",
+    "sila": 3,
+    "horyzont": "6mies",
+    "dopasowanie_alterbake": "Kwartalna kolaboracja z gliwicką palarnią kawy lub lodziarnią: jeden wspólny produkt na 2 tygodnie, wzajemna promocja. Mieści się w slocie \"produkt miesiąca\" — bez zmian w harmonogramie pieca.",
+    "przyklad": "Dominique Ansel (Nowy Jork) — seryjne kolaboracje; Lune x marki (Australia)"
+  },
+  {
+    "id": "tr-13",
+    "nazwa": "Dropy i przedsprzedaż online",
+    "opis": "Sprzedaż limitowanych partii przez zapisy/przedsprzedaż z odbiorem osobistym: pewny wolumen, zero strat, efekt ekskluzywności. Model przechodzi z streetwearu do gastronomii.",
+    "sila": 3,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Przedsprzedaż na święta, Tłusty Czwartek i rogale świętomarcińskie to fundament; dodatkowo miesięczny \"drop\" nowości (np. 40 sztuk, zapisy w social mediach). Produkcja pod pewny popyt to najtańsza forma planowania.",
+    "przyklad": "Dominique Ansel — kolejki/rezerwacje na Cronuta; małe pracownie tortowe w Polsce"
+  },
+  {
+    "id": "tr-14",
+    "nazwa": "Nostalgia po polsku (premium klasyki PRL)",
+    "opis": "WZ-ka, karpatka, szarlotka na kruchym, pączek z różą — klasyki dzieciństwa w wykonaniu premium, z lepszym surowcem i techniką. Silny sentyment + niski próg edukacji klienta.",
+    "sila": 4,
+    "horyzont": "teraz",
+    "dopasowanie_alterbake": "Linia \"klasyki po naszemu\": 2-3 SKU nostalgiczne w wersji premium (prawdziwa wanilia w karpatce, róża w pączku całorocznie). Bazy proste i znane zespołowi, marża dobra, klient nie wymaga tłumaczenia produktu.",
+    "przyklad": "warszawskie i krakowskie cukiernie nowej fali odświeżające klasyki (nurt widoczny w całej Polsce)"
+  }
+]

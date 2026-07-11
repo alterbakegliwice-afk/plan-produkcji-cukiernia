@@ -1,0 +1,98 @@
+[
+  {
+    "miesiac": 1,
+    "nazwa": "Styczeń",
+    "surowce": ["cytrusy (pomarańcza, cytryna, grejpfrut, kumkwat)", "mrożone owoce z lata (malina, porzeczka, wiśnia)", "orzechy z jesiennych zapasów", "mak, miód (końcówki świąteczne)"],
+    "okazje": ["Nowy Rok / postanowienia (lżejsze, mniej słodkie)", "Dzień Babci i Dziadka (21-22.01)", "ferie zimowe (woj. śląskie zwykle w styczniu/lutym)", "karnawał — pierwsze zamówienia na bale"],
+    "produkty": ["tarty i monoporcje cytrusowe", "serniki lżejsze (cytryna, limonka)", "drobne ciastka do kawy dla seniorów (Dzień Babci/Dziadka — zestawy prezentowe)", "pierwsze partie testowe pączków przed Tłustym Czwartkiem"],
+    "planowanie": "Miesiąc niskiej sprzedaży detalicznej — idealny na inwentaryzację receptur, szkolenie pomocy i testy pączków. Zaplanuj już teraz logistykę Tłustego Czwartku (zamówienia surowców: smalec/olej, marmolada róża, drożdże; grafik nocnej zmiany). Zbuduj zapas mrożonych wkładów na luty."
+  },
+  {
+    "miesiac": 2,
+    "nazwa": "Luty",
+    "surowce": ["róża (konfitura), marmolada wieloowocowa", "cytrusy nadal w szczycie", "mrożona malina i wiśnia", "smalec/olej do smażenia w hurtowych ilościach"],
+    "okazje": ["TŁUSTY CZWARTEK (ruchomy: luty lub początek marca) — największy dzień roku dla pączków", "Walentynki (14.02)", "ostatki/śledzik", "ferie zimowe"],
+    "produkty": ["pączki (róża, adwokat, słony karmel; wersja premium i klasyczna), faworki, oponki", "monoporcje walentynkowe (serca: malina-czekolada, pistacja-róża)", "mini-desery dla par, boxy walentynkowe"],
+    "planowanie": "Tłusty Czwartek planuj jak operację wojskową: przedsprzedaż z odbiorem na godzinę (wygładza kolejkę i daje pewny wolumen), nocna zmiana smażenia, uproszczona karta pozostałych SKU tego dnia do absolutnego minimum. Walentynki to głównie piątek/weekend przed 14.02 — nie przeceniaj wolumenu w dzień powszedni."
+  },
+  {
+    "miesiac": 3,
+    "nazwa": "Marzec",
+    "surowce": ["rabarbar szklarniowy (koniec marca)", "cytrusy schodzą", "mak, ser twarogowy, bakalie (przygotowania wielkanocne)", "pierwsza zieleń dekoracyjna"],
+    "okazje": ["Dzień Kobiet (8.03)", "początek wiosny — zmiana witryny na jaśniejszą", "Wielki Post (część klientów ogranicza słodycze)", "jeśli Wielkanoc wypada w marcu — pełny tryb świąteczny"],
+    "produkty": ["babeczki i monoporcje na Dzień Kobiet (tulipany, pastele)", "pierwsze tarty rabarbarowe", "testy i przedsprzedaż wielkanocna: mazurki, baby drożdżowe i piaskowe, serniki"],
+    "planowanie": "Post realnie obniża sprzedaż w tygodniu — zmniejsz partie codzienne o 10-15% i przerzuć moce na przygotowania wielkanocne: mrożenie spodów do mazurków, testy dekoracji, sesja zdjęciowa oferty świątecznej i uruchomienie zamówień przedświątecznych do końca miesiąca."
+  },
+  {
+    "miesiac": 4,
+    "nazwa": "Kwiecień",
+    "surowce": ["rabarbar (pełnia sezonu krajowego pod koniec miesiąca)", "twaróg, jaja, mak, bakalie, lukier, biała czekolada", "pierwsze polskie szparagi jako ciekawostka (dekoracje wytrawne)"],
+    "okazje": ["WIELKANOC (najczęściej kwiecień) — drugi szczyt roku", "Lany Poniedziałek", "po świętach: tydzień zdecydowanego dołka sprzedaży"],
+    "produkty": ["mazurki (królewski, kajmakowy, cytrynowy, czekoladowy)", "baby wielkanocne drożdżowe i piaskowe z lukrem", "serniki wiedeńskie, paschy", "figurki i pisanki z czekolady", "po świętach: lekkie tarty rabarbarowe"],
+    "planowanie": "Wielkanoc = 90% wolumenu na zamówienia z odbiorem w Wielki Piątek/Sobotę. Zamknij przyjmowanie zamówień z 5-dniowym wyprzedzeniem, rozpisz produkcję wstecz (mazurki -3 dni na spodach z mrożnika, baby -1 dzień). Tydzień po świętach tnij produkcję o 30% — klienci mają domowe ciasta."
+  },
+  {
+    "miesiac": 5,
+    "nazwa": "Maj",
+    "surowce": ["rabarbar w pełni", "pierwsze polskie truskawki (koniec maja, szklarniowe wcześniej)", "kwiaty jadalne, zioła (werbena, mięta)", "śmietanka — sezon tortowy startuje"],
+    "okazje": ["KOMUNIE (soboty i niedziele maja) — sezon tortów i pakietów", "majówka (1-3.05)", "Dzień Matki (26.05)"],
+    "produkty": ["torty komunijne i paczki ciast na przyjęcia (blaszki, mini-desery, słodkie stoły)", "bezy i torty bezowe z truskawką i rabarbarem", "monoporcje truskawkowe", "eleganckie boxy na Dzień Matki"],
+    "planowanie": "Komunie rezerwują weekendowe moce na 2-3 tygodnie naprzód — prowadź kalendarz zamówień z limitem tortów na sobotę (np. maks. 6) i nie przyjmuj ponad limit. Przerzuć produkcję witrynową na piątek. Majówka: mniejsze partie w dni wyjazdowe, więcej formatu piknikowego (ciastka, drożdżówki)."
+  },
+  {
+    "miesiac": 6,
+    "nazwa": "Czerwiec",
+    "surowce": ["truskawka (szczyt sezonu polskiego)", "czereśnia", "pierwsze maliny i porzeczki (koniec miesiąca)", "rabarbar kończy sezon"],
+    "okazje": ["Dzień Dziecka (1.06)", "Boże Ciało (ruchome) — długi weekend", "komunie (pierwsza połowa)", "zakończenie roku szkolnego (torty, podziękowania dla nauczycieli)", "początek sezonu ślubnego"],
+    "produkty": ["wszystko z truskawką: tarty, torty bezowe, monoporcje, drożdżówki z owocem", "kolorowe babeczki na Dzień Dziecka", "torty na zakończenie roku i pierwsze wesela", "lody/sorbety własne jeśli w ofercie"],
+    "planowanie": "Truskawka nie czeka: kupuj codziennie małe partie od sprawdzonego dostawcy, nadwyżki natychmiast przerabiaj na kulisy i konfitury do mrożenia (tani surowiec teraz = wkłady na cały rok). Upały zaczynają zabijać kremy maślane — przestaw witrynę na musy, bezy i owoce."
+  },
+  {
+    "miesiac": 7,
+    "nazwa": "Lipiec",
+    "surowce": ["malina, jagoda, borówka, porzeczki, wiśnia", "morele i pierwsze brzoskwinie", "ostatnie truskawki"],
+    "okazje": ["wakacje — odpływ stałych klientów, napływ okazjonalnych", "sezon ślubny w pełni (soboty)", "upały — zmiana zachowań zakupowych"],
+    "produkty": ["jagodzianki (kultowy produkt lata — potrafią być hitem wolumenowym)", "tarty i monoporcje z maliną i borówką", "lżejsze desery: musy, panna cotta, sorbety", "torty weselne wg kalendarza zamówień"],
+    "planowanie": "Zaplanuj urlopy zespołu TERAZ na zasadzie: nigdy mistrz i doświadczona pomoc jednocześnie. Zredukuj kartę do sprawdzonych 12-14 SKU na czas urlopów. Jagodzianki traktuj jak produkt flagowy lata — stały słot pieca każdego ranka. Mroź maliny i porzeczki na zimowe wkłady."
+  },
+  {
+    "miesiac": 8,
+    "nazwa": "Sierpień",
+    "surowce": ["śliwka węgierka (od połowy miesiąca!)", "brzoskwinia, morela", "jeżyna, późne maliny", "pierwsze jabłka letnie"],
+    "okazje": ["sezon ślubny trwa", "15.08 — długi weekend", "końcówka wakacji, powroty klientów pod koniec miesiąca", "dożynki lokalne"],
+    "produkty": ["drożdżówki i ciasta ze śliwką (kruszonka!)", "tarty z brzoskwinią i jeżyną", "torty weselne", "od końca sierpnia: powrót pełnej karty"],
+    "planowanie": "Węgierka to najlepszy stosunek jakości do ceny w roku — wjazd na witrynę szeroko i mrożenie połówek na zimę. Pod koniec miesiąca stopniowo zwiększaj partie (powroty z wakacji) i zaplanuj wrześniową kolekcję jesienną, żeby 1 września nie zaskoczył."
+  },
+  {
+    "miesiac": 9,
+    "nazwa": "Wrzesień",
+    "surowce": ["śliwka w pełni, jabłka i gruszki nowego zbioru", "orzechy laskowe i włoskie świeże", "figa importowana w dobrej cenie", "pierwsza dynia"],
+    "okazje": ["powrót do szkoły/pracy — odbudowa rutyny zakupowej", "sezon urodzinowo-imprezowy wraca", "ostatnie wesela"],
+    "produkty": ["szarlotki i tarty jabłkowe (klasyk jesieni)", "ciasta ze śliwką, powidła własne", "monoporcje gruszka-orzech, śliwka-cynamon", "powrót cięższych deserów: karmel, orzech, czekolada"],
+    "planowanie": "Wrzesień to reset roczny: przegląd wyników lata (sell-through per SKU), wycinka najsłabszych 2-3 pozycji, wprowadzenie kolekcji jesiennej. Zrób dzień produkcji powideł i konfitur śliwkowych na cały sezon. Zacznij planować personel i surowce na Q4 (najcięższy kwartał)."
+  },
+  {
+    "miesiac": 10,
+    "nazwa": "Październik",
+    "surowce": ["dynia (szczyt)", "jabłko, gruszka, pigwa", "orzechy, kasztany jadalne", "czekolada — start sezonu ciężkich smaków"],
+    "okazje": ["Halloween (31.10) — rosnące, zwłaszcza dla młodszych klientów", "jesienna aura sprzyja deserom i kawie — dobry ruch popołudniowy", "przygotowania do Wszystkich Świętych"],
+    "produkty": ["tarty i serniki dyniowe (pumpkin spice działa też w Polsce)", "desery kasztanowe i orzechowe", "monoporcje Halloween (limitowana seria, 1-2 SKU max)", "pierwsze pierniki — ciasto piernikowe dojrzewające musi powstać TERAZ"],
+    "planowanie": "Zagniataj ciasto na pierniki dojrzewające w październiku (4-6 tygodni leżakowania do Bożego Narodzenia). Halloween traktuj jako mały test kreatywny, nie duży wolumen. Zaplanuj i sfotografuj ofertę bożonarodzeniową do końca miesiąca — firmy pytają o zamówienia świąteczne już w listopadzie."
+  },
+  {
+    "miesiac": 11,
+    "nazwa": "Listopad",
+    "surowce": ["mak, miód, bakalie, przyprawy korzenne (zakupy hurtowe na święta)", "jabłka, gruszki, cytrusy wracają", "kasztan, orzech"],
+    "okazje": ["Wszystkich Świętych (1.11) — ruch przy cmentarzach, ciasta \"na stół rodzinny\"", "11 listopada — rogale świętomarcińskie (tradycja wykracza poza Poznań)", "Andrzejki (29/30.11)", "start zamówień firmowych na święta", "Black Friday — ew. promocja na przedsprzedaż świąteczną"],
+    "produkty": ["rogale z białym makiem (św. Marcin) — produkt eventowy z przedsprzedażą", "ciasta rodzinne: seromakowce, jabłeczniki", "pierniki wczesne, kalendarze adwentowe z pralinami (przedsprzedaż!)", "słodkie stoły na Andrzejki"],
+    "planowanie": "Listopad to miesiąc przedsprzedaży: otwórz zamówienia świąteczne (osoby prywatne + firmy) z cennikiem i deadline'em ok. 10-14.12. Kalendarze adwentowe muszą być gotowe do sprzedaży do 25.11. Rogale świętomarcińskie planuj jak mini-Tłusty Czwartek: przedsprzedaż + dedykowany blok pieca 10-11.11."
+  },
+  {
+    "miesiac": 12,
+    "nazwa": "Grudzień",
+    "surowce": ["mak, miód, bakalie, kasztany, cytrusy (pomarańcza+goździki)", "czekolada w maksymalnym zużyciu rocznym", "wanilia, przyprawy korzenne"],
+    "okazje": ["Mikołajki (6.12)", "BOŻE NARODZENIE — największy tydzień roku (zamówienia z odbiorem 22-24.12)", "zamówienia firmowe (pierwsze 2 tygodnie)", "Sylwester (31.12)"],
+    "produkty": ["makowce, serniki świąteczne, pierniki dojrzewające i pierniczki dekorowane", "keksy, strucle, mini-desery na firmowe prezenty", "praliny i figurki mikołajowe z czekolady", "na Sylwestra: monoporcje imprezowe, mini-desery, torty sylwestrowe"],
+    "planowanie": "Podziel grudzień na 3 fale: (1) 1-14.12 firmy i Mikołajki, (2) 15-24.12 święta detaliczne — zamknij zamówienia ok. 18.12, produkcja wsteczna od odbiorów 23-24.12, mrożone spody i wkłady przygotowane w listopadzie ratują przepustowość, (3) 27-31.12 Sylwester na małej, imprezowej karcie. Między 24 a 27.12 daj zespołowi realny oddech — styczeń wybaczy."
+  }
+]
