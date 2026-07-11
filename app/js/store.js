@@ -19,16 +19,39 @@
     czat: []             // historia rozmowy z Sous Chefem
   });
 
+  const CZAS_RE = /^([01]?\d|2[0-3]):[0-5]\d$/;
+
+  // migracja + walidacja — używana przy starcie ORAZ przy imporcie kopii
+  // (stara/spreparowana kopia nie może wywalić aplikacji ani wstrzyknąć treści do atrybutów)
+  function znormalizuj(surowy) {
+    const wzor = domyslny();
+    const s = (surowy && typeof surowy === "object") ? surowy : {};
+    for (const k of Object.keys(wzor)) if (s[k] === undefined) s[k] = wzor[k];
+    if (!s.ustawienia || typeof s.ustawienia !== "object") s.ustawienia = wzor.ustawienia;
+    for (const k of Object.keys(wzor.ustawienia)) if (s.ustawienia[k] === undefined) s.ustawienia[k] = wzor.ustawienia[k];
+    // godziny tylko w formacie HH:MM
+    if (!CZAS_RE.test(s.ustawienia.dzienOd)) s.ustawienia.dzienOd = wzor.ustawienia.dzienOd;
+    if (!CZAS_RE.test(s.ustawienia.dzienDo)) s.ustawienia.dzienDo = wzor.ustawienia.dzienDo;
+    if (!Array.isArray(s.ustawienia.zespol) || !s.ustawienia.zespol.length) s.ustawienia.zespol = wzor.ustawienia.zespol;
+    s.ustawienia.zespol = s.ustawienia.zespol.map((os, i) => ({
+      id: String((os && os.id) || "osoba" + i),
+      nazwa: String((os && os.nazwa) || "Osoba " + (i + 1)).slice(0, 40),
+      rola: (os && os.rola) === "szef" ? "szef" : "pomoc",
+      od: CZAS_RE.test(os && os.od) ? os.od : "07:00",
+      do: CZAS_RE.test(os && os.do) ? os.do : "14:00"
+    }));
+    for (const k of ["zadania", "inspiracje", "czat"]) if (!Array.isArray(s[k])) s[k] = [];
+    if (!s.plan || typeof s.plan !== "object") s.plan = {};
+    if (!s.kalibracja || typeof s.kalibracja !== "object") s.kalibracja = {};
+    return s;
+  }
+
   let stan;
   try {
-    stan = JSON.parse(localStorage.getItem(KLUCZ)) || domyslny();
+    stan = znormalizuj(JSON.parse(localStorage.getItem(KLUCZ)));
   } catch (e) {
     stan = domyslny();
   }
-  // migracja brakujących kluczy po aktualizacji aplikacji
-  const wzor = domyslny();
-  for (const k of Object.keys(wzor)) if (stan[k] === undefined) stan[k] = wzor[k];
-  for (const k of Object.keys(wzor.ustawienia)) if (stan.ustawienia[k] === undefined) stan.ustawienia[k] = wzor.ustawienia[k];
 
   const sluchacze = [];
 
@@ -60,7 +83,10 @@
     },
 
     eksportuj() {
-      const blob = new Blob([JSON.stringify(stan, null, 1)], { type: "application/json" });
+      // klucz API nigdy nie wychodzi z urządzenia w pliku kopii
+      const kopia = JSON.parse(JSON.stringify(stan));
+      kopia.ustawienia.apiKey = "";
+      const blob = new Blob([JSON.stringify(kopia, null, 1)], { type: "application/json" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
       a.download = "alterbake-planer-kopia-" + AB.dzisISO() + ".json";
@@ -72,7 +98,9 @@
       return plik.text().then(txt => {
         const dane = JSON.parse(txt);
         if (!dane || typeof dane !== "object" || !dane.ustawienia) throw new Error("zły format");
-        stan = dane;
+        const klucz = stan.ustawienia.apiKey; // klucz z tego urządzenia zostaje
+        stan = znormalizuj(dane);
+        stan.ustawienia.apiKey = klucz;
         this.zapisz();
       });
     },

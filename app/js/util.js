@@ -12,10 +12,10 @@ AB.doMin = function (hhmm) {
   return (h || 0) * 60 + (m || 0);
 };
 
-// 390 -> "06:30"
+// 390 -> "06:30"; po północy nie zawijamy (konwencja piekarska: 24:30, 25:15)
 AB.zMin = function (min) {
   min = Math.max(0, Math.round(min));
-  const h = Math.floor(min / 60) % 24, m = min % 60;
+  const h = Math.floor(min / 60), m = min % 60;
   return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
 };
 

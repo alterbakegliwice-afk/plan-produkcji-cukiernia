@@ -17,34 +17,44 @@ window.WidokReceptury = {
       kategorie.map(k => '<button class="chip ' + (this.kategoria === k ? "" : "szary") + '" data-kat="' + AB.esc(k) + '">' + AB.esc(k) + "</button>").join("") +
       "</div><div id=\"rec-lista\"></div>";
 
-    const lista = el.querySelector("#rec-lista");
-    const q = this.filtr.toLowerCase();
-    const pasujace = AB_RECEPTURY.filter(r =>
-      (!this.kategoria || r.kategoria === this.kategoria) &&
-      (!q || r.nazwa.toLowerCase().includes(q) || r.nr.toLowerCase().includes(q)));
+    this._renderLista(el.querySelector("#rec-lista"));
 
-    for (const r of pasujace) {
-      const rz = Czas.rozklad(r.nr, 1);
-      lista.appendChild(AB.el('<div class="karta dotykowa" data-nr="' + r.nr + '">' +
-        '<div class="rzad"><b>' + AB.esc(r.nazwa) + '</b><span class="chip szary">' + AB.esc(r.kategoria || "") + "</span>" +
-        '<span class="rozdziel wyciszony maly">' + r.nr + "</span></div>" +
-        '<div class="wyciszony maly" style="margin-top:4px">' +
-        (r.tylko_proces ? "⚠ tylko parametry procesu — brak składników w XLSX" :
-          "partia: ~" + Math.round(r.porcje_partia || 1) + " porcji · surowce " + AB.zl(r.koszt_surowcow_partia)) +
-        " · ręce " + AB.min(Store.czasPracy(r.nr)) +
-        (rz.piec ? " · piec " + AB.min(rz.czasWsadu) + "/wsad" : "") + "</div>" +
-        (r.alergeny.length ? '<div class="chipy" style="margin-top:6px">' + r.alergeny.map(a => '<span class="chip zloty">' + AB.esc(a) + "</span>").join("") + "</div>" : "") +
-        "</div>"));
-    }
-    if (!pasujace.length) lista.innerHTML = '<div class="pusto">Brak receptur dla tego filtra.</div>';
-
-    el.querySelector("#rec-szukaj").addEventListener("input", e => { this.filtr = e.target.value; App.render(); });
+    // odświeżamy tylko listę — pełny render zabierałby fokus (i klawiaturę) po każdej literze
+    el.querySelector("#rec-szukaj").addEventListener("input", e => {
+      this.filtr = e.target.value;
+      this._renderLista(el.querySelector("#rec-lista"));
+    });
     el.addEventListener("click", e => {
       const kat = e.target.closest("[data-kat]");
       if (kat) { this.kategoria = kat.dataset.kat; App.render(); return; }
       const karta = e.target.closest("[data-nr]");
       if (karta) { this.otwarta = karta.dataset.nr; this.partie = 1; App.render(); }
     });
+  },
+
+  _renderLista(lista) {
+    const q = this.filtr.toLowerCase();
+    const pasujace = AB_RECEPTURY.filter(r =>
+      (!this.kategoria || r.kategoria === this.kategoria) &&
+      (!q || r.nazwa.toLowerCase().includes(q) || r.nr.toLowerCase().includes(q)));
+
+    lista.innerHTML = "";
+    for (const r of pasujace) {
+      const rz = Czas.rozklad(r.nr, 1);
+      const czasNiepewny = !Store.stan.kalibracja[r.nr] && (r.czas_pracy_min || 0) <= 2;
+      lista.appendChild(AB.el('<div class="karta dotykowa" data-nr="' + r.nr + '">' +
+        '<div class="rzad"><b>' + AB.esc(r.nazwa) + '</b><span class="chip szary">' + AB.esc(r.kategoria || "") + "</span>" +
+        '<span class="rozdziel wyciszony maly">' + r.nr + "</span></div>" +
+        '<div class="wyciszony maly" style="margin-top:4px">' +
+        (r.tylko_proces ? "⚠ tylko parametry procesu — brak składników w XLSX" :
+          "partia: ~" + Math.round(r.porcje_partia || 1) + " porcji · surowce " +
+          (r.brak_cen && r.brak_cen.length ? "niepełne (brak cen)" : AB.zl(r.koszt_surowcow_partia))) +
+        " · ręce " + (czasNiepewny ? "⚠ do kalibracji" : AB.min(Store.czasPracy(r.nr))) +
+        (rz.piec ? " · piec " + AB.min(rz.czasWsadu) + "/wsad" : "") + "</div>" +
+        (r.alergeny.length ? '<div class="chipy" style="margin-top:6px">' + r.alergeny.map(a => '<span class="chip zloty">' + AB.esc(a) + "</span>").join("") + "</div>" : "") +
+        "</div>"));
+    }
+    if (!pasujace.length) lista.innerHTML = '<div class="pusto">Brak receptur dla tego filtra.</div>';
   },
 
   _karta(el, r) {
@@ -84,15 +94,23 @@ window.WidokReceptury = {
       html += '<p class="maly" style="margin-top:8px">Surowce <b>' + AB.zl(koszt.surowce) + "</b> + robocizna <b>" + AB.zl(koszt.robocizna) +
         "</b> = <b>" + AB.zl(koszt.razem) + "</b> (" + AB.zl(koszt.naPorcje) + "/porcję" +
         (r.cena_obecna ? ", cena obecna " + AB.zl(r.cena_obecna) : "") + ")</p>";
+      if (r.brak_cen && r.brak_cen.length) {
+        html += '<div class="ostrzezenie">⚠️ Koszt NIEPEŁNY — w cenniku brakuje cen: ' + AB.esc(r.brak_cen.join(", ")) +
+          ". Uzupełnij CENNIK_SUROWCÓW w XLSX i przelicz.</div>";
+      }
+    }
+    if (!Store.stan.kalibracja[r.nr] && (r.czas_pracy_min || 0) <= 2) {
+      html += '<div class="ostrzezenie">⚠️ Czas pracy z arkusza (' + (r.czas_pracy_min || 0) +
+        " min) wygląda na nierealny — zmierz stoperem i użyj „Kalibruj czas”, inaczej symulacje będą nieprawdziwe.</div>";
     }
     html += '<div class="rzad" style="margin-top:10px">' +
       '<button class="btn btn-glowny" data-akcja="do-planu">+ Wstaw do planu</button>' +
       '<button class="btn" data-akcja="deleguj-nawazki">Deleguj naważki</button>' +
       '<button class="btn btn-cichy" data-akcja="kalibruj">⏱ Kalibruj czas</button></div></div>';
 
-    // wykres czasu vs ilość
+    // wykres czasu vs ilość (zakres = zakres steppera)
     html += '<div class="karta"><h2>Czas vs ilość</h2>' +
-      Wykresy.skalowanie(r.nr, 8, this.partie) + "</div>";
+      Wykresy.skalowanie(r.nr, 12, this.partie) + "</div>";
 
     // naważki wg faz
     if (nawazki.length) {

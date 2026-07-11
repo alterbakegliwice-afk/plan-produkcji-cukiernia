@@ -19,7 +19,7 @@ window.WidokPlan = {
         porcje += (r.porcje_partia || 1) * b.partie;
         const k = Czas.koszt(b.nr, b.partie);
         if (k) koszt += k.surowce;
-        aktywne += b.segmenty.filter(s => s.typ === "aktywny").reduce((a, s) => a + s.do - s.od, 0);
+        aktywne += b.segmenty.filter(s => s.typ === "aktywny" || s.osobaAktywna).reduce((a, s) => a + s.do - s.od, 0);
       }
       el.appendChild(AB.el(
         '<div class="karta rzad maly"><span><b>' + dzien.bloki.length + '</b> produktów</span>' +
@@ -42,7 +42,8 @@ window.WidokPlan = {
       '<div class="rzad" style="margin:10px 0">' +
       '<button class="btn btn-glowny" data-akcja="dodaj">+ Dodaj produkt</button>' +
       '<button class="btn" data-akcja="uloz">✨ Ułóż dzień</button>' +
-      (dzien.bloki.length ? '<button class="btn btn-cichy rozdziel" data-akcja="wyczysc-dzien">Wyczyść</button>' : "") +
+      (dzien.bloki.length ? '<button class="btn" data-akcja="nawazki-dnia">🧾 Naważki dnia</button>' +
+        '<button class="btn btn-cichy rozdziel" data-akcja="wyczysc-dzien">Wyczyść</button>' : "") +
       "</div>"));
 
     // ostrzeżenia
@@ -98,7 +99,7 @@ window.WidokPlan = {
       const tytul = r.nazwa + " — " + s.nazwa + " " + AB.zMin(b.start + s.od) + "–" + AB.zMin(b.start + s.do) +
         (s.temp ? " · " + s.temp + "°C" : "");
       return '<div class="blok-seg ' + s.typ + (b.id === this.zaznaczony ? " zaznaczony" : "") +
-        '" style="left:' + Math.max(0, lewo) + "px;width:" + Math.max(14, w) + 'px" data-blok="' + b.id +
+        '" style="left:' + Math.max(0, lewo) + "px;width:" + Math.max(24, w) + 'px" data-blok="' + b.id +
         '" title="' + AB.esc(tytul) + '">' + (i === 0 ? AB.esc(r.nazwa.slice(0, 18)) + " " : "") + AB.esc(w > 70 ? s.nazwa : "") + "</div>";
     };
 
@@ -165,8 +166,12 @@ window.WidokPlan = {
             AB.receptura(list[i].b.nr).nazwa + " (" + AB.zMin(list[i].od) + "). Przesuń jeden z bloków albo użyj „Ułóż dzień”." });
         }
         if (list[i].temp && list[i - 1].temp && list[i].temp < list[i - 1].temp - 20) {
-          ostrz.push({ tekst: nazwa + ": temperatura spada z " + list[i - 1].temp + "°C na " + list[i].temp +
-            "°C — piec stygnie wolno. Lepiej piec od najniższej do najwyższej temperatury." });
+          const rPoprz = AB.receptura(list[i - 1].b.nr);
+          const przezFerm = rPoprz && ((rPoprz.proces.ferm_min || 0) + (rPoprz.proces.rozrost_min || 0) > 0);
+          ostrz.push({ tekst: nazwa + ": temperatura spada z " + list[i - 1].temp + "°C na " + list[i].temp + "°C. " +
+            (przezFerm
+              ? "To cena wczesnego startu drożdżowych — dolicz 10–15 min na wystygnięcie pieca (drzwi uchylone)."
+              : "Piec stygnie wolno — lepiej piec od najniższej do najwyższej temperatury.") });
         }
       }
       const piecInfo = AB_ZASOBY.piece.find(p => p.id === zasob);
@@ -174,11 +179,11 @@ window.WidokPlan = {
         if (w.od < AB.doMin(piecInfo.dostepnyOd))
           ostrz.push({ tekst: nazwa + " dostępny od " + piecInfo.dostepnyOd + " — " + AB.receptura(w.b.nr).nazwa + " zaplanowany wcześniej." });
     }
-    // kolizje osób
+    // kolizje osób (czynności aktywne + smażenie, które też angażuje ręce)
     const osoby = {};
     for (const b of dzien.bloki)
       for (const s of b.segmenty)
-        if (s.typ === "aktywny") (osoby[b.osoba] = osoby[b.osoba] || []).push({ b, od: b.start + s.od, do: b.start + s.do });
+        if (s.typ === "aktywny" || s.osobaAktywna) (osoby[b.osoba] = osoby[b.osoba] || []).push({ b, od: b.start + s.od, do: b.start + s.do });
     for (const [id, list] of Object.entries(osoby)) {
       list.sort((a, x) => a.od - x.od);
       const os = Store.stan.ustawienia.zespol.find(z => z.id === id);
@@ -204,6 +209,7 @@ window.WidokPlan = {
     if (akcja === "dzien-naprzod") { this.data = AB.przesunDate(this.data, 1); this.zaznaczony = null; App.render(); }
     if (akcja === "dodaj") this._modalDodaj();
     if (akcja === "uloz") this._ulozDzien();
+    if (akcja === "nawazki-dnia") this._modalNawazkiDnia();
     if (akcja === "wyczysc-dzien") {
       AB.potwierdz("Usunąć wszystkie bloki z tego dnia?").then(t => {
         if (t) { dzien.bloki = []; this.zaznaczony = null; Store.zapisz(); App.render(); }
@@ -216,6 +222,33 @@ window.WidokPlan = {
     if (akcja === "usun-blok") { dzien.bloki = dzien.bloki.filter(x => x !== b); this.zaznaczony = null; Store.zapisz(); App.render(); }
     if (akcja === "otworz-recepture") { WidokReceptury.otwarta = b.nr; App.idz("receptury"); }
     if (akcja === "zmien-osobe" && cel.tagName === "SELECT") { /* obsługa w change */ }
+  },
+
+  // zbiorcza lista naważek/zakupów z całego dnia — suma składników po wszystkich blokach
+  _modalNawazkiDnia() {
+    const dzien = Store.dzien(this.data);
+    const suma = {}; // nazwa -> gramy
+    const bezReceptury = [];
+    for (const b of dzien.bloki) {
+      const r = AB.receptura(b.nr);
+      if (!r) continue;
+      if (r.tylko_proces) { bezReceptury.push(r.nazwa); continue; }
+      for (const n of Czas.nawazki(b.nr, b.partie)) suma[n.nazwa] = (suma[n.nazwa] || 0) + n.ilosc;
+    }
+    const wiersze = Object.entries(suma).sort((a, b) => b[1] - a[1]);
+    const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>🧾 Naważki dnia — ' + AB.dataPL(this.data) + "</h2>" +
+      '<p class="maly wyciszony">Suma składników ze wszystkich bloków. Wydrukuj albo przekaż pomocy jako listę naważek/zakupów.</p>' +
+      (wiersze.length ? '<table class="tabela">' + wiersze.map(w =>
+        "<tr><td>" + AB.esc(w[0]) + '</td><td class="liczba"><b>' + AB.g(w[1]) + "</b></td></tr>").join("") + "</table>"
+        : '<p class="wyciszony">Brak składników w planie.</p>') +
+      (bezReceptury.length ? '<p class="maly wyciszony" style="margin-top:8px">Pominięte (brak receptury w XLSX): ' + AB.esc(bezReceptury.join(", ")) + "</p>" : "") +
+      '<div class="modal-akcje"><button class="btn" data-a="drukuj">🖨 Drukuj</button>' +
+      '<button class="btn btn-glowny" data-a="x">Zamknij</button></div></div></div>');
+    m.addEventListener("click", e => {
+      if (e.target.dataset.a === "x" || e.target === m) m.remove();
+      if (e.target.dataset.a === "drukuj") window.print();
+    });
+    document.body.appendChild(m);
   },
 
   _modalDodaj() {

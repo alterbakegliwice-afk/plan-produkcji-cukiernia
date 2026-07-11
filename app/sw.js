@@ -1,5 +1,7 @@
 // Service worker — praca offline (cache-first z aktualizacją w tle)
-const CACHE = "alterbake-planer-v1";
+// UWAGA: przy każdej zmianie plików aplikacji podbij numer wersji poniżej,
+// inaczej telefony zostaną na starej wersji do wygaśnięcia cache.
+const CACHE = "alterbake-planer-v2";
 const PLIKI = [
   "./", "index.html", "manifest.webmanifest", "ikona.svg", "css/app.css",
   "data/receptury.js", "data/zasoby.js", "data/wiedza.js",

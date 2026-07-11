@@ -31,7 +31,8 @@ Dane (plany, zadania, inspiracje) żyją w przeglądarce telefonu (localStorage)
 - Bloki produkcyjne na osi 06:00–16:00: przygotowanie (ręce) → fermentacja/chłodzenie (pasywne) → **piec** → studzenie → wykończenie.
 - Osobne tory dla **Bongard Krystal+**, **IBIS GT MAXI 3** i **smażalnika MechMasz**.
 - **„Ułóż dzień”** — symulacja rozstawia bloki bez kolizji, pilnując drabinki temperatur (piec konwekcyjny grzeje się szybciej niż stygnie → wypieki od najniższej do najwyższej temperatury) i dostępności IBIS-a (rano piekarnia).
-- Ostrzeżenia: nakładające się wypieki, spadki temperatur, przekroczenie zmiany, przeciążenie osoby.
+- Ostrzeżenia: nakładające się wypieki, spadki temperatur, przekroczenie zmiany, przeciążenie osoby. Smażenie liczy się jako praca rąk (ktoś stoi przy smażalniku).
+- **🧾 Naważki dnia** — zbiorcza lista składników z całego planu (suma po blokach) do druku: gotowa lista naważek dla pomocy albo lista zakupów.
 - **Inteligentne podpowiedzi**: kiedy zrobić podwójną partię kremu/ciasta i zamrozić, serniki na jutrzejszą witrynę (tężeją noc), wspólne okno smażenia pączków i donutów, delegacja gdy dzień Oliwii pęka w szwach.
 
 ### 📖 Receptury — 18 produktów z systemu Receptur XLSX

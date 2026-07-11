@@ -55,13 +55,13 @@ window.App = {
     const u = Store.stan.ustawienia;
     const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>⚙️ Ustawienia</h2>' +
       '<h3>Dzień pracy</h3><div class="rzad">' +
-      '<label class="pole" style="flex:1"><span>Start</span><input type="time" id="u-od" value="' + u.dzienOd + '"></label>' +
-      '<label class="pole" style="flex:1"><span>Koniec</span><input type="time" id="u-do" value="' + u.dzienDo + '"></label></div>' +
+      '<label class="pole" style="flex:1"><span>Start</span><input type="time" id="u-od" value="' + AB.esc(u.dzienOd) + '"></label>' +
+      '<label class="pole" style="flex:1"><span>Koniec</span><input type="time" id="u-do" value="' + AB.esc(u.dzienDo) + '"></label></div>' +
       "<h3>Zespół</h3>" +
       u.zespol.map((os, i) =>
         '<div class="rzad" style="margin-bottom:6px"><b style="width:70px">' + AB.esc(os.nazwa) + "</b>" +
-        '<input type="time" data-zm="od" data-i="' + i + '" value="' + os.od + '" style="width:auto">–' +
-        '<input type="time" data-zm="do" data-i="' + i + '" value="' + os.do + '" style="width:auto"></div>').join("") +
+        '<input type="time" data-zm="od" data-i="' + i + '" value="' + AB.esc(os.od) + '" style="width:auto">–' +
+        '<input type="time" data-zm="do" data-i="' + i + '" value="' + AB.esc(os.do) + '" style="width:auto"></div>').join("") +
       '<h3 style="margin-top:14px">Sous Chef online (opcjonalnie)</h3>' +
       '<p class="maly wyciszony">Tryb lokalny działa bez internetu. Tryb online łączy się z Claude API — potrzebny własny klucz z console.anthropic.com. Klucz zostaje tylko w tym telefonie (localStorage). Uwaga: klucz w przeglądarce jest widoczny dla każdego z dostępem do urządzenia — używaj klucza z niskim limitem wydatków.</p>' +
       '<label class="pole"><span>Klucz API</span><input type="password" id="u-klucz" value="' + AB.esc(u.apiKey || "") + '" placeholder="sk-ant-…"></label>' +

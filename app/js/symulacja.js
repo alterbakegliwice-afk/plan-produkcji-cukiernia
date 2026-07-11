@@ -28,9 +28,10 @@ window.Symulacja = {
     if (rz.pasywnePrzed) seg.push({ typ: "pasywny", nazwa: "Fermentacja / rozrost", od: t, do: t += rz.pasywnePrzed });
 
     if (rz.piec) {
-      const nazwaPieca = rz.zasob === "smazalnik" ? "Smażenie" : "Wypiek";
-      seg.push({ typ: "piec", nazwa: nazwaPieca + " (" + rz.wsady + " wsad" + (rz.wsady > 1 ? "y" : "") + ")",
-                 od: t, do: t += rz.piec, zasob: rz.zasob, temp: Czas.temperatura(r) });
+      const smazenie = rz.zasob === "smazalnik";
+      // smażenie angażuje ręce (partie wkłada się i wyjmuje na bieżąco) — wypiek w piecu nie
+      seg.push({ typ: "piec", nazwa: (smazenie ? "Smażenie" : "Wypiek") + " (" + rz.wsady + " wsad" + (rz.wsady > 1 ? "y" : "") + ")",
+                 od: t, do: t += rz.piec, zasob: rz.zasob, temp: Czas.temperatura(r), osobaAktywna: smazenie });
       seg.push({ typ: "pasywny", nazwa: "Studzenie", od: t, do: t += rz.studzenie });
     }
 
@@ -86,7 +87,8 @@ window.Symulacja = {
     for (const poz of posort) {
       const r = AB.receptura(poz.nr);
       if (!r) continue;
-      const osoba = poz.osoba || "oliwia";
+      let osoba = poz.osoba || "oliwia";
+      if (!zajeteOsoby[osoba]) osoba = ust.zespol[0].id; // osoba spoza zespołu (np. po edycji składu) → szef
       const seg = this.segmenty(poz.nr, poz.partie);
       if (!seg.length) continue;
 
@@ -110,9 +112,17 @@ window.Symulacja = {
             if (od < dostepnyOd) { start += dostepnyOd - od; ok = false; break; }
             const wolne = this._wolneOkno(zajetePiece[s.zasob], od, s.do - s.od);
             if (wolne > od) { start += wolne - od; ok = false; break; }
+            if (s.osobaAktywna) { // smażenie: ta sama osoba musi być wolna
+              const wolnaOsoba = this._wolneOkno(zajeteOsoby[osoba], od, s.do - s.od);
+              if (wolnaOsoba > od) { start += wolnaOsoba - od; ok = false; break; }
+            }
           }
         }
         proby++;
+      }
+      if (!ok) {
+        ostrzezenia.push({ typ: "kolizja", tekst: r.nazwa + ": nie udało się znaleźć okna bez kolizji — blok wstawiony z nakładaniem. " +
+          "Zmniejsz liczbę produktów albo rozłóż na dwa dni." });
       }
 
       // rezerwacja zasobów
@@ -122,6 +132,7 @@ window.Symulacja = {
         else if (s.typ === "piec") {
           this._wstawZajete(zajetePiece[s.zasob], od, do_);
           koniecPieca[s.zasob] = Math.max(koniecPieca[s.zasob], do_);
+          if (s.osobaAktywna) this._wstawZajete(zajeteOsoby[osoba], od, do_);
         }
       }
 
@@ -148,9 +159,13 @@ window.Symulacja = {
     for (let i = 1; i < piecowe.length; i++) {
       const t0 = piecowe[i - 1].s.temp, t1 = piecowe[i].s.temp;
       if (t1 < t0 - 20) {
-        ostrzezenia.push({ typ: "piec", tekst: "Piec: po " + t0 + "°C (" + AB.receptura(piecowe[i - 1].b.nr).nazwa +
-          ") wraca w dół do " + t1 + "°C (" + AB.receptura(piecowe[i].b.nr).nazwa +
-          ") — piec stygnie wolno. Zamień kolejność wypieków, jeśli się da." });
+        const rPoprz = AB.receptura(piecowe[i - 1].b.nr);
+        const przezFermentacje = (rPoprz.proces.ferm_min || 0) + (rPoprz.proces.rozrost_min || 0) > 0;
+        ostrzezenia.push({ typ: "piec", tekst: "Piec: po " + t0 + "°C (" + rPoprz.nazwa +
+          ") wraca w dół do " + t1 + "°C (" + AB.receptura(piecowe[i].b.nr).nazwa + "). " +
+          (przezFermentacje
+            ? "To cena wczesnego startu drożdżowych/laminowanych — dolicz 10–15 min na wystygnięcie pieca (drzwi uchylone) albo przenieś " + rPoprz.nazwa.toLowerCase() + " na koniec, jeśli godzina witryny pozwala."
+            : "Piec stygnie wolno — zamień kolejność wypieków, jeśli się da.") });
       }
     }
 
@@ -206,7 +221,7 @@ window.Symulacja = {
     const zespol = Store.stan.ustawienia.zespol;
     const minAktywne = {};
     for (const b of dzien.bloki) {
-      const akt = b.segmenty.filter(s => s.typ === "aktywny").reduce((a, s) => a + (s.do - s.od), 0);
+      const akt = b.segmenty.filter(s => s.typ === "aktywny" || s.osobaAktywna).reduce((a, s) => a + (s.do - s.od), 0);
       minAktywne[b.osoba] = (minAktywne[b.osoba] || 0) + akt;
     }
     const szef = zespol.find(z => z.rola === "szef");

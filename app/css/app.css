@@ -4,12 +4,14 @@
   --tlo: #f7f3ec;            /* ciepły ecru */
   --karta: #fffdf9;
   --atrament: #2b2119;       /* espresso */
-  --atrament-2: #6b5d4f;
-  --wyciszony: #9a8c7c;
+  --atrament-2: #5f5344;
+  --wyciszony: #756857;      /* ≥4.5:1 na tle */
   --linia: #e7ded1;
   --akcent: #b4552d;         /* terracotta */
   --akcent-tlo: #f6e3d7;
   --zloto: #a8842c;
+  --zloto-tekst: #7c611c;    /* tekst złoty na jasnym tle */
+  --na-zlocie: #241a06;      /* tekst na złotym segmencie */
   --zielen: #4a7c3a;
   --zielen-tlo: #e6efe0;
   --blad: #b03030;
@@ -28,11 +30,13 @@
     --karta: #211c17;
     --atrament: #f1e9de;
     --atrament-2: #c4b5a3;
-    --wyciszony: #8d8071;
+    --wyciszony: #a89a89;
     --linia: #372f27;
     --akcent: #d97a4d;
     --akcent-tlo: #3a2418;
     --zloto: #cfa53f;
+    --zloto-tekst: #cfa53f;
+    --na-zlocie: #241a06;
     --zielen: #7fb56b;
     --zielen-tlo: #24301e;
     --blad: #e06c6c;
@@ -117,11 +121,12 @@ button { font: inherit; }
 .chip {
   display: inline-flex; align-items: center; gap: 4px;
   background: var(--akcent-tlo); color: var(--akcent);
-  border-radius: 999px; padding: 3px 10px; font-size: .74rem; font-weight: 700;
+  border-radius: 999px; padding: 6px 12px; font-size: .74rem; font-weight: 700;
+  min-height: 32px; border: 0; cursor: pointer;
 }
 .chip.szary { background: var(--tlo); color: var(--atrament-2); border: 1px solid var(--linia); }
 .chip.zielony { background: var(--zielen-tlo); color: var(--zielen); }
-.chip.zloty { background: color-mix(in srgb, var(--zloto) 16%, transparent); color: var(--zloto); }
+.chip.zloty { background: color-mix(in srgb, var(--zloto) 16%, transparent); color: var(--zloto-tekst); }
 .chipy { display: flex; gap: 6px; flex-wrap: wrap; }
 
 /* ── formularze ── */
@@ -144,7 +149,7 @@ label.pole > span { display: block; font-size: .78rem; font-weight: 700; color: 
 .os-siatka { position: relative; min-width: 640px; }
 .os-godziny { display: flex; border-bottom: 1px solid var(--linia); position: sticky; top: 0; background: var(--karta); z-index: 2; }
 .os-godziny div { flex: 0 0 60px; font-size: .68rem; color: var(--wyciszony); padding: 4px 0 4px 4px; border-left: 1px dashed var(--linia); }
-.os-tor { position: relative; height: 46px; border-bottom: 1px solid var(--linia); }
+.os-tor { position: relative; height: 56px; border-bottom: 1px solid var(--linia); }
 .os-tor:last-child { border-bottom: 0; }
 .os-tor .tor-nazwa {
   position: sticky; left: 0; z-index: 3; width: 86px; height: 100%;
@@ -154,14 +159,14 @@ label.pole > span { display: block; font-size: .78rem; font-weight: 700; color: 
   pointer-events: none;
 }
 .blok-seg {
-  position: absolute; top: 7px; height: 32px; border-radius: 8px;
+  position: absolute; top: 6px; height: 44px; border-radius: 8px;
   font-size: .66rem; font-weight: 700; color: #fff;
   display: flex; align-items: center; padding: 0 6px; overflow: hidden; white-space: nowrap;
-  cursor: pointer;
+  cursor: pointer; min-width: 24px;
 }
 .blok-seg.aktywny { background: var(--akcent); }
 .blok-seg.pasywny { background: var(--pasywny); color: var(--atrament-2); border: 1px dashed var(--wyciszony); }
-.blok-seg.piec { background: var(--zloto); }
+.blok-seg.piec { background: var(--zloto); color: var(--na-zlocie); }
 .blok-seg.zaznaczony { outline: 3px solid var(--atrament); outline-offset: 1px; z-index: 5; }
 .linia-teraz { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--blad); z-index: 4; }
 
