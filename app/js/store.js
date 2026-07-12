@@ -126,7 +126,21 @@
   aliasuj();
   if (window.ustawModul) window.ustawModul(stan.aktywnyModul);
 
+  // wpisz aliasy z powrotem do aktywnego modułu — dzięki temu nawet PODMIANA aliasu
+  // (np. Store.stan.zadania = ...filter()) trafia do trwałego magazynu, a nie ginie
+  function synchronizuj() {
+    const m = stan.moduly[stan.aktywnyModul];
+    m.ustawienia = stan.ustawienia;
+    m.kalibracja = stan.kalibracja;
+    m.plan = stan.plan;
+    m.zadania = stan.zadania;
+    m.inspiracje = stan.inspiracje;
+    m.czat = stan.czat;
+    m.nauka = stan.nauka;
+  }
+
   function doZapisu() {
+    synchronizuj();
     return { wersja: 2, aktywnyModul: stan.aktywnyModul, globalne: stan.globalne, moduly: stan.moduly };
   }
 

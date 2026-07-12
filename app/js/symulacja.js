@@ -151,21 +151,26 @@ window.Symulacja = {
       bloki.push({ id: AB.uid(), nr: poz.nr, partie: poz.partie, osoba, start, segmenty: seg });
     }
 
-    // analiza sekwencji temperatur pieca
-    const piecowe = bloki
-      .map(b => ({ b, s: b.segmenty.find(s => s.typ === "piec" && s.zasob === "bongard") }))
-      .filter(x => x.s)
-      .sort((x, y) => (x.b.start + x.s.od) - (y.b.start + y.s.od));
-    for (let i = 1; i < piecowe.length; i++) {
-      const t0 = piecowe[i - 1].s.temp, t1 = piecowe[i].s.temp;
-      if (t1 < t0 - 20) {
-        const rPoprz = AB.receptura(piecowe[i - 1].b.nr);
-        const przezFermentacje = (rPoprz.proces.ferm_min || 0) + (rPoprz.proces.rozrost_min || 0) > 0;
-        ostrzezenia.push({ typ: "piec", tekst: "Piec: po " + t0 + "°C (" + rPoprz.nazwa +
-          ") wraca w dół do " + t1 + "°C (" + AB.receptura(piecowe[i].b.nr).nazwa + "). " +
-          (przezFermentacje
-            ? "To cena wczesnego startu drożdżowych/laminowanych — dolicz 10–15 min na wystygnięcie pieca (drzwi uchylone) albo przenieś " + rPoprz.nazwa.toLowerCase() + " na koniec, jeśli godzina witryny pozwala."
-            : "Piec stygnie wolno — zamień kolejność wypieków, jeśli się da.") });
+    // analiza sekwencji temperatur — dla KAŻDEGO pieca (nie tylko Bongarda;
+    // w piekarni wszystko idzie na IBIS-a i to jego drabinka pokładów ma znaczenie)
+    for (const piec of (window.AB_ZASOBY.piece || [])) {
+      if (piec.id === "smazalnik") continue;
+      const nazwaPieca = piec.nazwa.split(" ")[0];
+      const piecowe = bloki
+        .map(b => ({ b, s: b.segmenty.find(s => s.typ === "piec" && s.zasob === piec.id) }))
+        .filter(x => x.s && x.s.temp)
+        .sort((x, y) => (x.b.start + x.s.od) - (y.b.start + y.s.od));
+      for (let i = 1; i < piecowe.length; i++) {
+        const t0 = piecowe[i - 1].s.temp, t1 = piecowe[i].s.temp;
+        if (t1 < t0 - 20) {
+          const rPoprz = AB.receptura(piecowe[i - 1].b.nr);
+          const przezFermentacje = (rPoprz.proces.ferm_min || 0) + (rPoprz.proces.rozrost_min || 0) > 0;
+          ostrzezenia.push({ typ: "piec", tekst: nazwaPieca + ": po " + t0 + "°C (" + rPoprz.nazwa +
+            ") schodzisz do " + t1 + "°C (" + AB.receptura(piecowe[i].b.nr).nazwa + "). " +
+            (przezFermentacje
+              ? "To cena wczesnego startu drożdżowych/laminowanych — dolicz 10–15 min na wystygnięcie pieca (drzwi uchylone) albo przełóż na koniec ciągu."
+              : "Piec stygnie wolno — piecz od najniższej do najwyższej temperatury (drabinka pokładów).") });
+        }
       }
     }
 

@@ -43,6 +43,7 @@ window.WidokPlan = {
       '<button class="btn btn-glowny" data-akcja="dodaj">+ Dodaj produkt</button>' +
       '<button class="btn" data-akcja="auto-plan">🤖 Auto-plan</button>' +
       (dzien.bloki.length ? '<button class="btn" data-akcja="uloz">✨ Ułóż</button>' +
+        '<button class="btn" data-akcja="odprawa-d1">🌙 Odprawa D-1</button>' +
         '<button class="btn" data-akcja="zadania-z-planu">✅ Zadania z planu</button>' +
         '<button class="btn" data-akcja="nawazki-dnia">🧾 Naważki dnia</button>' +
         '<button class="btn btn-cichy rozdziel" data-akcja="wyczysc-dzien">Wyczyść</button>' : "") +
@@ -214,6 +215,7 @@ window.WidokPlan = {
     if (akcja === "uloz") this._ulozDzien();
     if (akcja === "nawazki-dnia") this._modalNawazkiDnia();
     if (akcja === "auto-plan") this._autoPlan();
+    if (akcja === "odprawa-d1") this._modalOdprawa();
     if (akcja === "zadania-z-planu") {
       const n = Automat.generujZadania(this.data);
       AB.toast(n ? "Utworzono " + n + " zadań z planu ✓" : "Nic nowego do dodania");
@@ -231,6 +233,23 @@ window.WidokPlan = {
     if (akcja === "usun-blok") { dzien.bloki = dzien.bloki.filter(x => x !== b); this.zaznaczony = null; Store.zapisz(); App.render(); }
     if (akcja === "otworz-recepture") { WidokReceptury.otwarta = b.nr; App.idz("receptury"); }
     if (akcja === "zmien-osobe" && cel.tagName === "SELECT") { /* obsługa w change */ }
+  },
+
+  // Odprawa D-1 — co przygotować dzień wcześniej (retard, zaczyny, serniki…)
+  _modalOdprawa() {
+    const punkty = Automat.odprawaD1(this.data);
+    const wczoraj = AB.dataPL(AB.przesunDate(this.data, -1));
+    const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>🌙 Odprawa D-1 — na plan ' + AB.dataPL(this.data) + "</h2>" +
+      '<p class="maly wyciszony">Co zrobić <b>wieczorem dzień wcześniej</b> (' + wczoraj + "), żeby rano ruszyć bez presji. Oś dnia tego nie pokazuje — a tu jest.</p>" +
+      (punkty.length ? punkty.map(p => '<div class="sugestia"><b>' + AB.esc(p.tytul) + "</b>" + AB.esc(p.tekst) + "</div>").join("")
+        : '<p class="wyciszony">Brak przygotowań z wyprzedzeniem.</p>') +
+      '<div class="modal-akcje"><button class="btn" data-a="drukuj">🖨 Drukuj</button>' +
+      '<button class="btn btn-glowny" data-a="x">Zamknij</button></div></div></div>');
+    m.addEventListener("click", e => {
+      if (e.target.dataset.a === "x" || e.target === m) m.remove();
+      if (e.target.dataset.a === "drukuj") window.print();
+    });
+    document.body.appendChild(m);
   },
 
   // zbiorcza lista naważek/zakupów z całego dnia — suma składników po wszystkich blokach

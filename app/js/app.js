@@ -27,6 +27,8 @@ window.App = {
     if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
       navigator.serviceWorker.register("sw.js").catch(() => {});
     }
+    // poproś przeglądarkę o trwały magazyn (żeby nie kasowała danych przy sprzątaniu)
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
   },
 
   idz(widok) {

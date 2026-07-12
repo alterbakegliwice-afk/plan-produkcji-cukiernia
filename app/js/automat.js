@@ -68,6 +68,62 @@ window.Automat = {
     return { ...wynik, produkty };
   },
 
+  // ODPRAWA D-1 — czego oś dnia nie pokazuje: co przygotować WIECZÓR wcześniej.
+  // Piekarnia: dokarmienie zaczynów (wg czasu prowadzenia), retard kęsów, zaparki.
+  // Cukiernia: serniki dzień przed, ciasto chłodzone, kremy/mrożenie z wyprzedzeniem.
+  odprawaD1(data) {
+    const dzien = Store.dzien(data);
+    const punkty = [];
+    if (!dzien.bloki.length) return punkty;
+    const nrList = dzien.bloki.map(b => b.nr);
+    const receptury = nrList.map(AB.receptura).filter(Boolean);
+    const M = window.AB_MODUL || {};
+
+    if (M.klucz === "piekarnia") {
+      // 1. zaczyny użyte w planie → dokarmić D-1 wg czasu prowadzenia
+      const zaczyny = new Set();
+      for (const r of receptury) (r.prefermenty || []).forEach(p => zaczyny.add(p));
+      const P = window.AB_PREFERMENTY || {};
+      for (const nazwa of zaczyny) {
+        // receptura: "Pszenny levain płynny (100%)" · tabela: "Pszenny levain płynny"
+        const czysta = nazwa.replace(/\s*\(.*?\)\s*/g, " ").trim().toLowerCase();
+        let p = P[nazwa];
+        if (!p) {
+          const wpis = Object.entries(P).find(([k]) => {
+            const kl = k.toLowerCase();
+            return kl === czysta || czysta.startsWith(kl) || kl.startsWith(czysta);
+          });
+          p = wpis && wpis[1];
+        }
+        const czas = p && p.czas_h != null ? p.czas_h + " h przed mieszaniem" : "wg tabeli prowadzenia";
+        const sygnal = p && p.sygnal ? " · sygnał: " + p.sygnal : "";
+        punkty.push({ tytul: "🫧 Dokarm: " + nazwa, tekst: "Odśwież ~" + czas + sygnal + ". Zaczyn ma być na szczycie w chwili mieszania." });
+      }
+      // 2. zaparki / kęsy laminowane / retard — z tabeli półproduktów
+      for (const pp of (window.AB_ZASOBY.polprodukty || [])) {
+        if (pp.uzycie && pp.uzycie.some(nr => nrList.includes(nr))) {
+          punkty.push({ tytul: "🌙 " + pp.nazwa, tekst: pp.rada + " (mrożenie: " + pp.mrozenie + ")" });
+        } else if (/zaparki|retard|levain/i.test(pp.nazwa)) {
+          punkty.push({ tytul: "🌙 " + pp.nazwa, tekst: pp.rada });
+        }
+      }
+      // 3. ogólna zasada modelu wieczornego
+      punkty.push({ tytul: "🌙 Domknięcie zmiany", tekst: "Uformuj i wstaw do retardu nocnego (Asber −2…8°C) to, co idzie rano prosto z chłodu. Rano tylko gar + odpiek — bez presji." });
+    } else {
+      // cukiernia: co zrobić dzień wcześniej
+      const serniki = receptury.filter(r => r.kategoria === "Serniki");
+      if (serniki.length) punkty.push({ tytul: "🌙 Serniki — piecz dziś na jutro", tekst: serniki.map(r => r.nazwa).join(", ") + ": tężeją noc w lodówce, na witrynę są gotowe dopiero jutro." });
+      if (nrList.includes("C-018")) punkty.push({ tytul: "🌙 Ciasto maślane — schłodź", tekst: "Ciasto na ciastka maślane chłodź min. 2 h (najlepiej noc) przed wałkowaniem." });
+      for (const pp of (window.AB_ZASOBY.polprodukty || [])) {
+        if (pp.uzycie && pp.uzycie.some(nr => nrList.includes(nr)) && /mroż|retard|noc/i.test(pp.rada)) {
+          punkty.push({ tytul: "🌙 " + pp.nazwa, tekst: pp.rada });
+        }
+      }
+      if (!punkty.length) punkty.push({ tytul: "🌙 Brak zadań z wyprzedzeniem", tekst: "Dzisiejszy plan nie wymaga przygotowań dzień wcześniej — wszystko robisz na bieżąco." });
+    }
+    return punkty;
+  },
+
   // zadania z planu: naważki (pomoc) + sprzątanie końcowe
   generujZadania(data) {
     const dzien = Store.dzien(data);
