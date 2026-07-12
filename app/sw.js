@@ -1,13 +1,16 @@
 // Service worker — praca offline (cache-first z aktualizacją w tle)
 // UWAGA: przy każdej zmianie plików aplikacji podbij numer wersji poniżej,
 // inaczej telefony zostaną na starej wersji do wygaśnięcia cache.
-const CACHE = "alterbake-planer-v2";
+const CACHE = "alterbake-planer-v3";
 const PLIKI = [
   "./", "index.html", "manifest.webmanifest", "ikona.svg", "css/app.css",
-  "data/receptury.js", "data/zasoby.js", "data/wiedza.js",
-  "js/util.js", "js/store.js", "js/czas.js", "js/symulacja.js", "js/wykresy.js",
-  "js/souschef.js", "js/widok-plan.js", "js/widok-receptury.js",
-  "js/widok-zadania.js", "js/widok-inspiracje.js", "js/widok-souschef.js", "js/app.js"
+  "data/receptury.js", "data/zasoby.js", "data/wiedza.js", "data/korpus-cukiernia.js",
+  "data/piekarnia.js", "data/zasoby-piekarnia.js", "data/wiedza-piekarnia.js", "data/korpus-piekarnia.js",
+  "data/moduly.js",
+  "js/util.js", "js/wiedza-index.js", "js/store.js", "js/nauka.js", "js/czas.js",
+  "js/symulacja.js", "js/automat.js", "js/wykresy.js", "js/souschef.js",
+  "js/widok-plan.js", "js/widok-receptury.js", "js/widok-zadania.js",
+  "js/widok-inspiracje.js", "js/widok-souschef.js", "js/app.js"
 ];
 
 self.addEventListener("install", e => {

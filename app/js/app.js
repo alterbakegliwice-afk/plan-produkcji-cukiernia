@@ -16,6 +16,7 @@ window.App = {
       if (b) this.idz(b.dataset.widok);
     });
     document.querySelector("#btn-ustawienia").addEventListener("click", () => this.ustawienia());
+    document.querySelector("#btn-modul").addEventListener("click", () => this.przelaczModul());
     // delegowana zmiana osoby na pasku bloku (select w widoku planu)
     document.querySelector("#widok").addEventListener("change", e => {
       if (e.target.dataset.akcja === "zmien-osobe" && WidokPlan.zaznaczony) {
@@ -34,7 +35,30 @@ window.App = {
     this.render();
   },
 
+  przelaczModul() {
+    const inny = Store.modul() === "cukiernia" ? "piekarnia" : "cukiernia";
+    Store.przelaczModul(inny);
+    // reset stanów widoków zależnych od modułu
+    WidokReceptury.otwarta = null;
+    WidokReceptury.filtr = ""; WidokReceptury.kategoria = "";
+    WidokPlan.zaznaczony = null;
+    if (window.Wiedza) Wiedza.przebuduj();
+    const M = window.AB_MODUL;
+    AB.toast(M.ikona + " Moduł: " + M.nazwa);
+    this.idz("plan");
+  },
+
+  _naglowek() {
+    const M = window.AB_MODUL || { nazwa: "Planer", ikona: "🍰" };
+    const marka = document.querySelector("#marka-modul");
+    if (marka) marka.textContent = M.nazwa;
+    const btn = document.querySelector("#btn-modul");
+    // ikona pokazuje moduł, DO którego przełączysz
+    if (btn) btn.textContent = Store.modul() === "cukiernia" ? "🥖" : "🍰";
+  },
+
   render() {
+    this._naglowek();
     // nawigacja
     document.querySelectorAll("#nawigacja button").forEach(b =>
       b.classList.toggle("aktywna", b.dataset.widok === this.widok));

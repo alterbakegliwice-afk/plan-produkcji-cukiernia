@@ -28,7 +28,7 @@ window.WidokReceptury = {
       const kat = e.target.closest("[data-kat]");
       if (kat) { this.kategoria = kat.dataset.kat; App.render(); return; }
       const karta = e.target.closest("[data-nr]");
-      if (karta) { this.otwarta = karta.dataset.nr; this.partie = 1; App.render(); }
+      if (karta) { this.otwarta = karta.dataset.nr; this.partie = (window.AB_MODUL || {}).minIlosc || 1; App.render(); }
     });
   },
 
@@ -38,17 +38,24 @@ window.WidokReceptury = {
       (!this.kategoria || r.kategoria === this.kategoria) &&
       (!q || r.nazwa.toLowerCase().includes(q) || r.nr.toLowerCase().includes(q)));
 
+    const M = window.AB_MODUL;
+    const bazowa = M.minIlosc;
     lista.innerHTML = "";
     for (const r of pasujace) {
-      const rz = Czas.rozklad(r.nr, 1);
-      const czasNiepewny = !Store.stan.kalibracja[r.nr] && (r.czas_pracy_min || 0) <= 2;
+      const rz = Czas.rozklad(r.nr, bazowa);
+      const czasZ = r.czas_pracy_min;
+      const czasNiepewny = !Store.stan.kalibracja[r.nr] && (czasZ == null || czasZ <= 2);
+      const opisWydajnosci = M.skalowanie === "maka"
+        ? bazowa + " kg mąki → ~" + Czas.sztuki(r, bazowa) + " szt."
+        : "partia → ~" + Math.round(r.porcje_partia || 1) + " porcji";
+      const koszt = M.skalowanie === "maka" ? r.koszt_na_kg_maki : r.koszt_surowcow_partia;
       lista.appendChild(AB.el('<div class="karta dotykowa" data-nr="' + r.nr + '">' +
         '<div class="rzad"><b>' + AB.esc(r.nazwa) + '</b><span class="chip szary">' + AB.esc(r.kategoria || "") + "</span>" +
         '<span class="rozdziel wyciszony maly">' + r.nr + "</span></div>" +
         '<div class="wyciszony maly" style="margin-top:4px">' +
         (r.tylko_proces ? "⚠ tylko parametry procesu — brak składników w XLSX" :
-          "partia: ~" + Math.round(r.porcje_partia || 1) + " porcji · surowce " +
-          (r.brak_cen && r.brak_cen.length ? "niepełne (brak cen)" : AB.zl(r.koszt_surowcow_partia))) +
+          opisWydajnosci + " · surowce " +
+          (r.brak_cen && r.brak_cen.length ? "niepełne" : AB.zl(koszt || 0))) +
         " · ręce " + (czasNiepewny ? "⚠ do kalibracji" : AB.min(Store.czasPracy(r.nr))) +
         (rz.piec ? " · piec " + AB.min(rz.czasWsadu) + "/wsad" : "") + "</div>" +
         (r.alergeny.length ? '<div class="chipy" style="margin-top:6px">' + r.alergeny.map(a => '<span class="chip zloty">' + AB.esc(a) + "</span>").join("") + "</div>" : "") +
@@ -74,13 +81,19 @@ window.WidokReceptury = {
       r.alergeny.map(a => '<span class="chip zloty">' + AB.esc(a) + "</span>").join("") + "</div>" +
       (p.uwagi ? '<p class="maly">📌 ' + AB.esc(p.uwagi) + "</p>" : "") + "</div>";
 
-    // skalowanie
+    // skalowanie (moduł: partie albo kg mąki)
+    const M = window.AB_MODUL;
+    const sztuk = Czas.sztuki(r, this.partie);
     html += '<div class="karta"><div class="rzad"><h2 style="margin:0">Skalowanie</h2>' +
       '<div class="stepper rozdziel"><button data-akcja="partie" data-s="-1">−</button>' +
-      '<span class="wartosc">' + this.partie + "</span>" +
+      '<span class="wartosc">' + this.partie + (M.skalowanie === "maka" ? " kg" : "") + "</span>" +
       '<button data-akcja="partie" data-s="1">+</button></div></div>' +
-      '<p class="maly wyciszony" style="margin:6px 0 10px">partii × ' + Math.round(r.porcje_partia || 1) + " porcji = <b>~" +
-      Math.round((r.porcje_partia || 1) * this.partie) + " porcji</b> · masa ciasta ~" + AB.g(r.masa_partii_g * this.partie) + "</p>";
+      '<p class="maly wyciszony" style="margin:6px 0 10px">' +
+      (M.skalowanie === "maka"
+        ? this.partie + " kg mąki wsadu → <b>~" + sztuk + " szt.</b> · masa ciasta ~" + AB.g(Czas.masaCiasta(r, this.partie)) +
+          " · hydracja " + (r.hydracja_pct || "?") + "%"
+        : this.partie + " × " + Math.round(r.porcje_partia || 1) + " porcji = <b>~" + sztuk + " porcji</b> · masa ciasta ~" +
+          AB.g(Czas.masaCiasta(r, this.partie))) + "</p>";
 
     // rozkład czasu
     html += '<div class="przewijalna"><table class="tabela"><tr>' +
@@ -92,29 +105,31 @@ window.WidokReceptury = {
 
     if (koszt && !r.tylko_proces) {
       html += '<p class="maly" style="margin-top:8px">Surowce <b>' + AB.zl(koszt.surowce) + "</b> + robocizna <b>" + AB.zl(koszt.robocizna) +
-        "</b> = <b>" + AB.zl(koszt.razem) + "</b> (" + AB.zl(koszt.naPorcje) + "/porcję" +
+        "</b> = <b>" + AB.zl(koszt.razem) + "</b> (" + AB.zl(koszt.naSztuke) + "/" + (M.skalowanie === "maka" ? "szt." : "porcję") +
         (r.cena_obecna ? ", cena obecna " + AB.zl(r.cena_obecna) : "") + ")</p>";
-      if (r.brak_cen && r.brak_cen.length) {
-        html += '<div class="ostrzezenie">⚠️ Koszt NIEPEŁNY — w cenniku brakuje cen: ' + AB.esc(r.brak_cen.join(", ")) +
-          ". Uzupełnij CENNIK_SUROWCÓW w XLSX i przelicz.</div>";
+      if (koszt.niepelny || (r.brak_cen && r.brak_cen.length)) {
+        html += '<div class="ostrzezenie">⚠️ Koszt NIEPEŁNY — w cenniku brakuje cen: ' + AB.esc((r.brak_cen || []).slice(0, 8).join(", ")) +
+          ((r.brak_cen || []).length > 8 ? " …" : "") + ". Uzupełnij CENNIK_SUROWCÓW w XLSX i przelicz.</div>";
       }
     }
-    if (!Store.stan.kalibracja[r.nr] && (r.czas_pracy_min || 0) <= 2) {
-      html += '<div class="ostrzezenie">⚠️ Czas pracy z arkusza (' + (r.czas_pracy_min || 0) +
-        " min) wygląda na nierealny — zmierz stoperem i użyj „Kalibruj czas”, inaczej symulacje będą nieprawdziwe.</div>";
+    const czasZArkusza = r.czas_pracy_min;
+    if (!Store.stan.kalibracja[r.nr] && (czasZArkusza == null || czasZArkusza <= 2)) {
+      html += '<div class="ostrzezenie">⚠️ Czas pracy ' + (czasZArkusza == null ? "nie podany w arkuszu" : "z arkusza (" + czasZArkusza + " min) wygląda na nierealny") +
+        " — zmierz stoperem i użyj „Kalibruj czas”, inaczej symulacje będą nieprawdziwe.</div>";
     }
     html += '<div class="rzad" style="margin-top:10px">' +
       '<button class="btn btn-glowny" data-akcja="do-planu">+ Wstaw do planu</button>' +
       '<button class="btn" data-akcja="deleguj-nawazki">Deleguj naważki</button>' +
       '<button class="btn btn-cichy" data-akcja="kalibruj">⏱ Kalibruj czas</button></div></div>';
 
-    // wykres czasu vs ilość (zakres = zakres steppera)
+    // wykres czasu vs ilość (zakres = zakres steppera modułu)
     html += '<div class="karta"><h2>Czas vs ilość</h2>' +
-      Wykresy.skalowanie(r.nr, 12, this.partie) + "</div>";
+      Wykresy.skalowanie(r.nr, M.maxIlosc, this.partie) + "</div>";
 
     // naważki wg faz
     if (nawazki.length) {
-      html += '<div class="karta"><div class="rzad"><h2 style="margin:0">Naważki × ' + this.partie + '</h2>' +
+      html += '<div class="karta"><div class="rzad"><h2 style="margin:0">Naważki — ' + this.partie +
+        (M.skalowanie === "maka" ? " kg mąki" : " partii") + '</h2>' +
         '<button class="btn btn-maly rozdziel" data-akcja="drukuj">🖨 Drukuj</button></div>';
       for (const faza of fazy) {
         const grupa = nawazki.filter(n => n.faza === faza);
@@ -150,33 +165,39 @@ window.WidokReceptury = {
     const cel = e.target.closest("[data-akcja]");
     if (!cel) return;
     const a = cel.dataset.akcja;
+    const M = window.AB_MODUL;
     if (a === "wroc") { this.otwarta = null; App.render(); }
-    if (a === "partie") { this.partie = Math.min(12, Math.max(1, this.partie + Number(cel.dataset.s))); App.render(); }
+    if (a === "partie") {
+      this.partie = Math.min(M.maxIlosc, Math.max(M.minIlosc, this.partie + Number(cel.dataset.s) * M.krokIlosc));
+      App.render();
+    }
     if (a === "do-planu") {
-      WidokPlan._dodajBlok(r.nr, this.partie, "oliwia");
+      WidokPlan._dodajBlok(r.nr, this.partie, Store.stan.ustawienia.zespol[0].id);
       App.idz("plan");
     }
     if (a === "drukuj") window.print();
     if (a === "deleguj-nawazki") {
       const pomoc = Store.stan.ustawienia.zespol.find(z => z.rola === "pomoc");
       Store.stan.zadania.push({
-        id: AB.uid(), tytul: "Naważki: " + r.nazwa + " × " + this.partie + " partii",
-        osoba: pomoc ? pomoc.id : "oliwia", data: WidokPlan.data,
-        czas_min: 10 * this.partie, status: "otwarte", typ: "nawazki", zrodlo: r.nr
+        id: AB.uid(), tytul: "Naważki: " + r.nazwa + " — " + this.partie + (M.skalowanie === "maka" ? " kg mąki" : " partii"),
+        osoba: pomoc ? pomoc.id : Store.stan.ustawienia.zespol[0].id, data: WidokPlan.data,
+        czas_min: 12, status: "otwarte", typ: "nawazki", zrodlo: r.nr
       });
       Store.zapisz();
-      AB.toast("Zadanie naważek dodane dla " + (pomoc ? pomoc.nazwa : "Oliwii") + " ✓");
+      AB.toast("Zadanie naważek dodane dla " + (pomoc ? pomoc.nazwa : M.osoba) + " ✓");
     }
     if (a === "kalibruj") this._modalKalibracji(r);
   },
 
   _modalKalibracji(r) {
     const teraz = Store.czasPracy(r.nr);
+    const jedn = (window.AB_MODUL || {}).skalowanie === "maka"
+      ? this.partie + " kg mąki" : "1 partia";
     const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>Kalibracja czasu</h2>' +
-      "<p class=\"maly\">Ile minut pracy rąk zajmuje 1 partia „" + AB.esc(r.nazwa) + "”? " +
-      "Domyślnie z arkusza FOODCOST: " + (r.czas_pracy_min || "—") + " min. Zmierz raz stoperem i wpisz — " +
-      "symulacje będą liczyć na Twojej liczbie.</p>" +
-      '<label class="pole"><span>Czas pracy 1 partii (min)</span><input type="number" id="kal-min" value="' + teraz + '" min="1" max="600"></label>' +
+      "<p class=\"maly\">Ile minut pracy rąk zajmuje „" + AB.esc(r.nazwa) + "” (" + jedn + ")? " +
+      "Domyślnie z arkusza: " + (r.czas_pracy_min || "—") + " min. Zmierz raz stoperem i wpisz — " +
+      "symulacje będą liczyć na Twojej liczbie. To Twoja apka się od Ciebie uczy.</p>" +
+      '<label class="pole"><span>Czas pracy (min)</span><input type="number" id="kal-min" value="' + teraz + '" min="1" max="600"></label>' +
       '<div class="modal-akcje"><button class="btn btn-cichy" data-a="x">Anuluj</button>' +
       '<button class="btn btn-glowny" data-a="ok">Zapisz</button></div></div></div>');
     m.addEventListener("click", e => {
@@ -185,7 +206,8 @@ window.WidokReceptury = {
         const v = Number(m.querySelector("#kal-min").value);
         if (v > 0) {
           Store.stan.kalibracja[r.nr] = { czas_pracy_min: v };
-          Store.zapisz(); AB.toast("Skalibrowano ✓"); m.remove(); App.render();
+          Nauka.zapamietajKalibracje(r, v, jedn); // apka uczy się Twojego pomiaru
+          Store.zapisz(); AB.toast("Skalibrowano ✓ — zapamiętane"); m.remove(); App.render();
         }
       }
     });

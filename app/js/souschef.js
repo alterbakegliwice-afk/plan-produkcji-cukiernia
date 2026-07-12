@@ -8,11 +8,12 @@ window.SousChef = {
   // ── kontekst: co wie doradca ───────────────────────────────────────────
   _kontekstPlanu(data) {
     const dzien = Store.dzien(data);
+    const jedn = (window.AB_MODUL || {}).skalowanie === "maka" ? " kg mąki" : " partii";
     if (!dzien.bloki.length) return "Plan dnia " + data + " jest pusty.";
     const linie = dzien.bloki.map(b => {
       const r = AB.receptura(b.nr);
       const koniec = b.start + b.segmenty[b.segmenty.length - 1].do;
-      return "• " + r.nazwa + " ×" + b.partie + " partii (" + AB.zMin(b.start) + "–" + AB.zMin(koniec) +
+      return "• " + r.nazwa + " — " + b.partie + jedn + " (" + AB.zMin(b.start) + "–" + AB.zMin(koniec) +
         ", " + (Czas.temperatura(r) ? Czas.temperatura(r) + "°C" : "smażone/bez pieca") + ", prowadzi: " + b.osoba + ")";
     });
     return "Plan dnia " + data + ":\n" + linie.join("\n");
@@ -27,72 +28,35 @@ window.SousChef = {
     if (/oce[nń]|omów.*plan|sprawd[zź].*plan|co s[aą]dzisz|plan dnia/.test(q)) {
       return this._ocenPlan(data);
     }
-    // 2. sezon
-    if (/sezon|miesi[aą]c|co teraz|co produkowa|owoce|lipiec|sierpie|okazje/.test(q)) {
+    // 2. sezon (tylko wprost o sezon/miesiąc — nie przechwytuj innych pytań)
+    if (/\bsezon|w sezonie|miesi[aą]c|co teraz produkowa|jaki[ei] owoce|kalendarz/.test(q)) {
       const m = W.sezon.find(s => s.miesiac === new Date().getMonth() + 1);
-      if (m) return { tekst: "📅 " + m.nazwa + " w cukierni rzemieślniczej:\n\n" +
-        "Surowce sezonu: " + m.surowce.join("; ") + "\n\n" +
-        "Okazje: " + m.okazje.join("; ") + "\n\n" +
-        "Co produkować: " + m.produkty.join("; ") + "\n\n" +
-        "💡 " + m.planowanie, zrodlo: "Kalendarz sezonowy — ZS Planowanie Produkcji" };
+      if (m) return { tekst: "📅 " + m.nazwa + ":\n\n" +
+        "Surowce sezonu: " + (m.surowce || []).join("; ") + "\n\n" +
+        "Okazje: " + (m.okazje || []).join("; ") + "\n\n" +
+        "Co produkować: " + (m.produkty || []).join("; ") + "\n\n💡 " + (m.planowanie || ""),
+        zrodlo: "Kalendarz sezonowy" };
     }
-    // 3. mrożenie / zapas
-    if (/mro[zż]|zamro|zapas|na zapas|batch|wi[eę]cej kremu|wi[eę]cej ciasta|schłodz|chłodz/.test(q)) {
-      const rady = AB_ZASOBY.polprodukty.slice(0, 5).map(p => "• " + p.nazwa + ": " + p.rada).join("\n");
-      const reg = W.reguly.filter(r => r.kategoria === "mrozenie" || r.kategoria === "chlodzenie").slice(0, 3)
-        .map(r => "• " + r.rada + " (źródło: " + r.zrodlo + ")").join("\n");
-      return { tekst: "🧊 Batching i mrożenie strategiczne:\n\n" + rady + "\n\nZe złotych standardów:\n" + reg +
-        "\n\nZasada progu: rób podwójną partię, gdy druga partia kosztuje <40% czasu pierwszej i masz zbyt/miejsce w mrozie.",
-        zrodlo: "Złote standardy + tabela półproduktów" };
-    }
-    // 4. delegacja
-    if (/deleg|julia|natalia|pomoc|komu da[cć]|zadania|rozdziel/.test(q)) {
-      const reg = W.reguly.filter(r => r.kategoria === "delegacja").slice(0, 3)
-        .map(r => "• " + r.rada).join("\n");
-      return { tekst: "👥 Delegacja wg gradientu osądu:\n\n" +
-        "Zostaje przy Tobie (wysoki osąd): ciasta i kremy do oceny sensorycznej, prowadzenie pieca, dekoracja finalna, decyzje jakościowe.\n\n" +
-        "Oddajesz pomocy od 1. dnia (niski osąd, checklista): naważki, opisywanie pudełek, mycie form, tulipany, obtaczanie pączków, przygotowanie owoców, sprzątanie.\n\n" + reg +
-        "\n\nW zakładce Zadania masz gotowe szablony z czasami — jedno dotknięcie i zadanie idzie do Julii lub Natalii.",
-        zrodlo: "ZS Planowanie Produkcji, rozdz. 5 (gradient osądu)" };
-    }
-    // 5. trendy
-    if (/trend|nowo[sś]|inspirac|co modne|dubai|pistacj|crookie|wege|vintage/.test(q)) {
+    // 3. trendy (wprost)
+    if ((W.trendy || []).length && /\btrend|co modne|radar|dubai|crookie|vintage/.test(q)) {
       const top = [...W.trendy].sort((a, b) => b.sila - a.sila).slice(0, 4);
       return { tekst: "📡 Radar trendów (najsilniejsze):\n\n" + top.map(t =>
         "• " + t.nazwa + " (siła " + t.sila + "/5, " + t.horyzont + "): " + t.dopasowanie_alterbake).join("\n\n") +
-        "\n\nPełny radar w zakładce Sous Chef → Trendy. Pomysł? Wrzuć do Inspiracji i przetestuj na 1 blasze.",
+        "\n\nPełny radar w zakładce Doradca → Trendy. Pomysł? Wrzuć do Pomysłów i przetestuj na 1 blasze.",
         zrodlo: "Radar trendów 2025/26" };
     }
-    // 6. piec / kolejność
-    if (/piec|kolejno|temperatur|bongard|ibis|wsad/.test(q)) {
-      const reg = W.reguly.filter(r => r.kategoria === "piec" || r.kategoria === "kolejnosc").slice(0, 4)
-        .map(r => "• " + r.rada + " (" + r.zrodlo + ")").join("\n");
-      return { tekst: "🔥 Sekwencjonowanie pieca:\n\nZłota zasada: planuj od pieca (wąskie gardło) i układaj wypieki od najniższej do najwyższej temperatury — piec szybciej dogrzewa niż stygnie. Bongard: jedna temperatura naraz. IBIS rano zajęty przez piekarnię.\n\n" + reg +
-        "\n\nPrzycisk „Ułóż dzień” w Planie robi to automatycznie.",
-        zrodlo: "ZS Planowanie Produkcji, rozdz. 3 (drabinka temperaturowa)" };
-    }
-    // 7. autorytety / kto
-    if (/autorytet|mistrz|kto|herm|grolet|poil|goldratt|ohno|jak robi[aą]/.test(q)) {
-      const traf = W.autorytety.filter(a => q.includes(a.nazwa.split(" ").pop().toLowerCase()));
-      const lista = (traf.length ? traf : W.autorytety.slice(0, 3)).map(a =>
-        "• " + a.nazwa + " (" + a.rola + "): " + a.praktyka + "\n  → U nas: " + a.zastosowanie).join("\n\n");
-      return { tekst: "📚 Z bazy 25 autorytetów:\n\n" + lista, zrodlo: "ZS Planowanie Produkcji, rozdz. 1" };
-    }
-    // 8. skalowanie / czas
-    if (/skalow|czas|ile zajmie|jak długo|partii|podwójn/.test(q)) {
-      return { tekst: "⏱ Model czasu Alterbake:\n\nCzas rąk n partii = czas 1 partii × (0,3 + 0,7·n) — 30% to czynności stałe (stanowisko, sprzęt, mycie), które robisz raz. Druga partia tego samego produktu kosztuje ~70% czasu pierwszej — dlatego batching się opłaca.\n\nCzas pieca liczy się wsadami (Bongard mieści ~4 formy naraz). Wykres „czas vs ilość” znajdziesz na każdej karcie receptury.\n\nCzasy są średnie — zmierz raz stoperem i skalibruj na karcie receptury.",
-        zrodlo: "Model czasu — założenia w app/data/zasoby.js" };
-    }
-    // 9. reguły ogólne — szukaj po słowach kluczowych
-    const slowa = q.split(/\s+/).filter(w => w.length > 4);
-    const trafienia = W.reguly.filter(r =>
-      slowa.some(w => (r.warunek + " " + r.rada).toLowerCase().includes(w))).slice(0, 3);
-    if (trafienia.length) {
-      return { tekst: trafienia.map(r => "• " + r.rada + "\n  (kiedy: " + r.warunek + " — źródło: " + r.zrodlo + ")").join("\n\n"),
-        zrodlo: "Reguły ze złotych standardów" };
+
+    // WSZYSTKO INNE — pełnotekstowe wyszukiwanie po całej bazie wiedzy: dokumenty,
+    // reguły, autorytety, półprodukty, sezon, ORAZ Twoja wiedza własna i nauczone fakty.
+    // Dzięki temu doradca korzysta z tego, czego się od Ciebie nauczył.
+    const znal = window.Wiedza && Wiedza.odpowiedz(pytanie);
+    if (znal && znal.tekst) {
+      return { tekst: "Z bazy wiedzy:\n\n" + znal.tekst, zrodlo: znal.zrodlo };
     }
 
-    return { tekst: "Mogę pomóc w tych tematach — zapytaj np.:\n\n• „Oceń mój plan” — analiza dzisiejszego dnia\n• „Co mrozić na zapas?” — batching półproduktów\n• „Jak delegować?” — podział na Ciebie / Julię / Natalię\n• „Co w sezonie?” — kalendarz miesiąca\n• „Trendy” — radar cukierniczy\n• „Kolejność pieca” — sekwencjonowanie wypieków\n\nAlbo włącz tryb online (⚙ Ustawienia) — wtedy rozmawiasz swobodnie z modelem Claude ugruntowanym w Twojej bazie wiedzy.",
+    return { tekst: "Nie znalazłem tego w bazie. Zapytaj inaczej albo dotknij podpowiedzi. Przykłady:\n\n" +
+      "• „Oceń mój plan” — analiza dzisiejszego dnia\n• „Co mrozić na zapas?”\n• „Jak delegować?”\n• „Co w sezonie?”\n• „Kolejność pieca / pokładów”\n\n" +
+      "Możesz też dopisać własną wiedzę (zakładka 🧠 Moja wiedza) — doradca zacznie z niej korzystać. Albo włącz tryb online (⚙ Ustawienia) — rozmowa z modelem Claude na Twojej bazie.",
       zrodlo: null };
   },
 
@@ -113,23 +77,33 @@ window.SousChef = {
   },
 
   // ── tryb online: Claude API ────────────────────────────────────────────
-  _systemPrompt() {
+  _systemPrompt(pytanie) {
     const W = window.AB_WIEDZA || {};
+    const M = window.AB_MODUL || {};
     const m = (W.sezon || []).find(s => s.miesiac === new Date().getMonth() + 1);
+    const piekarnia = M.klucz === "piekarnia";
+    // najtrafniejsze fragmenty z lokalnej bazy jako grunt dla modelu (RAG — także online)
+    const grunt = (window.Wiedza ? Wiedza.szukaj(pytanie || "planowanie produkcji", 6) : [])
+      .map(t => "— " + t.frag.tekst.replace(/\s+/g, " ").trim().slice(0, 300)).join("\n");
     return [
-      "Jesteś Sous Chefem-doradcą strategicznym Oliwii — kierowniczki cukierni w rzemieślniczej piekarni-cukierni ALTERBAKE S.C. (Gliwice).",
-      "Twoja rola: pomagasz planować produkcję cukierniczą — sekwencjonowanie pieca, batching, mrożenie, delegacja, sezonowość, eksperymenty. Odpowiadasz po polsku, konkretnie, po partnersku, z liczbami i tolerancjami. Krótko — Oliwia czyta na telefonie w pracowni.",
-      "Sprzęt: piec konwekcyjny Bongard Krystal+ (jedna temperatura naraz, ~4 formy/wsad), piec pokładowy IBIS GT MAXI 3 (rano zajęty przez piekarnię), smażalnik MechMasz (pączki/donuty 180-190°C, CCP2), chłodnia Asber (−2..8°C).",
-      "Zespół: Oliwia (szef — osąd sensoryczny, piec, dekoracja), Julia i Natalia (pomoc — naważki, pudełka, sprzątanie, owoce; deleguj wg gradientu osądu).",
-      "Asortyment C-001..C-018: brownie, serniki (NY, baskijski, mango, tonka — pieczone dzień przed sprzedażą, tężeją noc), pączki różane, croissanty, muffiny, babki, ciastka maślane (ciasto chłodzić 2h, walce można mrozić 4 tyg.), donuty.",
-      "Kluczowe zasady złotych standardów: planuj od pieca (wąskie gardło, Goldratt); wypieki od najniższej do najwyższej temperatury; krem patissiere max 3°C/2 dni (CCP5); retardacja kęsów drożdżowych przez noc w Asber; podwójna partia gdy druga kosztuje <40% czasu pierwszej; zasada triady: liczba + tolerancja + znak sensoryczny; testuj liść nie drzewo (nowy produkt = wariant istniejącej bazy, 1 blacha próbna).",
+      "Jesteś Sous Chefem — doradcą strategicznym " + (piekarnia ? "piekarza" : "Oliwii, kierowniczki cukierni") +
+        " w rzemieślniczej piekarni-cukierni ALTERBAKE S.C. (Gliwice, „stara piekarnia na nowo”).",
+      "Rola: pomagasz planować produkcję " + (piekarnia ? "piekarską (fermentacja, retard, prowadzenie zaczynów, poranny odpiek na IBIS-ie, sekwencjonowanie pokładów)" :
+        "cukierniczą (sekwencjonowanie pieca, batching, mrożenie, delegacja, sezonowość, eksperymenty)") +
+        ". Odpowiadasz po polsku, konkretnie, po partnersku, z liczbami i tolerancjami. Krótko — czyta na telefonie w pracowni.",
+      "Sprzęt: piec pokładowy IBIS GT MAXI 3 (3 pokłady, para), konwekcyjny Bongard Krystal+, chłodnia Asber (−2..8°C, retard)" +
+        (piekarnia ? ", miesiarka." : ", smażalnik MechMasz (pączki/donuty 180-190°C)."),
+      "Kluczowe zasady: planuj od wąskiego gardła (Goldratt); " + (piekarnia
+        ? "harmonogram wsteczny od porannego odpieku; levain/prefermenty to zegary — dokarmiaj D-1; retard nocny w Asber; rdzeń ≥92°C (CCP1, sonda nie skórka)."
+        : "wypieki od najniższej do najwyższej temperatury; krem patissiere max 3°C/2 dni (CCP5); serniki pieczone dzień przed (tężeją noc)."),
+      "Zasada triady: liczba + tolerancja + znak sensoryczny. Testuj liść nie drzewo (nowy produkt = wariant bazy, 1 blacha próbna).",
       m ? "Sezon (" + m.nazwa + "): " + (m.surowce || []).join(", ") + ". " + (m.planowanie || "") : "",
-      "Wybrane reguły: " + (W.reguly || []).slice(0, 12).map(r => r.rada).join(" | ")
+      grunt ? "FRAGMENTY Z BAZY WIEDZY ALTERBAKE (opieraj się na nich, cytuj gdy trzeba):\n" + grunt : ""
     ].filter(Boolean).join("\n");
   },
 
   async odpowiedzOnline(pytanie, data) {
-    const klucz = Store.stan.ustawienia.apiKey;
+    const klucz = Store.stan.globalne.apiKey;
     if (!klucz) throw new Error("Brak klucza API — wpisz go w Ustawieniach.");
     const historia = Store.stan.czat.slice(-10).map(w => ({ role: w.rola === "ja" ? "user" : "assistant", content: w.tekst }));
     const resp = await fetch("https://api.anthropic.com/v1/messages", {
@@ -143,7 +117,7 @@ window.SousChef = {
       body: JSON.stringify({
         model: "claude-opus-4-8",
         max_tokens: 1024,
-        system: this._systemPrompt(),
+        system: this._systemPrompt(pytanie),
         messages: [...historia, { role: "user", content: this._kontekstPlanu(data) + "\n\nPytanie Oliwii: " + pytanie }]
       })
     });
@@ -158,7 +132,7 @@ window.SousChef = {
   },
 
   async zapytaj(pytanie, data) {
-    if (Store.stan.ustawienia.trybOnline && Store.stan.ustawienia.apiKey) {
+    if (Store.stan.globalne.trybOnline && Store.stan.globalne.apiKey) {
       try {
         return await this.odpowiedzOnline(pytanie, data);
       } catch (e) {

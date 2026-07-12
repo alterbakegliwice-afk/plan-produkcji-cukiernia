@@ -12,18 +12,18 @@ window.WidokPlan = {
 
     // podsumowanie dnia
     if (dzien.bloki.length) {
-      let porcje = 0, koszt = 0, aktywne = 0;
+      let sztuk = 0, koszt = 0, aktywne = 0;
       for (const b of dzien.bloki) {
         const r = AB.receptura(b.nr);
         if (!r) continue;
-        porcje += (r.porcje_partia || 1) * b.partie;
+        sztuk += Czas.sztuki(r, b.partie);
         const k = Czas.koszt(b.nr, b.partie);
         if (k) koszt += k.surowce;
         aktywne += b.segmenty.filter(s => s.typ === "aktywny" || s.osobaAktywna).reduce((a, s) => a + s.do - s.od, 0);
       }
       el.appendChild(AB.el(
         '<div class="karta rzad maly"><span><b>' + dzien.bloki.length + '</b> produktów</span>' +
-        '<span>· <b>~' + Math.round(porcje) + '</b> porcji</span>' +
+        '<span>· <b>~' + Math.round(sztuk) + '</b> ' + (window.AB_MODUL || {}).jednostkaWynik + '</span>' +
         '<span>· surowce <b>' + AB.zl(koszt) + '</b></span>' +
         '<span class="rozdziel wyciszony">ręce: ' + AB.min(aktywne) + '</span></div>'));
     }
@@ -41,8 +41,10 @@ window.WidokPlan = {
     el.appendChild(AB.el(
       '<div class="rzad" style="margin:10px 0">' +
       '<button class="btn btn-glowny" data-akcja="dodaj">+ Dodaj produkt</button>' +
-      '<button class="btn" data-akcja="uloz">✨ Ułóż dzień</button>' +
-      (dzien.bloki.length ? '<button class="btn" data-akcja="nawazki-dnia">🧾 Naważki dnia</button>' +
+      '<button class="btn" data-akcja="auto-plan">🤖 Auto-plan</button>' +
+      (dzien.bloki.length ? '<button class="btn" data-akcja="uloz">✨ Ułóż</button>' +
+        '<button class="btn" data-akcja="zadania-z-planu">✅ Zadania z planu</button>' +
+        '<button class="btn" data-akcja="nawazki-dnia">🧾 Naważki dnia</button>' +
         '<button class="btn btn-cichy rozdziel" data-akcja="wyczysc-dzien">Wyczyść</button>' : "") +
       "</div>"));
 
@@ -137,7 +139,8 @@ window.WidokPlan = {
     const zespol = Store.stan.ustawienia.zespol;
     return AB.el('<div class="karta" style="margin-top:10px">' +
       '<div class="rzad"><b>' + AB.esc(r.nazwa) + "</b>" +
-      '<span class="chip szary">' + b.partie + " partii · ~" + Math.round((r.porcje_partia || 1) * b.partie) + " porcji</span>" +
+      '<span class="chip szary">' + b.partie + ((window.AB_MODUL || {}).skalowanie === "maka" ? " kg mąki" : " partii") +
+      " · ~" + Czas.sztuki(r, b.partie) + " " + (window.AB_MODUL || {}).jednostkaWynik + "</span>" +
       '<span class="chip szary">' + AB.zMin(b.start) + "–" + AB.zMin(b.start + b.segmenty[b.segmenty.length - 1].do) + "</span></div>" +
       '<div class="rzad" style="margin-top:10px">' +
       '<button class="btn btn-maly" data-akcja="przesun" data-o="-15">−15 min</button>' +
@@ -210,6 +213,12 @@ window.WidokPlan = {
     if (akcja === "dodaj") this._modalDodaj();
     if (akcja === "uloz") this._ulozDzien();
     if (akcja === "nawazki-dnia") this._modalNawazkiDnia();
+    if (akcja === "auto-plan") this._autoPlan();
+    if (akcja === "zadania-z-planu") {
+      const n = Automat.generujZadania(this.data);
+      AB.toast(n ? "Utworzono " + n + " zadań z planu ✓" : "Nic nowego do dodania");
+      App.render();
+    }
     if (akcja === "wyczysc-dzien") {
       AB.potwierdz("Usunąć wszystkie bloki z tego dnia?").then(t => {
         if (t) { dzien.bloki = []; this.zaznaczony = null; Store.zapisz(); App.render(); }
@@ -256,11 +265,13 @@ window.WidokPlan = {
       '<option value="' + r.nr + '">' + r.nr + " · " + AB.esc(r.nazwa) +
       (r.tylko_proces ? " (bez receptury)" : "") + "</option>").join("");
     const zespol = Store.stan.ustawienia.zespol;
+    const M = window.AB_MODUL;
     const m = AB.el('<div class="modal-tlo"><div class="modal">' +
       "<h2>Dodaj produkt do planu</h2>" +
       '<label class="pole"><span>Produkt</span><select id="md-nr">' + opcje + "</select></label>" +
-      '<label class="pole"><span>Liczba partii</span><div class="stepper">' +
-      '<button type="button" data-s="-1">−</button><span class="wartosc" id="md-partie">1</span><button type="button" data-s="1">+</button>' +
+      '<label class="pole"><span>' + (M.skalowanie === "maka" ? "Ilość (kg mąki)" : "Liczba partii") + '</span><div class="stepper">' +
+      '<button type="button" data-s="-1">−</button><span class="wartosc" id="md-partie">' + M.minIlosc + (M.skalowanie === "maka" ? " kg" : "") +
+      '</span><button type="button" data-s="1">+</button>' +
       "</div></label>" +
       '<label class="pole"><span>Kto prowadzi</span><select id="md-osoba">' +
       zespol.map(z => '<option value="' + z.id + '">' + AB.esc(z.nazwa) + (z.rola === "szef" ? " (szef)" : " (pomoc)") + "</option>").join("") +
@@ -269,21 +280,21 @@ window.WidokPlan = {
       '<div class="modal-akcje"><button class="btn btn-cichy" data-a="anuluj">Anuluj</button>' +
       '<button class="btn btn-glowny" data-a="dodaj">Dodaj</button></div></div></div>');
 
-    let partie = 1;
+    let partie = M.minIlosc;
     const info = () => {
       const nr = m.querySelector("#md-nr").value;
       const rz = Czas.rozklad(nr, partie);
       const r = AB.receptura(nr);
       m.querySelector("#md-info").textContent = rz ?
-        "≈ " + Math.round((r.porcje_partia || 1) * partie) + " porcji · ręce " + AB.min(rz.aktywny) +
+        "≈ " + Czas.sztuki(r, partie) + " " + M.jednostkaWynik + " · ręce " + AB.min(rz.aktywny) +
         (rz.piec ? " · piec " + AB.min(rz.piec) + " (" + rz.wsady + " wsad.)" : "") +
         " · razem " + AB.min(rz.total) : "";
     };
     info();
     m.addEventListener("click", e => {
       if (e.target.dataset.s) {
-        partie = Math.min(12, Math.max(1, partie + Number(e.target.dataset.s)));
-        m.querySelector("#md-partie").textContent = partie; info();
+        partie = Math.min(M.maxIlosc, Math.max(M.minIlosc, partie + Number(e.target.dataset.s) * M.krokIlosc));
+        m.querySelector("#md-partie").textContent = partie + (M.skalowanie === "maka" ? " kg" : ""); info();
       }
       if (e.target.dataset.a === "anuluj" || e.target === m) m.remove();
       if (e.target.dataset.a === "dodaj") {
@@ -308,6 +319,16 @@ window.WidokPlan = {
     dzien.bloki.push({ id: AB.uid(), nr, partie, osoba, start, segmenty: seg });
     Store.zapisz();
     AB.toast("Dodano. Dotknij „Ułóż dzień”, by rozstawić bez kolizji.");
+    App.render();
+  },
+
+  async _autoPlan() {
+    const dzien = Store.dzien(this.data);
+    if (dzien.bloki.length && !(await AB.potwierdz("Zastąpić bieżący plan auto-propozycją (z Twoich nawyków i sezonu)?"))) return;
+    const wynik = Automat.ulozAutomat(this.data, 4);
+    this.zaznaczony = null;
+    if (!wynik.produkty.length) { AB.toast("Brak receptur do zaplanowania"); return; }
+    AB.toast("Auto-plan: " + wynik.produkty.map(r => r.nazwa.split(" ")[0]).join(", ") + " — skoryguj ilości");
     App.render();
   },
 

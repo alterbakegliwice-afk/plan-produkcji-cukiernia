@@ -95,7 +95,11 @@ window.WidokInspiracje = {
     if (cel.dataset.ocen) return this._modalWynik(insp.find(i => i.id === cel.dataset.ocen));
     if (cel.dataset.status) {
       const i = insp.find(x => x.id === cel.dataset.id);
-      i.status = cel.dataset.status; Store.zapisz(); App.render(); return;
+      i.status = cel.dataset.status;
+      if (window.Nauka) Nauka.zapamietajEksperyment(i, cel.dataset.status); // apka uczy się z wyniku
+      Store.zapisz();
+      AB.toast(cel.dataset.status === "wdrozone" ? "Wdrożone — zapamiętane w wiedzy 🧠" : "Odrzucone — zapamiętane 🧠");
+      App.render(); return;
     }
   },
 
