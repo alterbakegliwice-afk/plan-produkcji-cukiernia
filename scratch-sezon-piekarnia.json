@@ -1,0 +1,98 @@
+[
+  {
+    "miesiac": 1,
+    "nazwa": "Styczeń",
+    "surowce": ["mąki z poprzednich zbiorów (najbardziej ustabilizowane W/białko w roku)", "mąka żytnia i orkiszowa na cięższe chleby", "miód, przyprawy korzenne (końcówki świąteczne)", "susz, orzechy, nasiona (słonecznik, len, dynia) do inkluzji"],
+    "okazje": ["Nowy Rok / postanowienia (chleb jako 'zdrowszy' wybór — długa fermentacja, czysta etykieta)", "Dzień Babci i Dziadka (21-22.01)", "ferie zimowe (woj. śląskie zwykle styczeń/luty)", "dołek posylwestrowy w sprzedaży"],
+    "produkty": ["grube chleby zakwasowe i żytnie (B2 — sezon cięższego pieczywa)", "chleby wieloziarniste i z zaparką (miękisz, trwałość)", "bułki i pieczywo śniadaniowe (rutyna powrotu do pracy)", "pierwsze testy chałek i drożdżowych premium"],
+    "planowanie": "Miesiąc niskiej sprzedaży i najstabilniejszej mąki — idealny na kalibrację WSP: WSP. TARCIA per miesiarka, progi retardu baz B1-B4, parametry Tradilevain. Zimno w hali obniża temperaturę mąki i otoczenia: podnieś temperaturę wody zarobowej z formuły (DDT), fermentacja wolniejsza — wydłuż okna pointage i retardu. Przegląd i odświeżenie backupów levainu (3-2-1)."
+  },
+  {
+    "miesiac": 2,
+    "nazwa": "Luty",
+    "surowce": ["mąka pszenna chlebowa i żytnia stabilna", "masło ≥82% do laminowania (kontrola dostaw pod viennoiserie)", "mak, ser, powidła do drożdżowych", "tłuszcz do smażenia (jeśli w ofercie pączki/oponki wytrawne)"],
+    "okazje": ["Tłusty Czwartek (ruchomy: luty/początek marca) — dla piekarni głównie drożdżowe/racuchy jako dodatek", "Walentynki (14.02)", "ferie zimowe", "wciąż zimno — fermentacja wolniejsza"],
+    "produkty": ["grube chleby i mieszane (szczyt sezonu ciężkiego pieczywa)", "drożdżowe słodkie i chałki weekendowe (B3)", "croissanty i laminowane premium na weekend", "pieczywo śniadaniowe, bagietki na kolacje walentynkowe"],
+    "planowanie": "Wciąż niskie temperatury: trzymaj korektę zimową DDT (cieplejsza woda, dłuższe okna). Tłusty Czwartek dla piekarni to nie taki szczyt jak w cukierni, ale jeśli robisz smażone — zaplanuj osobny blok i surowce. Weekendowy popyt na chałki i laminowane rośnie: dni laminowania wt/czw + mrożenie kęsów B4 na piątek/sobotę. Sprawdź dostawy masła laminacyjnego przed weekendem."
+  },
+  {
+    "miesiac": 3,
+    "nazwa": "Marzec",
+    "surowce": ["mąki stabilne (przednówek — do żniw daleko)", "mak, ser twarogowy, bakalie (przygotowania wielkanocne)", "orkisz i dawne zboża (rosnący segment 'funkcjonalny')", "pierwsze zioła do focaccii (rozmaryn)"],
+    "okazje": ["Dzień Kobiet (8.03)", "początek wiosny — cieplej w hali, fermentacja przyspiesza", "Wielki Post", "jeśli Wielkanoc w marcu — pełny tryb świąteczny (chałki, baby, chleby świąteczne)"],
+    "produkty": ["chałki wielkanocne i baby drożdżowe (B3) — start przedsprzedaży", "chleby świąteczne (żytnie, na zakwasie, na święconkę)", "focaccia i pieczywo obiadowe (cieplejsze dni)", "lżejsze bułki i bagietki (sezon przechodzi z ciężkiego na lżejsze)"],
+    "planowanie": "Punkt zwrotny temperatury: hala się ociepla, ciasto fermentuje szybciej — zacznij schodzić z zimowej korekty DDT (chłodniejsza woda). Uruchom przedsprzedaż wielkanocną: chałki, baby, chleby świąteczne z odbiorem na Wielki Piątek/Sobotę. Zaplanuj mrożenie kęsów laminowanych i chałek-półproduktów pod świąteczny szczyt. Fermentolevain (Tradilevain) niweluje sezonowy skok tempa — trzymaj stałą temperaturę."
+  },
+  {
+    "miesiac": 4,
+    "nazwa": "Kwiecień",
+    "surowce": ["mąki stabilne", "masło, mleko, jajo, bakalie, mak (szczyt zużycia na wypieki świąteczne)", "pierwsze zioła i szczypior do pieczywa wytrawnego", "orkisz, żyto na chleby świąteczne"],
+    "okazje": ["WIELKANOC (najczęściej kwiecień) — szczyt roku dla pieczywa świątecznego", "Lany Poniedziałek", "po świętach: tydzień dołka sprzedaży", "wiosna — cieplej, szybsza fermentacja"],
+    "produkty": ["chałki i baby drożdżowe (B3), strucle", "chleby świąteczne na święconkę (żytnie, zakwasowe, foremkowe)", "croissanty i laminowane na śniadania wielkanocne", "po świętach: powrót do lekkich chlebów i bułek"],
+    "planowanie": "Wielkanoc = duży udział zamówień z odbiorem w Wielki Piątek/Sobotę. Zamknij przyjmowanie zamówień ~5 dni wcześniej, rozpisz produkcję wstecz od odbioru: kęsy laminowane z mrożni, chałki na retardzie nocnym, chleby świąteczne w falach. Cieplej w hali — obniż wodę zarobową (DDT), skróć okna fermentacji, pilnuj by levain nie 'uciekał'. Tydzień po świętach tnij partie o ~30%."
+  },
+  {
+    "miesiac": 5,
+    "nazwa": "Maj",
+    "surowce": ["mąki stabilne (ostatnie miesiące przed nowymi zbiorami)", "zioła świeże do focaccii i pieczywa (rozmaryn, tymianek)", "oliwki, ser, suszone pomidory (pieczywo śródziemnomorskie)", "rabarbar, pierwsze owoce do drożdżowych"],
+    "okazje": ["KOMUNIE (weekendy maja) — pieczywo na słodkie stoły i kanapki bankietowe", "majówka (1-3.05) i sezon grillowy start", "Dzień Matki (26.05)", "cieplej — pełna korekta letnia fermentacji"],
+    "produkty": ["pieczywo na grilla: bułki do burgerów, bagietki, ciabatta, focaccia (start sezonu)", "chałki i drożdżowe na komunie i Dzień Matki", "chleby na kanapki bankietowe (komunie, wesela)", "lekkie pszenne chleby i bagietki (sezon lżejszego pieczywa)"],
+    "planowanie": "Start sezonu grillowego i pikników: rośnie popyt na bułki, ciabattę i focaccię — planuj focaccię jako format-wariant B1 (Bonci), monetyzacja ciepłego IBIS w środku dnia. Komunie i majówka koncentrują popyt na weekend: przenieś moce na piątek/sobotę, mrożenie kęsów na zapas. Wchodzi lato termiczne: pełna korekta DDT (zimna woda, część jako lód gdy formuła schodzi <4°C), krótsze okna, retard pilnowany bo szybciej przefermentowuje."
+  },
+  {
+    "miesiac": 6,
+    "nazwa": "Czerwiec",
+    "surowce": ["mąki z zapasów (koniec starego sezonu zbożowego)", "zioła świeże, warzywa do pieczywa wytrawnego", "truskawka, czereśnia do drożdżówek sezonowych", "oliwa, oliwki, zioła (szczyt pieczywa śródziemnomorskiego)"],
+    "okazje": ["Dzień Dziecka (1.06)", "Boże Ciało (ruchome) — długi weekend, wyjazdy", "sezon grillowy i pikniki w pełni", "upały — fermentacja najszybsza w roku"],
+    "produkty": ["pieczywo na grilla: bułki burgerowe, hot-dogowe, ciabatta, focaccia, bagietki", "lekkie chleby pszenne o otwartym miękiszu (upały sprzyjają lżejszemu)", "drożdżówki z truskawką/czereśnią (B3)", "chleby na kanapki na wyjazdy i pikniki"],
+    "planowanie": "Upał = fermentacja szybsza: koryguj DDT w dół (woda z lodem), skracaj pointage i okno retardu, częściej sprawdzaj levain (może uciec do przekwaszenia). Tradilevain trzyma profil stały mimo upału — to jego najlepszy moment. Grill napędza bułki i ciabattę — zwiększ te partie, mroź kęsy na weekendy. Boże Ciało i wyjazdy: policz popyt pod długi weekend, unikaj nadprodukcji w dni wyjazdowe."
+  },
+  {
+    "miesiac": 7,
+    "nazwa": "Lipiec",
+    "surowce": ["mąki: koniec starych zapasów, pierwsze nowe pszenice (uwaga na zmienność W/białka między partiami!)", "zioła, warzywa, oliwki do pieczywa letniego", "jagoda, borówka, malina do drożdżówek", "kukurydza, słonecznik do pieczywa sezonowego"],
+    "okazje": ["wakacje — odpływ stałych klientów, napływ okazjonalnych/turystów", "sezon grillowy i weselny w pełni", "upały — fermentacja szybka, hala gorąca", "urlopy w zespole"],
+    "produkty": ["pełny asortyment grillowy (bułki, ciabatta, focaccia)", "lekkie chleby pszenne i bagietki", "drożdżówki z owocami sezonowymi", "chleby na kanapki na wyjazdy"],
+    "planowanie": "Nowe zbiory pszenicy zaczynają wchodzić — audytuj każdą nową partię mąki (W, białko, liczba opadania); zmienność partii może rozregulować bazy, notuj odchylenia. Utrzymaj letnią korektę DDT. Zaplanuj urlopy: nigdy mistrz i doświadczona osoba (poziom 4-5 drabiny) jednocześnie — inaczej nie ma kto poprowadzić zakwasu i ocenić pointage. Zredukuj kartę do sprawdzonych baz na czas urlopów. Mroź kęsy na weekendy."
+  },
+  {
+    "miesiac": 8,
+    "nazwa": "Sierpień",
+    "surowce": ["świeża mąka nowych zbiorów (młoda mąka — może być 'ostra' enzymatycznie, niższa liczba opadania)", "śliwka węgierka (od połowy miesiąca) do drożdżowych", "miód, w tym gryczany (terroir — produkt-ikona)", "słonecznik, dynia, len do chlebów sezonowych"],
+    "okazje": ["DOŻYNKI (sierpień/początek września) — chleb dożynkowy, wieńce, tradycja lokalna", "15.08 — długi weekend", "końcówka wakacji, powroty pod koniec miesiąca", "sezon weselny trwa"],
+    "produkty": ["CHLEB DOŻYNKOWY (ozdobny, tradycyjny — event z przedsprzedażą)", "chleby ze śliwką i drożdżowe ze śliwką (kruszonka)", "chleby z miodem gryczanym (terroir, w stylu Wu Pao-chuna — lokalny produkt-ikona)", "pieczywo na grilla (końcówka sezonu)"],
+    "planowanie": "Chleb dożynkowy planuj jak event: przedsprzedaż + dedykowany blok pieca + wcześniejsze rozpisanie formowania ozdobnego (wysoki osąd — zostaje przy mistrzu). Uwaga na młodą mąkę nowych zbiorów: niższa liczba opadania = więcej enzymów = szybsza fermentacja i lepkość — skróć okna, obniż hydrację jeśli ciasto się rozlewa, testuj każdą partię. Śliwka węgierka wchodzi szeroko. Koniec sierpnia: zaplanuj jesienną korektę (chłodniej, cięższe chleby)."
+  },
+  {
+    "miesiac": 9,
+    "nazwa": "Wrzesień",
+    "surowce": ["świeża mąka nowych zbiorów (stabilizuje się enzymatycznie po kilku tygodniach)", "śliwka, jabłko, gruszka do drożdżowych", "orzechy, żurawina do inkluzji", "żyto nowego zbioru — start sezonu żytniego"],
+    "okazje": ["powrót do szkoły/pracy — odbudowa rutyny zakupowej pieczywa codziennego", "dożynki (początek miesiąca)", "ostatnie wesela", "chłodniej — powrót cięższego pieczywa"],
+    "produkty": ["powrót grubych chlebów żytnich i mieszanych (B2)", "chleby wieloziarniste, orzech-żurawina (inkluzje)", "chleby z zaparką na dłuższą świeżość", "drożdżowe ze śliwką i jabłkiem"],
+    "planowanie": "Wrzesień to reset roczny: przegląd sell-through per SKU z lata, przypisanie zwycięzców do baz B1-B4, wycofanie/repricing 'sierot' (produktów niepasujących do żadnego drzewa). Odbudowa rutyny = wzrost pieczywa codziennego, zwiększ partie chleba i bułek śniadaniowych. Chłodniejsze dni: zacznij jesienną korektę DDT (cieplejsza woda, dłuższe okna). Nowa mąka się ustabilizowała — zweryfikuj parametry baz."
+  },
+  {
+    "miesiac": 10,
+    "nazwa": "Październik",
+    "surowce": ["mąka nowych zbiorów ustabilizowana (dobra powtarzalność partii)", "dynia, jabłko, orzechy do pieczywa sezonowego", "żyto, orkisz (sezon ciężkiego pieczywa)", "przyprawy korzenne (przygotowania świąteczne)"],
+    "okazje": ["chłodna aura sprzyja pieczywu i zupom — rośnie popyt na chleby i focaccię obiadową", "Halloween (31.10) — mały test", "Wszystkich Świętych — przygotowania", "ruch popołudniowy przy kawie rośnie"],
+    "produkty": ["grube chleby żytnie, mieszane, wieloziarniste (pełnia sezonu)", "chleby dyniowe i z pestkami dyni (sezonowe)", "focaccia i pieczywo obiadowe (do zup — okno obiadowe)", "chleby z zaparką na trwałość"],
+    "planowanie": "Pełnia sezonu ciężkiego pieczywa: zwiększ udział B2 (żyto/mieszane) i chlebów z zaparką. Chłodne dni napędzają focaccię i pieczywo obiadowe do zup — wykorzystaj ciepły IBIS w środku dnia (Bonci: monetyzacja ciasta w południe). Zaplanuj i sfotografuj ofertę świąteczną (chałki, chleby świąteczne, strucle) do końca miesiąca — firmy pytają o zamówienia w listopadzie. Utrzymuj jesienną korektę DDT."
+  },
+  {
+    "miesiac": 11,
+    "nazwa": "Listopad",
+    "surowce": ["mąka stabilna (najlepsza powtarzalność w roku)", "mak, miód, bakalie, przyprawy korzenne (zakupy hurtowe na święta)", "orzechy, żurawina, susz do chlebów bakaliowych", "masło ≥82% (kontrola dostaw pod świąteczne laminowane)"],
+    "okazje": ["Wszystkich Świętych (1.11) — ruch, pieczywo 'na stół rodzinny'", "11 listopada — rogale świętomarcińskie (tradycja wykracza poza Poznań)", "Andrzejki (29/30.11)", "start zamówień firmowych na święta", "zimno — wolniejsza fermentacja"],
+    "produkty": ["rogale świętomarcińskie z białym makiem (11.11) — produkt eventowy z przedsprzedażą", "chleby bakaliowe, z żurawiną i orzechami (przedświąteczne)", "chałki i strucle (przedsprzedaż świąteczna)", "grube chleby żytnie i mieszane"],
+    "planowanie": "Miesiąc przedsprzedaży: otwórz zamówienia świąteczne (osoby prywatne + firmy) na chałki, chleby świąteczne, strucle z deadline'em ~10-14.12. Rogale świętomarcińskie planuj jak mini-event: przedsprzedaż + dedykowany blok pieca 10-11.11 + wcześniejsze mrożenie kęsów laminowanych. Zimno wraca: pełna zimowa korekta DDT (cieplejsza woda, dłuższe okna pointage i retardu). Zamów masło laminacyjne i bakalie hurtowo przed grudniem."
+  },
+  {
+    "miesiac": 12,
+    "nazwa": "Grudzień",
+    "surowce": ["mąka stabilna", "mak, miód, bakalie, kandyzowana skórka (szczyt zużycia)", "masło ≥82% (maksimum laminowania w roku)", "przyprawy korzenne, orzechy"],
+    "okazje": ["Mikołajki (6.12)", "BOŻE NARODZENIE — największy tydzień roku (zamówienia z odbiorem 22-24.12)", "zamówienia firmowe (pierwsze 2 tygodnie)", "Sylwester (31.12)", "mróz — najwolniejsza fermentacja w roku"],
+    "produkty": ["chałki świąteczne, strucle z makiem, chleby świąteczne na wigilijny stół", "chleby bakaliowe (keksowe wersje pieczywa)", "croissanty i laminowane premium na śniadania świąteczne", "pieczywo na Sylwestra (bagietki, ciabatta na przekąski)"],
+    "planowanie": "Podziel grudzień na fale: (1) 1-14.12 firmy i Mikołajki, (2) 15-24.12 święta detaliczne — zamknij zamówienia ~18.12, produkcja wsteczna od odbiorów 23-24.12, mrożone kęsy laminowane i chałki-półprodukty z listopada ratują przepustowość IBIS, (3) 27-31.12 Sylwester na małej karcie. Mróz = najwolniejsza fermentacja: maksymalna zimowa korekta DDT, najdłuższe okna, uważaj by chleb nie był niedofermentowany rano. Między 24 a 27.12 daj zespołowi realny oddech."
+  }
+]

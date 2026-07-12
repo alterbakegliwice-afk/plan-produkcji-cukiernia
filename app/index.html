@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#171310" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Alterbake · Planer Cukierni</title>
+<title>Alterbake · Planer Produkcji</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="ikona.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="ikona.svg">
@@ -17,10 +17,11 @@
 
 <header class="naglowek">
   <div>
-    <div class="marka">ALTER<span>BAKE</span> · Cukiernia</div>
-    <div class="pod">planer produkcji Oliwii · stara piekarnia na nowo</div>
+    <div class="marka">ALTER<span>BAKE</span> · <span id="marka-modul">Planer</span></div>
+    <div class="pod">planer produkcji · stara piekarnia na nowo</div>
   </div>
   <div class="prawa">
+    <button class="btn btn-ikona btn-cichy" id="btn-modul" aria-label="przełącz moduł">🍰</button>
     <button class="btn btn-ikona btn-cichy" id="btn-ustawienia" aria-label="ustawienia">⚙️</button>
   </div>
 </header>
@@ -31,19 +32,31 @@
   <button data-widok="plan"><span class="ikona">📋</span>Plan</button>
   <button data-widok="receptury"><span class="ikona">📖</span>Receptury</button>
   <button data-widok="zadania"><span class="ikona">✅</span>Zadania</button>
-  <button data-widok="inspiracje"><span class="ikona">💭</span>Inspiracje</button>
-  <button data-widok="souschef"><span class="ikona">👨‍🍳</span>Sous Chef</button>
+  <button data-widok="inspiracje"><span class="ikona">💭</span>Pomysły</button>
+  <button data-widok="souschef"><span class="ikona">👨‍🍳</span>Doradca</button>
 </nav>
 
+<!-- dane modułów -->
 <script src="data/receptury.js"></script>
 <script src="data/zasoby.js"></script>
 <script src="data/wiedza.js"></script>
+<script src="data/korpus-cukiernia.js"></script>
+<script src="data/piekarnia.js"></script>
+<script src="data/zasoby-piekarnia.js"></script>
+<script src="data/wiedza-piekarnia.js"></script>
+<script src="data/korpus-piekarnia.js"></script>
+<script src="data/moduly.js"></script>
+<!-- silnik -->
 <script src="js/util.js"></script>
+<script src="js/wiedza-index.js"></script>
 <script src="js/store.js"></script>
+<script src="js/nauka.js"></script>
 <script src="js/czas.js"></script>
 <script src="js/symulacja.js"></script>
+<script src="js/automat.js"></script>
 <script src="js/wykresy.js"></script>
 <script src="js/souschef.js"></script>
+<!-- widoki -->
 <script src="js/widok-plan.js"></script>
 <script src="js/widok-receptury.js"></script>
 <script src="js/widok-zadania.js"></script>

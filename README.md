@@ -1,8 +1,29 @@
-# 🥐 Alterbake · Planer Produkcji Cukierni
+# 🥐 Alterbake · Planer Produkcji
 
-Mobilne narzędzie do planowania produkcji cukierniczej dla **Oliwii** — kierowniczki cukierni w Alterbake S.C. (Gliwice, „stara piekarnia na nowo”).
+Mobilne narzędzie do planowania produkcji dla **Alterbake S.C.** (Gliwice, „stara piekarnia na nowo”) — w **dwóch modułach**:
 
-Planowanie produkcji przestaje być piętą achillesową: aplikacja układa dzień po piecach, skaluje receptury, liczy naważki, deleguje zadania i podpowiada — wszystko ugruntowane w **złotych standardach Alterbake** i bazie **25 autorytetów** planowania produkcji.
+- 🍰 **Cukiernia** (Oliwia) — 18 produktów C-001…C-018, skalowanie partiami
+- 🥖 **Piekarnia** (piekarz) — 40 produktów R-001…R-040, skalowanie w % piekarskich (kg mąki), prowadzenie zaczynów, retard nocny
+
+Przełączasz je jednym dotknięciem ikony w nagłówku (🍰 ↔ 🥖). Każdy moduł ma osobny plan, zadania, pomysły i wiedzę.
+
+Planowanie produkcji przestaje być piętą achillesową: aplikacja układa dzień po piecach, skaluje receptury, liczy naważki, deleguje zadania i podpowiada — wszystko ugruntowane w **złotych standardach Alterbake** (cukiernictwo + piekarstwo) i praktykach **autorytetów** planowania produkcji.
+
+## 🤖 Darmowy doradca AI — bez tokenów, offline, uczy się od Ciebie
+
+Najczęstsze pytanie: *„czy da się postawić AI, które odpowiada z plików wiedzy i samo się uczy, bez płatnych tokenów?”* — **tak, i tak to zrobiliśmy**:
+
+- **Silnik wyszukiwania (BM25) po całej bazie wiedzy** — doradca „Sous Chef" odpowiada na *dowolne* pytanie, zestawiając najtrafniejsze fragmenty z dokumentów, reguł, autorytetów, tabel półproduktów i kalendarza — **z podaniem źródła**. Zero tokenów, zero sieci, działa w samolocie.
+- **Uczy się z Twojej pracowni** (uczciwie — nie trenuje sieci neuronowej, tylko gromadzi wiedzę): każda **kalibracja czasu** i każdy **wynik eksperymentu** zapisują się jako fakt; możesz też **dopisać własną wiedzę** (zakładka 🧠 *Moja wiedza*). Wszystko to natychmiast wchodzi do bazy wyszukiwania — doradca zaczyna z tego korzystać w kolejnych odpowiedziach.
+- **Opcjonalny tryb online** (Claude API, własny klucz) — gdy chcesz swobodnej rozmowy; model dostaje najtrafniejsze fragmenty Twojej bazy jako grunt (RAG). Domyślnie wyłączony; bez niego wszystko i tak działa.
+
+> Świadomie **nie** stawiamy modelu językowego pobieranego na telefon (WebLLM/WebGPU): 0,5–2 GB do pobrania, kapryśne na iPhonie, słabe po polsku — to byłaby obietnica, która się sypie. Wyszukiwanie + uczenie z pracowni daje realną, cytowalną wartość, która nigdy się nie „zawiesi”.
+
+## ✨ Automatyzacja
+
+- **🤖 Auto-plan** — proponuje zestaw produktów na dzień z Twoich **nawyków** (historia planów) i **sezonu**, po czym układa go symulacją bez kolizji. Korygujesz ilości i gotowe.
+- **✅ Zadania z planu** — z gotowego planu generuje naważki (do pomocy) i sprzątanie jednym dotknięciem.
+- **🧾 Naważki dnia** — zbiorcza lista składników z całego planu do druku.
 
 ---
 
@@ -65,15 +86,16 @@ Dane (plany, zadania, inspiracje) żyją w przeglądarce telefonu (localStorage)
 
 | Dokument | Co zawiera |
 |---|---|
-| [`docs/baza-wiedzy/ZS-PLANOWANIE-PRODUKCJI.md`](docs/baza-wiedzy/ZS-PLANOWANIE-PRODUKCJI.md) | **Złoty Standard Planowania Produkcji** — nowy tom wypełniający lukę: 25 autorytetów, horyzonty planowania, drabinka temperaturowa, batching/mrożenie, gradient delegacji, kalendarz sezonowy, pipeline eksperymentów, mierniki, kanon 10 zasad, diagnostyka 13 objawów |
-| [`docs/standardy/DESTYLAT-ZLOTYCH-STANDARDOW.md`](docs/standardy/DESTYLAT-ZLOTYCH-STANDARDOW.md) | Destylat istniejących złotych standardów Alterbake (Drive) pod kątem planowania + **audyt 15 luk** w wiedzy firmowej |
+| [`docs/baza-wiedzy/ZS-PLANOWANIE-PRODUKCJI.md`](docs/baza-wiedzy/ZS-PLANOWANIE-PRODUKCJI.md) | **Cukiernia** — 25 autorytetów, horyzonty, drabinka temperaturowa, batching/mrożenie, gradient delegacji, kalendarz sezonowy, pipeline eksperymentów, mierniki, kanon 10 zasad, diagnostyka 13 objawów |
+| [`docs/baza-wiedzy/ZS-PLANOWANIE-PIEKARNIA.md`](docs/baza-wiedzy/ZS-PLANOWANIE-PIEKARNIA.md) | **Piekarnia** — 18 mistrzów piekarstwa, drzewo 4 ciast-matek → 40 SKU, krytyczna ścieżka doby z harmonogramem wstecznym, prefermenty jako zegary, retard masy vs kęsów, sekwencjonowanie pokładów IBIS, diagnostyka 16 objawów |
+| [`docs/standardy/DESTYLAT-ZLOTYCH-STANDARDOW.md`](docs/standardy/DESTYLAT-ZLOTYCH-STANDARDOW.md) | Destylat istniejących złotych standardów Alterbake (Drive) + **audyt 15 luk** w wiedzy firmowej |
 | [`docs/RED-TEAM.md`](docs/RED-TEAM.md) | Raport ataku red team na projekt + status poprawek |
-| `app/data/wiedza.js` | 60 reguł doradcy + 25 autorytetów + sezon + trendy (generowane) |
+| `app/data/wiedza*.js`, `korpus-*.js` | Reguły doradcy (60 cukiernia + 55 piekarnia), autorytety, sezon, trendy oraz pofragmentowane dokumenty do wyszukiwania (generowane) |
 
 ## Skąd są dane i jak je aktualizować
 
-- **Receptury**: `app/data/receptury.js` generowany z `Receptury_v2026-06-17.xlsx` (Google Drive) przez [`tools/extract.py`](tools/extract.py). Po aktualizacji receptur w XLSX: pobierz plik jako `receptury.xlsx` obok skryptu i uruchom `python3 tools/extract.py` (wymaga `pip install openpyxl`).
-- **Baza wiedzy**: `app/data/wiedza.js` scalany z plików `scratch-*.json` przez [`tools/build-wiedza.py`](tools/build-wiedza.py).
+- **Receptury**: generowane z `Receptury_v2026-06-17.xlsx` (Google Drive) — cukiernia przez [`tools/extract.py`](tools/extract.py), piekarnia (% piekarskie, prefermenty) przez [`tools/extract-piekarnia.py`](tools/extract-piekarnia.py). Po aktualizacji XLSX: pobierz jako `receptury.xlsx` i uruchom oba skrypty (wymaga `pip install openpyxl`).
+- **Baza wiedzy**: `wiedza*.js` scalane z `scratch-*.json` przez [`tools/build-wiedza.py`](tools/build-wiedza.py); `korpus-*.js` (fragmenty dokumentów do wyszukiwania) przez [`tools/build-korpus.py`](tools/build-korpus.py).
 - **Czasy pracy**: domyślnie z arkusza FOODCOST („Czas pracy min”) — to szacunki. Model: `czas(n) = czas(1) × (0,3 + 0,7·n)`, pojemność Bongarda ~4 formy/wsad, smażenie ~12 min/partię. **Kalibruj na kartach receptur** — każda zmierzona liczba wypiera założenie.
 
 ## Uczciwie o ograniczeniach

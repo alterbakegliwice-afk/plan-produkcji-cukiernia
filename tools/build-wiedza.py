@@ -1,35 +1,50 @@
 #!/usr/bin/env python3
-"""Scala źródła wiedzy (reguły, autorytety, sezon, trendy) w app/data/wiedza.js"""
-import json, os, sys, datetime
+"""Scala źródła wiedzy (reguły, autorytety, sezon, trendy) w app/data/wiedza*.js — oba moduły."""
+import json, os, datetime
 
 BAZA = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def wczytaj(nazwa):
-    with open(os.path.join(BAZA, nazwa)) as f:
+
+def wczytaj(nazwa, dom):
+    sciezka = os.path.join(BAZA, nazwa)
+    if not os.path.exists(sciezka):
+        print("  brak (pomijam):", nazwa)
+        return dom
+    with open(sciezka, encoding="utf-8") as f:
         return json.load(f)
 
-reguly = wczytaj('scratch-rules.json')
-autorytety = wczytaj('scratch-autorytety.json')
-sezon = wczytaj('scratch-sezon.json')
-trendy = wczytaj('scratch-trendy.json')
 
-out = (
-    "// BAZA WIEDZY — generowana przez tools/build-wiedza.py — %s\n"
-    "// Źródła: złote standardy Alterbake (Drive) + ZS Planowanie Produkcji (docs/baza-wiedzy)\n"
-    "window.AB_WIEDZA = {\n"
-    "reguly: %s,\n"
-    "autorytety: %s,\n"
-    "sezon: %s,\n"
-    "trendy: %s\n"
-    "};\n"
-) % (
-    datetime.date.today().isoformat(),
-    json.dumps(reguly, ensure_ascii=False),
-    json.dumps(autorytety, ensure_ascii=False),
-    json.dumps(sezon, ensure_ascii=False),
-    json.dumps(trendy, ensure_ascii=False),
-)
+def zbuduj(var, plik, zrodla):
+    dane = {k: wczytaj(v, dom) for k, (v, dom) in zrodla.items()}
+    out = (
+        "// BAZA WIEDZY — generowana przez tools/build-wiedza.py — %s\n"
+        "window.%s = {\n"
+        "reguly: %s,\nautorytety: %s,\nsezon: %s,\ntrendy: %s\n};\n"
+    ) % (
+        datetime.date.today().isoformat(), var,
+        json.dumps(dane["reguly"], ensure_ascii=False),
+        json.dumps(dane["autorytety"], ensure_ascii=False),
+        json.dumps(dane["sezon"], ensure_ascii=False),
+        json.dumps(dane["trendy"], ensure_ascii=False),
+    )
+    with open(os.path.join(BAZA, "app/data", plik), "w", encoding="utf-8") as f:
+        f.write(out)
+    print(plik, "→ reguły:", len(dane["reguly"]), "autorytety:", len(dane["autorytety"]),
+          "sezon:", len(dane["sezon"]), "trendy:", len(dane["trendy"]))
 
-with open(os.path.join(BAZA, 'app/data/wiedza.js'), 'w') as f:
-    f.write(out)
-print("reguły:", len(reguly), "| autorytety:", len(autorytety), "| miesiące:", len(sezon), "| trendy:", len(trendy))
+
+# CUKIERNIA
+zbuduj("AB_WIEDZA", "wiedza.js", {
+    "reguly": ("scratch-rules.json", []),
+    "autorytety": ("scratch-autorytety.json", []),
+    "sezon": ("scratch-sezon.json", []),
+    "trendy": ("scratch-trendy.json", []),
+})
+
+# PIEKARNIA (brak osobnych autorytetów/trendów w JSON — są w tomie i korpusie)
+zbuduj("AB_WIEDZA_PIEKARNIA", "wiedza-piekarnia.js", {
+    "reguly": ("scratch-rules-piekarnia.json", []),
+    "autorytety": ("scratch-autorytety-piekarnia.json", []),
+    "sezon": ("scratch-sezon-piekarnia.json", []),
+    "trendy": ("scratch-trendy-piekarnia.json", []),
+})
