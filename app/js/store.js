@@ -48,6 +48,8 @@
     const s = (surowy && typeof surowy === "object") ? surowy : {};
     if (!s.ustawienia || typeof s.ustawienia !== "object") s.ustawienia = wzor.ustawienia;
     for (const key of Object.keys(wzor.ustawienia)) if (s.ustawienia[key] === undefined) s.ustawienia[key] = wzor.ustawienia[key];
+    delete s.ustawienia.apiKey;      // klucz API jest globalny, nie per moduł — nie trzymaj tu (K1)
+    delete s.ustawienia.trybOnline;
     if (!CZAS_RE.test(s.ustawienia.dzienOd)) s.ustawienia.dzienOd = wzor.ustawienia.dzienOd;
     if (!CZAS_RE.test(s.ustawienia.dzienDo)) s.ustawienia.dzienDo = wzor.ustawienia.dzienDo;
     if (!Array.isArray(s.ustawienia.zespol) || !s.ustawienia.zespol.length) s.ustawienia.zespol = wzor.ustawienia.zespol;
@@ -59,6 +61,7 @@
       do: CZAS_RE.test(os && os.do) ? os.do : "14:00"
     }));
     for (const key of ["zadania", "inspiracje", "czat"]) if (!Array.isArray(s[key])) s[key] = [];
+    if (s.czat.length > 80) s.czat = s.czat.slice(-80); // nie rośnij bez końca
     if (!s.plan || typeof s.plan !== "object") s.plan = {};
     if (!s.kalibracja || typeof s.kalibracja !== "object") s.kalibracja = {};
     if (!s.nauka || typeof s.nauka !== "object") s.nauka = { fakty: [], notatki: [] };

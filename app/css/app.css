@@ -234,7 +234,12 @@ label.pole > span { display: block; font-size: .78rem; font-weight: 700; color: 
 
 /* drukowanie kart naważek */
 @media print {
-  .nawigacja, .naglowek .prawa, .btn, .czat-pasek { display: none !important; }
+  .nawigacja, .naglowek, .btn, .czat-pasek, .toast { display: none !important; }
   body { background: #fff; color: #000; padding: 0; }
   .karta { box-shadow: none; }
+  /* gdy otwarty modal (np. Karta dnia) — drukuj tylko jego treść, bez osi/tła */
+  body:has(.modal-tlo) #widok { display: none !important; }
+  .modal-tlo { position: static; background: #fff; display: block; }
+  .modal { max-height: none; box-shadow: none; border-radius: 0; max-width: 100%; }
+  .modal-akcje { display: none !important; }
 }

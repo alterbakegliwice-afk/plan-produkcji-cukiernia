@@ -64,15 +64,17 @@ window.Symulacja = {
     const dzienDo = AB.doMin(opcje.do || ust.dzienDo);
     const ostrzezenia = [];
 
-    // sortowanie: najpierw produkty z długim czasem pasywnym (drożdżowe — trzeba zacząć wcześnie),
-    // potem piecowe rosnąco po temperaturze, smażone na końcu (osobny zasób)
+    // profil temperatury pieca zależny od modułu:
+    // • konwekcja (cukiernia, Bongard) — RASNĄCO: piec szybko dogrzewa, wolno stygnie
+    // • pokładowy (piekarnia, IBIS) — OPADAJĄCO: chleby z parą w gorący trzon, potem schodzimy
+    const opadajaca = (window.AB_MODUL || {}).skalowanie === "maka";
     const posort = [...pozycje].sort((a, b) => {
       const ra = AB.receptura(a.nr), rb = AB.receptura(b.nr);
       const pasA = (ra.proces.ferm_min || 0) + (ra.proces.rozrost_min || 0);
       const pasB = (rb.proces.ferm_min || 0) + (rb.proces.rozrost_min || 0);
       if (pasA !== pasB) return pasB - pasA; // dłuższa fermentacja = wcześniej start
       const tA = Czas.temperatura(ra) || 0, tB = Czas.temperatura(rb) || 0;
-      return tA - tB; // piec: od najniższej temperatury
+      return opadajaca ? tB - tA : tA - tB;
     });
 
     const zajetePiece = { bongard: [], ibis: [], smazalnik: [] };
@@ -162,14 +164,20 @@ window.Symulacja = {
         .sort((x, y) => (x.b.start + x.s.od) - (y.b.start + y.s.od));
       for (let i = 1; i < piecowe.length; i++) {
         const t0 = piecowe[i - 1].s.temp, t1 = piecowe[i].s.temp;
-        if (t1 < t0 - 20) {
-          const rPoprz = AB.receptura(piecowe[i - 1].b.nr);
+        const rPoprz = AB.receptura(piecowe[i - 1].b.nr);
+        if (opadajaca && t1 > t0 + 20) {
+          // pokładowy: nie da się szybko dogrzać trzonu w górę
+          ostrzezenia.push({ typ: "piec", tekst: nazwaPieca + " (pokładowy): po " + t0 + "°C (" + rPoprz.nazwa +
+            ") wchodzisz WYŻEJ na " + t1 + "°C (" + AB.receptura(piecowe[i].b.nr).nazwa +
+            "). Trzon wolno się dogrzewa — piecz profilem opadającym: najgorętsze chleby (z parą) najpierw, potem schodź w dół." });
+        } else if (!opadajaca && t1 < t0 - 20) {
+          // konwekcja: wolno stygnie
           const przezFermentacje = (rPoprz.proces.ferm_min || 0) + (rPoprz.proces.rozrost_min || 0) > 0;
           ostrzezenia.push({ typ: "piec", tekst: nazwaPieca + ": po " + t0 + "°C (" + rPoprz.nazwa +
             ") schodzisz do " + t1 + "°C (" + AB.receptura(piecowe[i].b.nr).nazwa + "). " +
             (przezFermentacje
               ? "To cena wczesnego startu drożdżowych/laminowanych — dolicz 10–15 min na wystygnięcie pieca (drzwi uchylone) albo przełóż na koniec ciągu."
-              : "Piec stygnie wolno — piecz od najniższej do najwyższej temperatury (drabinka pokładów).") });
+              : "Piec stygnie wolno — piecz od najniższej do najwyższej temperatury.") });
         }
       }
     }

@@ -12,19 +12,20 @@ window.WidokPlan = {
 
     // podsumowanie dnia
     if (dzien.bloki.length) {
-      let sztuk = 0, koszt = 0, aktywne = 0;
+      let sztuk = 0, koszt = 0, aktywne = 0, niepelny = false;
       for (const b of dzien.bloki) {
         const r = AB.receptura(b.nr);
         if (!r) continue;
         sztuk += Czas.sztuki(r, b.partie);
         const k = Czas.koszt(b.nr, b.partie);
-        if (k) koszt += k.surowce;
+        if (k) { koszt += k.surowce; if (k.niepelny) niepelny = true; }
         aktywne += b.segmenty.filter(s => s.typ === "aktywny" || s.osobaAktywna).reduce((a, s) => a + s.do - s.od, 0);
       }
       el.appendChild(AB.el(
         '<div class="karta rzad maly"><span><b>' + dzien.bloki.length + '</b> produktów</span>' +
         '<span>· <b>~' + Math.round(sztuk) + '</b> ' + (window.AB_MODUL || {}).jednostkaWynik + '</span>' +
-        '<span>· surowce <b>' + AB.zl(koszt) + '</b></span>' +
+        '<span>· surowce <b>' + (niepelny ? "≥" : "") + AB.zl(koszt) + '</b>' +
+        (niepelny ? ' <span title="brak części cen w cenniku">⚠</span>' : "") + "</span>" +
         '<span class="rozdziel wyciszony">ręce: ' + AB.min(aktywne) + '</span></div>'));
     }
 
@@ -45,7 +46,7 @@ window.WidokPlan = {
       (dzien.bloki.length ? '<button class="btn" data-akcja="uloz">✨ Ułóż</button>' +
         '<button class="btn" data-akcja="odprawa-d1">🌙 Odprawa D-1</button>' +
         '<button class="btn" data-akcja="zadania-z-planu">✅ Zadania z planu</button>' +
-        '<button class="btn" data-akcja="nawazki-dnia">🧾 Naważki dnia</button>' +
+        '<button class="btn" data-akcja="karta-dnia">🖨 Karta dnia</button>' +
         '<button class="btn btn-cichy rozdziel" data-akcja="wyczysc-dzien">Wyczyść</button>' : "") +
       "</div>"));
 
@@ -169,13 +170,19 @@ window.WidokPlan = {
           ostrz.push({ tekst: nazwa + ": nakładają się wypieki " + AB.receptura(list[i - 1].b.nr).nazwa + " i " +
             AB.receptura(list[i].b.nr).nazwa + " (" + AB.zMin(list[i].od) + "). Przesuń jeden z bloków albo użyj „Ułóż dzień”." });
         }
-        if (list[i].temp && list[i - 1].temp && list[i].temp < list[i - 1].temp - 20) {
-          const rPoprz = AB.receptura(list[i - 1].b.nr);
-          const przezFerm = rPoprz && ((rPoprz.proces.ferm_min || 0) + (rPoprz.proces.rozrost_min || 0) > 0);
-          ostrz.push({ tekst: nazwa + ": temperatura spada z " + list[i - 1].temp + "°C na " + list[i].temp + "°C. " +
-            (przezFerm
-              ? "To cena wczesnego startu drożdżowych — dolicz 10–15 min na wystygnięcie pieca (drzwi uchylone)."
-              : "Piec stygnie wolno — lepiej piec od najniższej do najwyższej temperatury.") });
+        const opadajaca = (window.AB_MODUL || {}).skalowanie === "maka";
+        if (list[i].temp && list[i - 1].temp) {
+          if (opadajaca && list[i].temp > list[i - 1].temp + 20) {
+            ostrz.push({ tekst: nazwa + " (pokładowy): temperatura ROŚNIE z " + list[i - 1].temp + "°C na " + list[i].temp +
+              "°C — trzon wolno dogrzewa. Piecz profilem opadającym: najgorętsze chleby najpierw." });
+          } else if (!opadajaca && list[i].temp < list[i - 1].temp - 20) {
+            const rPoprz = AB.receptura(list[i - 1].b.nr);
+            const przezFerm = rPoprz && ((rPoprz.proces.ferm_min || 0) + (rPoprz.proces.rozrost_min || 0) > 0);
+            ostrz.push({ tekst: nazwa + ": temperatura spada z " + list[i - 1].temp + "°C na " + list[i].temp + "°C. " +
+              (przezFerm
+                ? "To cena wczesnego startu drożdżowych — dolicz 10–15 min na wystygnięcie pieca (drzwi uchylone)."
+                : "Piec stygnie wolno — lepiej piec od najniższej do najwyższej temperatury.") });
+          }
         }
       }
       const piecInfo = AB_ZASOBY.piece.find(p => p.id === zasob);
@@ -213,7 +220,7 @@ window.WidokPlan = {
     if (akcja === "dzien-naprzod") { this.data = AB.przesunDate(this.data, 1); this.zaznaczony = null; App.render(); }
     if (akcja === "dodaj") this._modalDodaj();
     if (akcja === "uloz") this._ulozDzien();
-    if (akcja === "nawazki-dnia") this._modalNawazkiDnia();
+    if (akcja === "karta-dnia") this._modalKartaDnia();
     if (akcja === "auto-plan") this._autoPlan();
     if (akcja === "odprawa-d1") this._modalOdprawa();
     if (akcja === "zadania-z-planu") {
@@ -243,6 +250,50 @@ window.WidokPlan = {
       '<p class="maly wyciszony">Co zrobić <b>wieczorem dzień wcześniej</b> (' + wczoraj + "), żeby rano ruszyć bez presji. Oś dnia tego nie pokazuje — a tu jest.</p>" +
       (punkty.length ? punkty.map(p => '<div class="sugestia"><b>' + AB.esc(p.tytul) + "</b>" + AB.esc(p.tekst) + "</div>").join("")
         : '<p class="wyciszony">Brak przygotowań z wyprzedzeniem.</p>') +
+      '<div class="modal-akcje"><button class="btn" data-a="drukuj">🖨 Drukuj</button>' +
+      '<button class="btn btn-glowny" data-a="x">Zamknij</button></div></div></div>');
+    m.addEventListener("click", e => {
+      if (e.target.dataset.a === "x" || e.target === m) m.remove();
+      if (e.target.dataset.a === "drukuj") window.print();
+    });
+    document.body.appendChild(m);
+  },
+
+  // KARTA DNIA — drukowalna kartka dla brygady: harmonogram + zbiorcze naważki.
+  // Rozwiązuje "jedno urządzenie": rano piekarz/pomoc czyta kartkę bez apki.
+  _modalKartaDnia() {
+    const dzien = Store.dzien(this.data);
+    const M = window.AB_MODUL || {};
+    const bloki = [...dzien.bloki].sort((a, b) => a.start - b.start);
+    const zesp = {};
+    Store.stan.ustawienia.zespol.forEach(z => zesp[z.id] = z.nazwa);
+
+    // harmonogram
+    const wierszePlan = bloki.map(b => {
+      const r = AB.receptura(b.nr);
+      const piecSeg = b.segmenty.find(s => s.typ === "piec");
+      const t = Czas.temperatura(r);
+      return "<tr><td>" + AB.zMin(b.start) + '</td><td>' + AB.esc(r ? r.nazwa : b.nr) + "</td>" +
+        '<td class="liczba">' + b.partie + (M.skalowanie === "maka" ? " kg" : "×") + "</td>" +
+        "<td>" + AB.esc(zesp[b.osoba] || b.osoba) + "</td>" +
+        '<td class="liczba">' + (piecSeg ? AB.zMin(b.start + piecSeg.od) + (t ? " · " + t + "°C" : "") : "—") + "</td></tr>";
+    }).join("");
+
+    // zbiorcze naważki
+    const suma = {};
+    for (const b of bloki) {
+      const r = AB.receptura(b.nr);
+      if (!r || r.tylko_proces) continue;
+      for (const n of Czas.nawazki(b.nr, b.partie)) suma[n.nazwa] = (suma[n.nazwa] || 0) + n.ilosc;
+    }
+    const wierszeNaw = Object.entries(suma).sort((a, b) => b[1] - a[1])
+      .map(w => "<tr><td>" + AB.esc(w[0]) + '</td><td class="liczba"><b>' + AB.g(w[1]) + "</b></td></tr>").join("");
+
+    const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>🖨 Karta dnia — ' + AB.dataPL(this.data) + " · " + (M.nazwa || "") + "</h2>" +
+      (bloki.length ? '<h3>Harmonogram</h3><div class="przewijalna"><table class="tabela">' +
+        "<tr><th>Start</th><th>Produkt</th><th>Ilość</th><th>Kto</th><th>Piec</th></tr>" + wierszePlan + "</table></div>" +
+        (wierszeNaw ? '<h3 style="margin-top:12px">Naważki zbiorcze</h3><table class="tabela">' + wierszeNaw + "</table>" : "")
+        : '<p class="wyciszony">Pusty plan.</p>') +
       '<div class="modal-akcje"><button class="btn" data-a="drukuj">🖨 Drukuj</button>' +
       '<button class="btn btn-glowny" data-a="x">Zamknij</button></div></div></div>');
     m.addEventListener("click", e => {

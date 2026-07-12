@@ -95,8 +95,8 @@ window.Wiedza = {
       tk.forEach(t => tf[t] = (tf[t] || 0) + 1);
       return tf;
     });
-    const N = frag.length || 1;
-    const avg = dlugosci.reduce((a, b) => a + b, 0) / N;
+    const N = frag.length; // 0 gdy pusto — szukaj() to zabezpiecza i zwraca []
+    const avg = N ? dlugosci.reduce((a, b) => a + b, 0) / N : 1;
     this._indeks = { frag, dokTokeny, df, dlugosci, N, avg };
     this._sygnatura = this._sygnaturaDanych();
   },

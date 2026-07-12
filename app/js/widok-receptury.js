@@ -79,6 +79,8 @@ window.WidokReceptury = {
       '<div class="chipy" style="margin:8px 0">' +
       '<span class="chip szary">' + AB.esc(r.kategoria || "") + "</span>" +
       r.alergeny.map(a => '<span class="chip zloty">' + AB.esc(a) + "</span>").join("") + "</div>" +
+      ((r.alergeny_warianty || []).length ? '<p class="maly wyciszony">Może zawierać (w wariancie): ' +
+        AB.esc(r.alergeny_warianty.join(", ")) + "</p>" : "") +
       (p.uwagi ? '<p class="maly">📌 ' + AB.esc(p.uwagi) + "</p>" : "") + "</div>";
 
     // skalowanie (moduł: partie albo kg mąki)
@@ -91,7 +93,7 @@ window.WidokReceptury = {
       '<p class="maly wyciszony" style="margin:6px 0 10px">' +
       (M.skalowanie === "maka"
         ? this.partie + " kg mąki wsadu → <b>~" + sztuk + " szt.</b> · masa ciasta ~" + AB.g(Czas.masaCiasta(r, this.partie)) +
-          " · hydracja " + (r.hydracja_pct || "?") + "%"
+          " · hydracja " + (r.hydracja_pct ? r.hydracja_pct + "%" : "n/d (ciasto wzbogacone)")
         : this.partie + " × " + Math.round(r.porcje_partia || 1) + " porcji = <b>~" + sztuk + " porcji</b> · masa ciasta ~" +
           AB.g(Czas.masaCiasta(r, this.partie))) + "</p>";
 
@@ -191,12 +193,15 @@ window.WidokReceptury = {
 
   _modalKalibracji(r) {
     const teraz = Store.czasPracy(r.nr);
-    const jedn = (window.AB_MODUL || {}).skalowanie === "maka"
-      ? this.partie + " kg mąki" : "1 partia";
+    // ZAWSZE kalibrujemy jednostkę BAZOWą (model skaluje od niej), nie bieżącą ilość
+    const M = window.AB_MODUL || {};
+    const baza = M.skalowanie === "maka"
+      ? (((window.AB_ZASOBY.modelCzasu || {}).wsadBazowyKg) || 10) + " kg mąki"
+      : "1 partia";
     const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>Kalibracja czasu</h2>' +
-      "<p class=\"maly\">Ile minut pracy rąk zajmuje „" + AB.esc(r.nazwa) + "” (" + jedn + ")? " +
+      "<p class=\"maly\">Ile minut pracy rąk zajmuje „" + AB.esc(r.nazwa) + "” dla <b>" + baza + "</b>? " +
       "Domyślnie z arkusza: " + (r.czas_pracy_min || "—") + " min. Zmierz raz stoperem i wpisz — " +
-      "symulacje będą liczyć na Twojej liczbie. To Twoja apka się od Ciebie uczy.</p>" +
+      "symulacje przeliczą to na dowolną ilość. To Twoja apka się od Ciebie uczy.</p>" +
       '<label class="pole"><span>Czas pracy (min)</span><input type="number" id="kal-min" value="' + teraz + '" min="1" max="600"></label>' +
       '<div class="modal-akcje"><button class="btn btn-cichy" data-a="x">Anuluj</button>' +
       '<button class="btn btn-glowny" data-a="ok">Zapisz</button></div></div></div>');
@@ -206,7 +211,7 @@ window.WidokReceptury = {
         const v = Number(m.querySelector("#kal-min").value);
         if (v > 0) {
           Store.stan.kalibracja[r.nr] = { czas_pracy_min: v };
-          Nauka.zapamietajKalibracje(r, v, jedn); // apka uczy się Twojego pomiaru
+          Nauka.zapamietajKalibracje(r, v, baza); // apka uczy się Twojego pomiaru
           Store.zapisz(); AB.toast("Skalibrowano ✓ — zapamiętane"); m.remove(); App.render();
         }
       }

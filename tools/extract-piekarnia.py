@@ -168,6 +168,41 @@ for r in rows('FOODCOST'):
 zaloz = {"stawka_h": 40, "media_zl_kg_maki": 0.8, "marza_detal": 0.35,
          "marza_gastro": 0.3, "vat_detal": 0.05, "vat_gastro": 0.23}
 
+# --- dopasowanie ceny surowca (piekarskie nazwy mąk różnią się od cennika) ---
+def _norm(s):
+    return str(s).lower().replace('ą', 'a').replace('ż', 'z').replace('ó', 'o').replace('ł', 'l')
+
+
+def cena_surowca(nazwa):
+    c = cennik.get(nazwa)
+    if c and c["cena"] is not None:
+        return c
+    n = _norm(nazwa)
+    # dopasowanie po numerze typu mąki (T65, T650...) i rdzeniu (żytnia/orkiszowa/graham)
+    import re as _re
+    tnum = _re.findall(r't\s?(\d{2,4})', n)
+    kand = None
+    for cn, cc in cennik.items():
+        if cc["cena"] is None:
+            continue
+        cnn = _norm(cn)
+        if 'maka' not in cnn and 'mąk' not in cn.lower():
+            continue
+        # ten sam numer T i zgodny rodzaj mąki
+        cnums = _re.findall(r't\s?(\d{2,4})', cnn)
+        if tnum and cnums and tnum[0] == cnums[0]:
+            rodzaj_ok = (('zytni' in n) == ('zytni' in cnn)) and (('orkisz' in n) == ('orkisz' in cnn))
+            if rodzaj_ok:
+                return cc
+        # bez numeru: dopasuj po rdzeniu (razowa żytnia, orkiszowa, graham, chlebowa≈500)
+        for rdzen in ('zytnia razowa', 'zytnia', 'orkiszowa razowa', 'orkiszowa', 'graham', 'pelnoziarnista'):
+            if rdzen in n and rdzen in cnn:
+                kand = cc
+    if 'chlebowa' in n and not tnum:
+        kand = kand or cennik.get('Mąka pszenna 500')
+    return kand
+
+
 # --- SCALENIE ---
 out = []
 for nr, rec in sorted(receptury.items()):
@@ -181,13 +216,15 @@ for nr, rec in sorted(receptury.items()):
     # prefermenty użyte w recepturze (nazwy zaczynów)
     prefy = [s["nazwa"] for s in rec["skladniki"] if s["typ"] in PREFERMENT_TYPY]
 
-    # alergeny: matryca cukierni + wnioskowanie z nazwy/typu składnika
-    # (matryca ALERGENY nie zna piekarskich nazw mąk T55/T65/żytnia/orkiszowa —
-    #  bez tego chleby pokazywałyby pusty zbiór alergenów mimo oczywistego glutenu)
+    # alergeny: matryca cukierni + wnioskowanie z nazwy/typu składnika.
+    # WAŻNE (bezpieczeństwo prawne): składniki wariantowe (kolumna Wariant) NIE
+    # wchodzą do alergenów bazowych — trafiają do osobnego zbioru "może zawierać".
     algs = set()
+    algs_war = set()
     for s in rec["skladniki"]:
+        cel = algs_war if s.get("wariant") else algs
         for a in alergeny.get(s["nazwa"], []):
-            algs.add(a)
+            cel.add(a)
         nz = s["nazwa"].lower()
         typ = s["typ"].lower()
         if any(k in nz for k in ["mąka pszen", "pszenna", "pszenn", "orkisz", "graham",
@@ -195,20 +232,20 @@ for nr, rec in sorted(receptury.items()):
                                   "t150", "t1850", "t2000", "chlebowa", "tostowa", "durum",
                                   "słód", "slod", "otręby", "otrab", "kasza manna", "bulgur",
                                   "jęczmi", "jeczmi", "owsian", "płatki owsiane"]) or typ == "mąka":
-            algs.add("Gluten")
+            cel.add("Gluten")
         if any(k in nz for k in ["jaj", "żółt", "zolt", "białk"]) or typ in ("jaja", "jajka"):
-            algs.add("Jaja")
+            cel.add("Jaja")
         if any(k in nz for k in ["mlek", "masło", "maslo", "śmietan", "smietan", "twaróg",
                                   "twarog", "serek", "mascarpone", "jogurt", "maślan", "maslan",
                                   "ser ", "kefir"]) or typ == "nabiał":
-            algs.add("Mleko")
+            cel.add("Mleko")
         if "sezam" in nz:
-            algs.add("Sezam")
+            cel.add("Sezam")
         if any(k in nz for k in ["soja", "sojow", "lecytyn"]):
-            algs.add("Soja")
+            cel.add("Soja")
         if any(k in nz for k in ["orzech", "migdał", "migdal", "pekan", "laskow", "nerkow",
                                   "pistacj", "włoski", "wloski"]):
-            algs.add("Orzechy")
+            cel.add("Orzechy")
 
     # koszt surowców na 1 kg mąki wsadu (baker's % => g na 1 kg mąki = pct*10)
     # Pomijamy: wodę (bez ceny) oraz prefermenty/zaczyny (ich mąka+woda są już
@@ -218,9 +255,11 @@ for nr, rec in sorted(receptury.items()):
     for s in rec["skladniki"]:
         if s["typ"] in ('woda',) or s["typ"] in PREFERMENT_TYPY:
             continue
+        if s.get("wariant"):
+            continue  # wariant opcjonalny — nie licz do kosztu bazowego
         pct = s["pct"] or 0
         gram_na_kg = pct * 10.0        # gramy składnika na 1 kg mąki
-        c = cennik.get(s["nazwa"])
+        c = cena_surowca(s["nazwa"])
         if c and c["cena"] is not None:
             if c["jednostka"] == 'szt':
                 koszt += (gram_na_kg / 55.0) * c["cena"]   # jajko ≈ 55 g
@@ -237,6 +276,7 @@ for nr, rec in sorted(receptury.items()):
         "proces": p,
         "prefermenty": prefy,
         "alergeny": sorted(algs),
+        "alergeny_warianty": sorted(algs_war - algs),
         "suma_mak_pct": suma_mak,
         "suma_mak_ok": abs(suma_mak - 100) < 0.5,
         "hydracja_pct": hydracja,

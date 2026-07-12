@@ -99,14 +99,14 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 80.0,
   "czas_pracy_min": 45.0,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.36,
+  "koszt_na_kg_maki": 2.7,
   "brak_cen": [
-   "Mąka pszenna chlebowa T65",
    "Słód pszeniczny"
   ]
  },
@@ -198,6 +198,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 55.0,
@@ -286,15 +287,14 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 65.0,
   "czas_pracy_min": 38.0,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.78,
-  "brak_cen": [
-   "Mąka pszenna chlebowa T65"
-  ]
+  "koszt_na_kg_maki": 2.6,
+  "brak_cen": []
  },
  {
   "nr": "R-004",
@@ -374,15 +374,14 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 62.0,
   "czas_pracy_min": 35.0,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.04,
-  "brak_cen": [
-   "Mąka pszenna T55 (baguette)"
-  ]
+  "koszt_na_kg_maki": 2.44,
+  "brak_cen": []
  },
  {
   "nr": "R-005",
@@ -477,7 +476,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "prefermenty": [],
   "alergeny": [
    "Gluten",
-   "Mleko",
+   "Mleko"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -486,9 +487,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "czas_pracy_min": 25.0,
   "cena_obecna": null,
   "koszt_na_kg_maki": 3.74,
-  "brak_cen": [
-   "Mak / sezam"
-  ]
+  "brak_cen": []
  },
  {
   "nr": "R-006",
@@ -577,6 +576,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 78.0,
@@ -688,12 +688,13 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 75.0,
   "czas_pracy_min": 30.0,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 2.92,
+  "koszt_na_kg_maki": 2.77,
   "brak_cen": [
    "Oliwa z oliwek (ciasto)",
    "Oliwa z oliwek (wierzch)"
@@ -815,6 +816,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 25.0,
@@ -920,15 +922,15 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 58.0,
   "czas_pracy_min": 28.0,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 1.0,
+  "koszt_na_kg_maki": 2.64,
   "brak_cen": [
    "Miód",
-   "Mąka pszenna chlebowa T650",
    "Otręby pszenne (posypka)"
   ]
  },
@@ -1037,6 +1039,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 0.0,
@@ -1046,7 +1049,6 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "brak_cen": [
    "Jajko",
    "Masło (ciasto)",
-   "Masło (laminowanie)",
    "Mleko pełne"
   ]
  },
@@ -1137,6 +1139,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 70.0,
@@ -1250,6 +1253,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 0.0,
@@ -1258,8 +1262,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "koszt_na_kg_maki": 8.82,
   "brak_cen": [
    "Jajko",
-   "Mleko pełne",
-   "Nadzienie (dżem/budyń)"
+   "Mleko pełne"
   ]
  },
  {
@@ -1376,16 +1379,16 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 70.0,
   "czas_pracy_min": 45.0,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.53,
+  "koszt_na_kg_maki": 2.61,
   "brak_cen": [
    "Dynia (namoczona)",
    "Mak (posypka)",
-   "Mąka pszenna chlebowa T65",
    "Siemię lniane (namoczone)",
    "Słonecznik (namoczony)"
   ]
@@ -1486,6 +1489,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 0.0,
@@ -1575,6 +1579,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 70.0,
@@ -1686,6 +1691,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 60.0,
@@ -1802,6 +1808,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 0.0,
@@ -1927,7 +1934,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten",
    "Jaja",
-   "Mleko",
+   "Mleko"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -1940,7 +1949,6 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jajko",
    "Masło (ciasto)",
    "Masło (glazura)",
-   "Mix ziaren (sezam, mak, słonecznik)",
    "Mleko pełne"
   ]
  },
@@ -2056,7 +2064,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten",
    "Jaja",
-   "Mleko",
+   "Mleko"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -2068,8 +2078,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "brak_cen": [
    "Jajko",
    "Jajko (glazura)",
-   "Mleko pełne",
-   "Sezam lub mak"
+   "Mleko pełne"
   ]
  },
  {
@@ -2175,7 +2184,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Pszenny levain płynny (100%)"
   ],
   "alergeny": [
-   "Gluten",
+   "Gluten"
+  ],
+  "alergeny_warianty": [
    "Orzechy"
   ],
   "suma_mak_pct": 100.0,
@@ -2183,10 +2194,8 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "hydracja_pct": 80.0,
   "czas_pracy_min": null,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.36,
+  "koszt_na_kg_maki": 2.7,
   "brak_cen": [
-   "Mąka pszenna chlebowa T65",
-   "Orzechy włoskie",
    "Żurawina suszona"
   ]
  },
@@ -2293,7 +2302,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Pszenny levain płynny (100%)"
   ],
   "alergeny": [
-   "Gluten",
+   "Gluten"
+  ],
+  "alergeny_warianty": [
    "Mleko"
   ],
   "suma_mak_pct": 100.0,
@@ -2301,11 +2312,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "hydracja_pct": 80.0,
   "czas_pracy_min": null,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.36,
+  "koszt_na_kg_maki": 2.7,
   "brak_cen": [
-   "Mąka pszenna chlebowa T65",
-   "Papryka jalapeno (kiszona, odsączona)",
-   "Ser cheddar w kostce"
+   "Papryka jalapeno (kiszona, odsączona)"
   ]
  },
  {
@@ -2422,16 +2431,15 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 80.0,
   "czas_pracy_min": null,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.69,
+  "koszt_na_kg_maki": 3.03,
   "brak_cen": [
-   "Czarnuszka",
-   "Mąka pszenna chlebowa T65",
-   "Słonecznik łuskany (prażony)"
+   "Czarnuszka"
   ]
  },
  {
@@ -2548,15 +2556,14 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 80.0,
   "czas_pracy_min": null,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.66,
+  "koszt_na_kg_maki": 3.0,
   "brak_cen": [
-   "Mąka pszenna chlebowa T65",
-   "Oliwki czarne (bez pestek)",
    "Skórka cytryny"
   ]
  },
@@ -2665,14 +2672,14 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 80.0,
   "czas_pracy_min": null,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 0.36,
+  "koszt_na_kg_maki": 2.7,
   "brak_cen": [
-   "Mąka pszenna chlebowa T65",
    "Suszone pomidory w oleju",
    "Słonecznik łuskany (prażony)"
   ]
@@ -2774,15 +2781,14 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Gluten",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 75.0,
   "czas_pracy_min": null,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 2.29,
-  "brak_cen": [
-   "Mąka pszenna chlebowa T65"
-  ]
+  "koszt_na_kg_maki": 4.63,
+  "brak_cen": []
  },
  {
   "nr": "R-026",
@@ -2876,7 +2882,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   },
   "prefermenty": [],
   "alergeny": [
-   "Gluten",
+   "Gluten"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -2886,7 +2894,6 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "cena_obecna": null,
   "koszt_na_kg_maki": 2.58,
   "brak_cen": [
-   "Mak lub sezam",
    "Smalec lub margaryna"
   ]
  },
@@ -2982,7 +2989,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   },
   "prefermenty": [],
   "alergeny": [
-   "Gluten",
+   "Gluten"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -2992,7 +3001,6 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "cena_obecna": null,
   "koszt_na_kg_maki": 2.58,
   "brak_cen": [
-   "Mix ziaren (sezam, mak, słonecznik, siemię)",
    "Smalec lub margaryna"
   ]
  },
@@ -3108,6 +3116,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 55.0,
@@ -3212,7 +3221,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   },
   "prefermenty": [],
   "alergeny": [
-   "Gluten",
+   "Gluten"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -3222,7 +3233,6 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "cena_obecna": null,
   "koszt_na_kg_maki": 2.54,
   "brak_cen": [
-   "Sezam lub mak",
    "Smalec lub margaryna"
   ]
  },
@@ -3338,7 +3348,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten",
    "Jaja",
-   "Mleko",
+   "Mleko"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -3346,7 +3358,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "hydracja_pct": 52.0,
   "czas_pracy_min": null,
   "cena_obecna": null,
-  "koszt_na_kg_maki": 5.23,
+  "koszt_na_kg_maki": 4.63,
   "brak_cen": [
    "Jajko",
    "Mleko pełne"
@@ -3457,6 +3469,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 52.0,
@@ -3573,6 +3586,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 52.0,
@@ -3689,6 +3703,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 52.0,
@@ -3812,7 +3827,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten",
    "Jaja",
-   "Mleko",
+   "Mleko"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -3823,8 +3840,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "koszt_na_kg_maki": 4.6,
   "brak_cen": [
    "Jajko",
-   "Mleko pełne",
-   "Sezam lub mak"
+   "Mleko pełne"
   ]
  },
  {
@@ -3939,7 +3955,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten",
    "Jaja",
-   "Mleko",
+   "Mleko"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -3950,8 +3968,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "koszt_na_kg_maki": 4.6,
   "brak_cen": [
    "Jajko",
-   "Mleko pełne",
-   "Sezam lub mak"
+   "Mleko pełne"
   ]
  },
  {
@@ -4055,7 +4072,9 @@ window.AB_PIEKARNIA_RECEPTURY = [
   },
   "prefermenty": [],
   "alergeny": [
-   "Gluten",
+   "Gluten"
+  ],
+  "alergeny_warianty": [
    "Sezam"
   ],
   "suma_mak_pct": 100.0,
@@ -4065,7 +4084,6 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "cena_obecna": null,
   "koszt_na_kg_maki": 2.6,
   "brak_cen": [
-   "Mix ziaren (sezam, mak, siemię, słonecznik)",
    "Miód"
   ]
  },
@@ -4165,6 +4183,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 70.0,
@@ -4271,6 +4290,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
   "alergeny": [
    "Gluten"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 70.0,
@@ -4386,6 +4406,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 0.0,
@@ -4511,6 +4532,7 @@ window.AB_PIEKARNIA_RECEPTURY = [
    "Jaja",
    "Mleko"
   ],
+  "alergeny_warianty": [],
   "suma_mak_pct": 100.0,
   "suma_mak_ok": true,
   "hydracja_pct": 0.0,

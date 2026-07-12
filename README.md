@@ -23,7 +23,8 @@ Najczęstsze pytanie: *„czy da się postawić AI, które odpowiada z plików w
 
 - **🤖 Auto-plan** — proponuje zestaw produktów na dzień z Twoich **nawyków** (historia planów) i **sezonu**, po czym układa go symulacją bez kolizji. Korygujesz ilości i gotowe.
 - **✅ Zadania z planu** — z gotowego planu generuje naważki (do pomocy) i sprzątanie jednym dotknięciem.
-- **🧾 Naważki dnia** — zbiorcza lista składników z całego planu do druku.
+- **🖨 Karta dnia** — drukowalna kartka dla brygady: harmonogram (start, produkt, ilość, kto, piec) + naważki zbiorcze. Rozwiązuje „jedno urządzenie" — rano pomoc czyta kartkę bez apki.
+- **🌙 Odprawa D-1** — co przygotować **wieczorem dzień wcześniej** (piekarnia: dokarmić zaczyny wg czasu prowadzenia, uformować i zretardować, zrobić zaparki; cukiernia: serniki dzień przed, ciasto chłodzone). Oś dnia tego nie pokazuje — a to sedno rytmu piekarni.
 
 ---
 

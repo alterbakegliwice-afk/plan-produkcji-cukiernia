@@ -78,8 +78,9 @@ window.App = {
   },
 
   ustawienia() {
-    const u = Store.stan.ustawienia;
-    const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>⚙️ Ustawienia</h2>' +
+    const u = Store.stan.ustawienia;      // per moduł: dzień pracy + zespół
+    const g = Store.stan.globalne;        // wspólne: klucz API + tryb online
+    const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>⚙️ Ustawienia · ' + (window.AB_MODUL || {}).nazwa + "</h2>" +
       '<h3>Dzień pracy</h3><div class="rzad">' +
       '<label class="pole" style="flex:1"><span>Start</span><input type="time" id="u-od" value="' + AB.esc(u.dzienOd) + '"></label>' +
       '<label class="pole" style="flex:1"><span>Koniec</span><input type="time" id="u-do" value="' + AB.esc(u.dzienDo) + '"></label></div>' +
@@ -90,8 +91,8 @@ window.App = {
         '<input type="time" data-zm="do" data-i="' + i + '" value="' + AB.esc(os.do) + '" style="width:auto"></div>').join("") +
       '<h3 style="margin-top:14px">Sous Chef online (opcjonalnie)</h3>' +
       '<p class="maly wyciszony">Tryb lokalny działa bez internetu. Tryb online łączy się z Claude API — potrzebny własny klucz z console.anthropic.com. Klucz zostaje tylko w tym telefonie (localStorage). Uwaga: klucz w przeglądarce jest widoczny dla każdego z dostępem do urządzenia — używaj klucza z niskim limitem wydatków.</p>' +
-      '<label class="pole"><span>Klucz API</span><input type="password" id="u-klucz" value="' + AB.esc(u.apiKey || "") + '" placeholder="sk-ant-…"></label>' +
-      '<label class="rzad" style="margin:8px 0"><input type="checkbox" id="u-online" style="width:24px;min-height:24px" ' + (u.trybOnline ? "checked" : "") + "> Włącz tryb online</label>" +
+      '<label class="pole"><span>Klucz API</span><input type="password" id="u-klucz" value="' + AB.esc(g.apiKey || "") + '" placeholder="sk-ant-…"></label>' +
+      '<label class="rzad" style="margin:8px 0"><input type="checkbox" id="u-online" style="width:24px;min-height:24px" ' + (g.trybOnline ? "checked" : "") + "> Włącz tryb online</label>" +
       '<h3 style="margin-top:14px">Dane</h3>' +
       '<div class="rzad"><button class="btn btn-maly" data-a="eksport">⬇ Kopia zapasowa</button>' +
       '<label class="btn btn-maly" style="display:inline-flex;align-items:center">⬆ Wczytaj<input type="file" id="u-import" accept=".json" hidden></label>' +
@@ -112,8 +113,8 @@ window.App = {
           const os = u.zespol[Number(inp.dataset.i)];
           if (os && inp.value) os[inp.dataset.zm] = inp.value;
         });
-        u.apiKey = m.querySelector("#u-klucz").value.trim();
-        u.trybOnline = m.querySelector("#u-online").checked;
+        g.apiKey = m.querySelector("#u-klucz").value.trim();
+        g.trybOnline = m.querySelector("#u-online").checked;
         Store.zapisz(); m.remove(); AB.toast("Zapisano ✓"); this.render();
       }
     });
