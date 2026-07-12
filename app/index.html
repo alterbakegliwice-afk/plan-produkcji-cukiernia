@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f3ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171310" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Alterbake · Planer Cukierni</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="ikona.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="ikona.svg">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<header class="naglowek">
+  <div>
+    <div class="marka">ALTER<span>BAKE</span> · Cukiernia</div>
+    <div class="pod">planer produkcji Oliwii · stara piekarnia na nowo</div>
+  </div>
+  <div class="prawa">
+    <button class="btn btn-ikona btn-cichy" id="btn-ustawienia" aria-label="ustawienia">⚙️</button>
+  </div>
+</header>
+
+<main class="widok" id="widok"></main>
+
+<nav class="nawigacja" id="nawigacja" aria-label="główna nawigacja">
+  <button data-widok="plan"><span class="ikona">📋</span>Plan</button>
+  <button data-widok="receptury"><span class="ikona">📖</span>Receptury</button>
+  <button data-widok="zadania"><span class="ikona">✅</span>Zadania</button>
+  <button data-widok="inspiracje"><span class="ikona">💭</span>Inspiracje</button>
+  <button data-widok="souschef"><span class="ikona">👨‍🍳</span>Sous Chef</button>
+</nav>
+
+<script src="data/receptury.js"></script>
+<script src="data/zasoby.js"></script>
+<script src="data/wiedza.js"></script>
+<script src="js/util.js"></script>
+<script src="js/store.js"></script>
+<script src="js/czas.js"></script>
+<script src="js/symulacja.js"></script>
+<script src="js/wykresy.js"></script>
+<script src="js/souschef.js"></script>
+<script src="js/widok-plan.js"></script>
+<script src="js/widok-receptury.js"></script>
+<script src="js/widok-zadania.js"></script>
+<script src="js/widok-inspiracje.js"></script>
+<script src="js/widok-souschef.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
