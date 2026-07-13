@@ -38,16 +38,14 @@ window.WidokPlan = {
       if (b) el.appendChild(this._akcjeBloku(b));
     }
 
-    // przyciski główne
+    // przyciski główne — jedno działanie wiodące, reszta pod „Więcej"
     el.appendChild(AB.el(
-      '<div class="rzad" style="margin:10px 0">' +
+      '<div class="rzad akcje-glowne" style="margin:12px 0">' +
       '<button class="btn btn-glowny" data-akcja="dodaj">+ Dodaj produkt</button>' +
-      '<button class="btn" data-akcja="auto-plan">🤖 Auto-plan</button>' +
-      (dzien.bloki.length ? '<button class="btn" data-akcja="uloz">✨ Ułóż</button>' +
-        '<button class="btn" data-akcja="odprawa-d1">🌙 Odprawa D-1</button>' +
-        '<button class="btn" data-akcja="zadania-z-planu">✅ Zadania z planu</button>' +
-        '<button class="btn" data-akcja="karta-dnia">🖨 Karta dnia</button>' +
-        '<button class="btn btn-cichy rozdziel" data-akcja="wyczysc-dzien">Wyczyść</button>' : "") +
+      (dzien.bloki.length
+        ? '<button class="btn" data-akcja="uloz">✨ Ułóż</button>' +
+          '<button class="btn btn-ikona rozdziel" data-akcja="wiecej" aria-label="więcej działań">⋯</button>'
+        : '<button class="btn" data-akcja="auto-plan">🤖 Auto-plan</button>') +
       "</div>"));
 
     // ostrzeżenia
@@ -104,7 +102,7 @@ window.WidokPlan = {
         (s.temp ? " · " + s.temp + "°C" : "");
       return '<div class="blok-seg ' + s.typ + (b.id === this.zaznaczony ? " zaznaczony" : "") +
         '" style="left:' + Math.max(0, lewo) + "px;width:" + Math.max(24, w) + 'px" data-blok="' + b.id +
-        '" title="' + AB.esc(tytul) + '">' + (i === 0 ? AB.esc(r.nazwa.slice(0, 18)) + " " : "") + AB.esc(w > 70 ? s.nazwa : "") + "</div>";
+        '" title="' + AB.esc(tytul) + '">' + AB.esc(w > 56 ? s.nazwa : "") + "</div>";
     };
 
     let tory = "";
@@ -219,6 +217,7 @@ window.WidokPlan = {
     if (akcja === "dzien-wstecz") { this.data = AB.przesunDate(this.data, -1); this.zaznaczony = null; App.render(); }
     if (akcja === "dzien-naprzod") { this.data = AB.przesunDate(this.data, 1); this.zaznaczony = null; App.render(); }
     if (akcja === "dodaj") this._modalDodaj();
+    if (akcja === "wiecej") this._menuWiecej();
     if (akcja === "uloz") this._ulozDzien();
     if (akcja === "karta-dnia") this._modalKartaDnia();
     if (akcja === "auto-plan") this._autoPlan();
@@ -240,6 +239,44 @@ window.WidokPlan = {
     if (akcja === "usun-blok") { dzien.bloki = dzien.bloki.filter(x => x !== b); this.zaznaczony = null; Store.zapisz(); App.render(); }
     if (akcja === "otworz-recepture") { WidokReceptury.otwarta = b.nr; App.idz("receptury"); }
     if (akcja === "zmien-osobe" && cel.tagName === "SELECT") { /* obsługa w change */ }
+  },
+
+  // Menu „Więcej" — rzadsze działania dnia w jednym arkuszu, żeby plan był czysty
+  _menuWiecej() {
+    const poz = [
+      { a: "auto-plan", ikona: "🤖", tytul: "Auto-plan", opis: "Zaproponuj produkty na dziś" },
+      { a: "odprawa-d1", ikona: "🌙", tytul: "Odprawa D-1", opis: "Co przygotować dzień wcześniej" },
+      { a: "zadania-z-planu", ikona: "✅", tytul: "Zadania z planu", opis: "Utwórz listę zadań brygady" },
+      { a: "karta-dnia", ikona: "🖨", tytul: "Karta dnia", opis: "Wydruk dla brygady: harmonogram + naważki" },
+      { a: "wyczysc-dzien", ikona: "🗑", tytul: "Wyczyść dzień", opis: "Usuń wszystkie bloki", blad: true }
+    ];
+    const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>Więcej działań</h2>' +
+      '<div class="menu-lista">' + poz.map(p =>
+        '<button class="menu-poz' + (p.blad ? " blad" : "") + '" data-akcja="' + p.a + '">' +
+        '<span class="menu-ikona">' + p.ikona + "</span>" +
+        '<span class="menu-tekst"><b>' + AB.esc(p.tytul) + "</b>" +
+        '<span class="wyciszony maly">' + AB.esc(p.opis) + "</span></span></button>").join("") + "</div>" +
+      '<div class="modal-akcje"><button class="btn btn-glowny" data-a="x">Zamknij</button></div></div></div>');
+    m.addEventListener("click", e => {
+      if (e.target.dataset.a === "x" || e.target === m) { m.remove(); return; }
+      const poz = e.target.closest("[data-akcja]");
+      if (!poz) return;
+      m.remove();
+      const a = poz.dataset.akcja;
+      if (a === "auto-plan") this._autoPlan();
+      else if (a === "odprawa-d1") this._modalOdprawa();
+      else if (a === "karta-dnia") this._modalKartaDnia();
+      else if (a === "zadania-z-planu") {
+        const n = Automat.generujZadania(this.data);
+        AB.toast(n ? "Utworzono " + n + " zadań z planu ✓" : "Nic nowego do dodania");
+        App.render();
+      } else if (a === "wyczysc-dzien") {
+        AB.potwierdz("Usunąć wszystkie bloki z tego dnia?").then(t => {
+          if (t) { const d = Store.dzien(this.data); d.bloki = []; this.zaznaczony = null; Store.zapisz(); App.render(); }
+        });
+      }
+    });
+    document.body.appendChild(m);
   },
 
   // Odprawa D-1 — co przygotować dzień wcześniej (retard, zaczyny, serniki…)
