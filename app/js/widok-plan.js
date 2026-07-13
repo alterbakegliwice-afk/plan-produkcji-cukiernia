@@ -37,15 +37,19 @@ window.WidokPlan = {
       if (b) el.appendChild(this._akcjeBloku(b));
     }
 
-    // przyciski główne
+    // przyciski główne — edycja tylko dla Właściciela/kierownika modułu
+    const edycja = Uprawnienia.mozeEdytowac();
     el.appendChild(AB.el(
       '<div class="rzad" style="margin:10px 0">' +
-      '<button class="btn btn-glowny" data-akcja="dodaj">+ Dodaj produkt</button>' +
-      '<button class="btn" data-akcja="auto-plan">🤖 Auto-plan</button>' +
-      (dzien.bloki.length ? '<button class="btn" data-akcja="uloz">✨ Ułóż</button>' +
-        '<button class="btn" data-akcja="zadania-z-planu">✅ Zadania z planu</button>' +
-        '<button class="btn" data-akcja="nawazki-dnia">🧾 Naważki dnia</button>' +
-        '<button class="btn btn-cichy rozdziel" data-akcja="wyczysc-dzien">Wyczyść</button>' : "") +
+      (edycja
+        ? '<button class="btn btn-glowny" data-akcja="dodaj">+ Dodaj produkt</button>' +
+          '<button class="btn" data-akcja="auto-plan">🤖 Auto-plan</button>' +
+          (dzien.bloki.length ? '<button class="btn" data-akcja="uloz">✨ Ułóż</button>' +
+            '<button class="btn" data-akcja="zadania-z-planu">✅ Zadania z planu</button>' +
+            '<button class="btn" data-akcja="nawazki-dnia">🧾 Naważki dnia</button>' +
+            '<button class="btn btn-cichy rozdziel" data-akcja="wyczysc-dzien">Wyczyść</button>' : "")
+        : (dzien.bloki.length ? '<button class="btn" data-akcja="nawazki-dnia">🧾 Naważki dnia</button>' : "") +
+          '<span class="wyciszony maly">👁 Podgląd — harmonogram układa Właściciel lub kierownik.</span>') +
       "</div>"));
 
     // ostrzeżenia
@@ -137,19 +141,23 @@ window.WidokPlan = {
     const r = AB.receptura(b.nr);
     const rz = Czas.rozklad(b.nr, b.partie);
     const zespol = Store.stan.ustawienia.zespol;
+    const edycja = Uprawnienia.mozeEdytowac();
+    const prowadzi = (zespol.find(z => z.id === b.osoba) || {}).nazwa || b.osoba;
     return AB.el('<div class="karta" style="margin-top:10px">' +
       '<div class="rzad"><b>' + AB.esc(r.nazwa) + "</b>" +
       '<span class="chip szary">' + b.partie + ((window.AB_MODUL || {}).skalowanie === "maka" ? " kg mąki" : " partii") +
       " · ~" + Czas.sztuki(r, b.partie) + " " + (window.AB_MODUL || {}).jednostkaWynik + "</span>" +
       '<span class="chip szary">' + AB.zMin(b.start) + "–" + AB.zMin(b.start + b.segmenty[b.segmenty.length - 1].do) + "</span></div>" +
       '<div class="rzad" style="margin-top:10px">' +
-      '<button class="btn btn-maly" data-akcja="przesun" data-o="-15">−15 min</button>' +
-      '<button class="btn btn-maly" data-akcja="przesun" data-o="15">+15 min</button>' +
-      '<select data-akcja="zmien-osobe" style="width:auto;min-height:34px;padding:4px 8px">' +
-      zespol.map(z => '<option value="' + z.id + '"' + (z.id === b.osoba ? " selected" : "") + ">" + AB.esc(z.nazwa) + "</option>").join("") +
-      "</select>" +
+      (edycja
+        ? '<button class="btn btn-maly" data-akcja="przesun" data-o="-15">−15 min</button>' +
+          '<button class="btn btn-maly" data-akcja="przesun" data-o="15">+15 min</button>' +
+          '<select data-akcja="zmien-osobe" style="width:auto;min-height:34px;padding:4px 8px">' +
+          zespol.map(z => '<option value="' + z.id + '"' + (z.id === b.osoba ? " selected" : "") + ">" + AB.esc(z.nazwa) + "</option>").join("") +
+          "</select>"
+        : '<span class="chip zloty">prowadzi: ' + AB.esc(prowadzi) + "</span>") +
       '<button class="btn btn-maly" data-akcja="otworz-recepture">Receptura</button>' +
-      '<button class="btn btn-maly btn-cichy rozdziel" data-akcja="usun-blok" style="color:var(--blad)">Usuń</button>' +
+      (edycja ? '<button class="btn btn-maly btn-cichy rozdziel" data-akcja="usun-blok" style="color:var(--blad)">Usuń</button>' : "") +
       "</div></div>");
   },
 
@@ -210,6 +218,12 @@ window.WidokPlan = {
     }
     if (akcja === "dzien-wstecz") { this.data = AB.przesunDate(this.data, -1); this.zaznaczony = null; App.render(); }
     if (akcja === "dzien-naprzod") { this.data = AB.przesunDate(this.data, 1); this.zaznaczony = null; App.render(); }
+    // druga linia obrony (akcje edycyjne są też ukryte w renderze)
+    const EDYCYJNE = ["dodaj", "auto-plan", "uloz", "zadania-z-planu", "wyczysc-dzien", "przesun", "usun-blok"];
+    if (EDYCYJNE.includes(akcja) && !Uprawnienia.mozeEdytowac()) {
+      AB.toast("Harmonogram zmienia Właściciel lub kierownik modułu", "blad");
+      return;
+    }
     if (akcja === "dodaj") this._modalDodaj();
     if (akcja === "uloz") this._ulozDzien();
     if (akcja === "nawazki-dnia") this._modalNawazkiDnia();
@@ -346,6 +360,7 @@ window.WidokPlan = {
 
   // zmiana osoby bloku (delegowana z change globalnego)
   zmienOsobe(idBloku, osoba) {
+    if (!Uprawnienia.mozeEdytowac()) return;
     const dzien = Store.dzien(this.data);
     const b = dzien.bloki.find(x => x.id === idBloku);
     if (b) { b.osoba = osoba; Store.zapisz(); App.render(); }
