@@ -27,6 +27,23 @@ Najczęstsze pytanie: *„czy da się postawić AI, które odpowiada z plików w
 
 ---
 
+## 🧭 Portal Alterbake OS (`os/`)
+
+Obok aplikacji, pod `os/index.html` (na GitHub Pages: `…/plan-produkcji-cukiernia/os/`),
+żyje **portal Alterbake OS** — wspólny pulpit wszystkich aplikacji Alterbake na tym
+originie. Portal:
+
+- pokazuje **stan źródeł danych** tego urządzenia (planer, Panel Szkoleniowy,
+  Work Profile, Menu Board) i listę **braków w danych** z linkami do uzupełnienia,
+- **generuje rejestr zespołu** (`alterbake_zespol_v1`) z profili Panelu Szkoleniowego
+  i pozwala nadać prawa KIEROWNIK per moduł — rejestr czyta Command HUD,
+- przyjmuje **zgłoszenia pracowników** (`alterbake_zgloszenia_v1`, log append-only),
+- **eksportuje/importuje PACZKĘ OS** — plik JSON przenoszący wspólne klucze do
+  prywatnego Command HUD i z powrotem (statusy zgłoszeń wracają do pracowników).
+
+Kontrakty i zasady scalania: `alterbake-ai-dashboard/docs/ALTERBAKE-OS.md`.
+Portal jest osobnym plikiem — nie dotyka aplikacji planera.
+
 ## Szybki start
 
 Aplikacja to statyczna strona — **bez instalacji, bez serwera, bez kont**.

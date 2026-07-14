@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Alterbake OS · Portal</title>
+<style>
+/* Tokeny spójne z Planerem (app/css/app.css) — plik samowystarczalny. */
+:root {
+  --tlo: #f7f3ec; --karta: #fffdf9; --atrament: #2b2119; --atrament-2: #5f5344;
+  --wyciszony: #756857; --linia: #e7ded1; --akcent: #b4552d; --akcent-tlo: #f6e3d7;
+  --zloto-tekst: #7c611c; --zielen: #4a7c3a; --zielen-tlo: #e6efe0;
+  --blad: #b03030; --blad-tlo: #f7e2e0;
+  --cien: 0 1px 3px rgba(43,33,25,.08), 0 4px 14px rgba(43,33,25,.06); --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tlo: #171310; --karta: #211c17; --atrament: #f1e9de; --atrament-2: #c4b5a3;
+    --wyciszony: #a89a89; --linia: #372f27; --akcent: #d97a4d; --akcent-tlo: #3a2418;
+    --zloto-tekst: #cfa53f; --zielen: #7fb56b; --zielen-tlo: #24301e;
+    --blad: #e06c6c; --blad-tlo: #3a1f1f; --cien: 0 1px 3px rgba(0,0,0,.4);
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--tlo); color: var(--atrament);
+  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+main { max-width: 760px; margin: 0 auto; padding: 16px 16px 48px; }
+header.top {
+  position: sticky; top: 0; z-index: 10; background: var(--tlo);
+  border-bottom: 1px solid var(--linia);
+  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  display: flex; align-items: baseline; gap: 10px;
+}
+.marka { font-weight: 800; letter-spacing: .04em; }
+.marka span { color: var(--akcent); }
+.pod { font-size: .74rem; color: var(--wyciszony); }
+h2 { font-size: 1.05rem; margin: 22px 0 10px; }
+.karta {
+  background: var(--karta); border: 1px solid var(--linia); border-radius: var(--r);
+  box-shadow: var(--cien); padding: 14px; margin-bottom: 10px;
+}
+.karta .naglowek-k { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.karta .tytul { font-weight: 700; }
+.karta .meta { font-size: .8rem; color: var(--wyciszony); margin-top: 4px; }
+.karta .dane { font-size: .92rem; margin-top: 6px; }
+.tag {
+  font-size: .68rem; font-weight: 700; letter-spacing: .04em; padding: 2px 8px;
+  border-radius: 999px; white-space: nowrap;
+}
+.tag.ok { background: var(--zielen-tlo); color: var(--zielen); }
+.tag.brak { background: var(--blad-tlo); color: var(--blad); }
+.tag.info { background: var(--akcent-tlo); color: var(--akcent); }
+a.link { color: var(--akcent); font-size: .84rem; }
+button {
+  font: inherit; font-size: .84rem; font-weight: 600; cursor: pointer;
+  background: var(--karta); color: var(--atrament);
+  border: 1px solid var(--linia); border-radius: 9px; padding: 7px 12px;
+}
+button.glowny { background: var(--akcent); border-color: var(--akcent); color: #fff; }
+button:disabled { opacity: .5; cursor: default; }
+ul.braki { margin: 6px 0 0; padding-left: 20px; font-size: .9rem; }
+ul.braki li { margin: 4px 0; }
+table { width: 100%; border-collapse: collapse; font-size: .86rem; margin-top: 8px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--linia); }
+th { font-size: .7rem; letter-spacing: .05em; color: var(--wyciszony); }
+.kier { font-size: .7rem; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--linia);
+  background: transparent; color: var(--wyciszony); }
+.kier.on { background: var(--zielen-tlo); color: var(--zielen); border-color: transparent; }
+form.zgl { display: grid; gap: 8px; margin-top: 10px; }
+form.zgl input, form.zgl select, form.zgl textarea {
+  font: inherit; padding: 8px 10px; border: 1px solid var(--linia); border-radius: 9px;
+  background: var(--tlo); color: var(--atrament); width: 100%;
+}
+form.zgl textarea { min-height: 64px; resize: vertical; }
+.wiersz { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.rozdziel { margin-left: auto; }
+#toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  background: var(--atrament); color: var(--tlo); padding: 9px 16px; border-radius: 10px;
+  font-size: .86rem; opacity: 0; transition: opacity .25s; pointer-events: none; max-width: 90vw;
+}
+#toast.widoczny { opacity: 1; }
+.notka { font-size: .8rem; color: var(--wyciszony); margin-top: 8px; }
+.imp-klucz { display: flex; gap: 8px; align-items: baseline; margin: 4px 0; font-size: .88rem; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <div class="marka">ALTERBAKE <span>OS</span></div>
+    <div class="pod">PORTAL · WSPÓLNY ORIGIN GITHUB PAGES · DANE Z TEJ PRZEGLĄDARKI</div>
+  </div>
+  <button class="rozdziel" id="odswiez">ODŚWIEŻ</button>
+</header>
+<main>
+
+<h2>Źródła danych na tym urządzeniu</h2>
+<div id="zrodla"></div>
+
+<h2>Braki w danych</h2>
+<div class="karta">
+  <ul class="braki" id="braki"></ul>
+  <div class="notka">Lista liczona automatycznie z localStorage tej przeglądarki.
+  Każda appka na tym samym originie (alterbakegliwice-afk.github.io) widzi te same klucze.</div>
+</div>
+
+<h2>Rejestr zespołu (dla HUD)</h2>
+<div class="karta">
+  <div class="naglowek-k">
+    <span class="tytul">alterbake_zespol_v1</span>
+    <span class="tag" id="zespolTag"></span>
+    <button class="rozdziel glowny" id="generujZespol">GENERUJ Z PANELU SZKOLENIOWEGO</button>
+  </div>
+  <div class="meta">HUD (moduł ZESPÓŁ) czyta ten rejestr. Pisze go wyłącznie ten portal —
+  na podstawie profili z Panelu Szkoleniowego. Odznacz/zaznacz KIEROWNIK, by nadać prawo
+  edycji harmonogramu w Planerze.</div>
+  <div id="zespolTabela"></div>
+</div>
+
+<h2>Zgłoszenia pracowników</h2>
+<div class="karta">
+  <div class="naglowek-k">
+    <span class="tytul">alterbake_zgloszenia_v1</span>
+    <span class="tag" id="zglTag"></span>
+  </div>
+  <div class="meta">Potrzeby, uwagi i awarie. Treść jest nietykalna (log append-only);
+  status zmienia właściciel w HUD.</div>
+  <div id="zglLista"></div>
+  <form class="zgl" id="zglForm">
+    <div class="wiersz">
+      <input name="imie" placeholder="Kto zgłasza" required maxlength="40" style="flex:1; min-width:140px">
+      <select name="typ">
+        <option value="potrzeba">potrzeba</option>
+        <option value="uwaga">uwaga</option>
+        <option value="awaria">awaria</option>
+      </select>
+    </div>
+    <textarea name="tresc" placeholder="Co zgłaszasz?" required maxlength="500"></textarea>
+    <div class="wiersz"><button class="glowny" type="submit">DODAJ ZGŁOSZENIE</button></div>
+  </form>
+</div>
+
+<h2>Mostek do HUD (Command HUD poza tym originem)</h2>
+<div class="karta">
+  <div class="meta">HUD działa lokalnie (plik / serwer w piekarni), więc nie widzi tego
+  localStorage. Paczka przenosi wspólne klucze w obie strony: pobierz tutaj → wgraj w HUD
+  (ZESPÓŁ → IMPORT PACZKI OS); po decyzjach w HUD pobierz paczkę tam → wgraj tutaj.</div>
+  <div class="wiersz" style="margin-top:10px">
+    <button class="glowny" id="eksportPaczki">POBIERZ PACZKĘ DLA HUD</button>
+    <button id="importPaczkiBtn">WGRAJ PACZKĘ…</button>
+    <input type="file" id="importPaczki" accept="application/json" hidden>
+  </div>
+  <div id="importPodglad"></div>
+</div>
+
+<h2>Aplikacje</h2>
+<div class="karta" id="appki"></div>
+
+</main>
+<div id="toast" role="status"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ── kontrakty kluczy współdzielonych (origin github.io) ── */
+  var K = {
+    planer:     "alterbake_planer_v2",
+    platforma:  "alterbake-platforma-v1",
+    workprofile:"alterbake_work_profile_wyniki_v1",
+    zespol:     "alterbake_zespol_v1",
+    zgloszenia: "alterbake_zgloszenia_v1",
+    stock:      "alterbake-stock-v1"
+  };
+  var BAZA = "https://alterbakegliwice-afk.github.io";
+  var APPKI = [
+    { nazwa: "Planer Produkcji (Cukiernia + Piekarnia)", url: "../app/index.html", pisze: K.planer },
+    { nazwa: "Panel Szkoleniowy", url: BAZA + "/Panel-szkoleniowy/", pisze: K.platforma },
+    { nazwa: "Work Profile · Mapa Potencjału", url: BAZA + "/alterbake-work-profile/", pisze: K.workprofile },
+    { nazwa: "Work Profile · Profil Pracy", url: BAZA + "/alterbake-work-profile/profil-pracy-mvp.html", pisze: K.workprofile },
+    { nazwa: "Menu Board (kiosk iPad)", url: BAZA + "/alterbake-menu-board/", pisze: K.stock }
+  ];
+
+  function czytaj(k) {
+    try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : null; }
+    catch (e) { return null; }
+  }
+  function zapisz(k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); return true; }
+    catch (e) { return false; }
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function dzis() {
+    var d = new Date(), p = function (n) { return String(n).padStart(2, "0"); };
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+  var toastT = null;
+  function toast(t) {
+    var el = document.getElementById("toast");
+    el.textContent = t; el.classList.add("widoczny");
+    clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove("widoczny"); }, 2600);
+  }
+
+  /* ── status źródeł ── */
+  function opisPlaner(p) {
+    if (!p || !p.moduly) return null;
+    var d = dzis(), otwarte = 0, wszystkie = 0;
+    ["cukiernia", "piekarnia"].forEach(function (m) {
+      var mod = p.moduly[m]; if (!mod) return;
+      (mod.zadania || []).forEach(function (z) {
+        if (z.data !== d) return;
+        wszystkie++; if (z.status !== "zrobione") otwarte++;
+      });
+    });
+    return "zadania dziś: " + (wszystkie ? otwarte + " otwartych / " + wszystkie : "brak");
+  }
+  function opisPlatforma(s) {
+    if (!s || !Array.isArray(s.pracownicy)) return null;
+    var realni = s.pracownicy.filter(function (p) {
+      return !/^\(przykład\)/.test(p.imie || "");
+    }).length;
+    return realni + " pracowników · " + (s.wyniki || []).length + " wyników quizów · " +
+      (s.profile || []).length + " profili rozwojowych";
+  }
+  function opisWp(w) {
+    if (!Array.isArray(w) || !w.length) return null;
+    var ostatni = w[w.length - 1] || {};
+    return w.length + " wyników testów · ostatni: " +
+      (ostatni.narzedzie || "?") + " " + String(ostatni.data || "").slice(0, 10);
+  }
+  function opisZespol(r) {
+    if (!r || !Array.isArray(r.pracownicy)) return null;
+    return r.pracownicy.length + " profili · akt. " + String(r.zaktualizowano || "").slice(0, 10);
+  }
+  function opisZgl(z) {
+    if (!z || !Array.isArray(z.zgloszenia)) return null;
+    var nowe = z.zgloszenia.filter(function (x) { return x.status === "nowe"; }).length;
+    return z.zgloszenia.length + " zgłoszeń · " + nowe + " nowych";
+  }
+  function opisStock(s) {
+    if (!s || s.day !== dzis()) return null;
+    var n = Object.keys(s.items || {}).length;
+    return n + " zmian dostępności dziś (na iPadzie przy ladzie)";
+  }
+
+  var ZRODLA = [
+    { klucz: K.planer,      nazwa: "Planer Produkcji",           opis: opisPlaner },
+    { klucz: K.platforma,   nazwa: "Panel Szkoleniowy",          opis: opisPlatforma },
+    { klucz: K.workprofile, nazwa: "Work Profile (testy)",       opis: opisWp },
+    { klucz: K.zespol,      nazwa: "Rejestr zespołu (dla HUD)",  opis: opisZespol },
+    { klucz: K.zgloszenia,  nazwa: "Zgłoszenia pracowników",     opis: opisZgl },
+    { klucz: K.stock,       nazwa: "Menu Board (dostępność)",    opis: opisStock }
+  ];
+
+  function renderZrodla() {
+    var host = document.getElementById("zrodla");
+    host.innerHTML = ZRODLA.map(function (z) {
+      var dane = czytaj(z.klucz);
+      var opis = dane ? z.opis(dane) : null;
+      var jest = opis !== null;
+      return '<div class="karta">' +
+        '<div class="naglowek-k"><span class="tytul">' + esc(z.nazwa) + "</span>" +
+        '<span class="tag ' + (jest ? "ok" : "brak") + '">' + (jest ? "DANE SĄ" : "BRAK") + "</span>" +
+        '<span class="rozdziel meta">' + esc(z.klucz) + "</span></div>" +
+        (jest ? '<div class="dane">' + esc(opis) + "</div>" : "") +
+        "</div>";
+    }).join("");
+  }
+
+  function renderBraki() {
+    var braki = [];
+    if (!czytaj(K.platforma)) braki.push('Załóż profile pracowników: <a class="link" href="' + BAZA + '/Panel-szkoleniowy/">Panel Szkoleniowy → Konfiguracja</a>.');
+    if (!czytaj(K.zespol)) braki.push("Wygeneruj rejestr zespołu dla HUD (przycisk niżej) — bez niego moduł ZESPÓŁ w HUD pokazuje BRAK REJESTRU.");
+    if (!czytaj(K.workprofile)) braki.push('Zrób pierwsze testy: <a class="link" href="' + BAZA + '/alterbake-work-profile/">Mapa Potencjału</a> i <a class="link" href="' + BAZA + '/alterbake-work-profile/profil-pracy-mvp.html">Profil Pracy</a>.');
+    var p = czytaj(K.planer);
+    if (!p) braki.push('Ułóż pierwszy plan dnia w <a class="link" href="../app/index.html">Planerze Produkcji</a>.');
+    else if (opisPlaner(p) === "zadania dziś: brak") braki.push('Brak zadań na dziś w Planerze — <a class="link" href="../app/index.html">rozdziel pracę</a>.');
+    var z = czytaj(K.zgloszenia);
+    if (z && z.zgloszenia && z.zgloszenia.some(function (x) { return x.status === "nowe"; }))
+      braki.push("Nowe zgłoszenia czekają na decyzję — pobierz paczkę i wgraj w HUD.");
+    var host = document.getElementById("braki");
+    host.innerHTML = braki.length
+      ? braki.map(function (b) { return "<li>" + b + "</li>"; }).join("")
+      : "<li>Wszystkie źródła na tym urządzeniu mają dane. ✔</li>";
+  }
+
+  /* ── rejestr zespołu: generacja z Panelu + prawa KIEROWNIK ── */
+  var MODULY_KIER = ["cukiernia", "piekarnia"];
+  function generujZespol() {
+    var s = czytaj(K.platforma);
+    if (!s || !Array.isArray(s.pracownicy) || !s.pracownicy.length) {
+      toast("Najpierw załóż profile w Panelu Szkoleniowym."); return;
+    }
+    var stary = czytaj(K.zespol);
+    var prawa = {};
+    if (stary && Array.isArray(stary.pracownicy))
+      stary.pracownicy.forEach(function (p) { prawa[p.id_prac] = p.kierownik || []; });
+    var rejestr = {
+      wersja: 1,
+      zaktualizowano: new Date().toISOString(),
+      zrodlo: "alterbake-os-portal",
+      pracownicy: s.pracownicy
+        .filter(function (p) { return !/^\(przykład\)/.test(p.imie || ""); })
+        .map(function (p) {
+          return {
+            id_prac: p.id_prac, imie: p.imie, rola: p.rola || "",
+            pin: p.pin || "", kierownik: prawa[p.id_prac] || []
+          };
+        })
+    };
+    if (!rejestr.pracownicy.length) { toast("W Panelu są tylko profile przykładowe."); return; }
+    zapisz(K.zespol, rejestr);
+    toast("Rejestr zespołu zapisany (" + rejestr.pracownicy.length + " profili).");
+    renderWszystko();
+  }
+  function przelaczKierownika(id, modul) {
+    var r = czytaj(K.zespol); if (!r) return;
+    r.pracownicy.forEach(function (p) {
+      if (p.id_prac !== id) return;
+      p.kierownik = p.kierownik || [];
+      var i = p.kierownik.indexOf(modul);
+      if (i >= 0) p.kierownik.splice(i, 1); else p.kierownik.push(modul);
+    });
+    r.zaktualizowano = new Date().toISOString();
+    zapisz(K.zespol, r);
+    renderWszystko();
+  }
+  function renderZespol() {
+    var r = czytaj(K.zespol);
+    var tag = document.getElementById("zespolTag");
+    tag.textContent = r ? r.pracownicy.length + " PROFILI" : "BRAK";
+    tag.className = "tag " + (r ? "ok" : "brak");
+    var host = document.getElementById("zespolTabela");
+    if (!r) { host.innerHTML = ""; return; }
+    host.innerHTML = "<table><thead><tr><th>ID</th><th>IMIĘ</th><th>ROLA</th><th>KIEROWNIK</th></tr></thead><tbody>" +
+      r.pracownicy.map(function (p) {
+        return "<tr><td>" + esc(p.id_prac) + "</td><td>" + esc(p.imie) + "</td><td>" + esc(p.rola) + "</td><td>" +
+          MODULY_KIER.map(function (m) {
+            var on = (p.kierownik || []).indexOf(m) >= 0;
+            return '<button class="kier' + (on ? " on" : "") + '" data-id="' + esc(p.id_prac) +
+              '" data-modul="' + m + '">' + m.toUpperCase() + "</button>";
+          }).join(" ") + "</td></tr>";
+      }).join("") + "</tbody></table>";
+  }
+
+  /* ── zgłoszenia: dodawanie (append-only) + podgląd ── */
+  function dodajZgloszenie(imie, typ, tresc) {
+    var z = czytaj(K.zgloszenia) || { wersja: 1, zgloszenia: [] };
+    z.zgloszenia.push({
+      id: "zg-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7),
+      data: new Date().toISOString(),
+      imie: imie, typ: typ, tresc: tresc, status: "nowe"
+    });
+    zapisz(K.zgloszenia, z);
+  }
+  function renderZgl() {
+    var z = czytaj(K.zgloszenia);
+    var lista = z && z.zgloszenia ? z.zgloszenia : [];
+    var nowe = lista.filter(function (x) { return x.status === "nowe"; }).length;
+    var tag = document.getElementById("zglTag");
+    tag.textContent = lista.length ? nowe + " NOWYCH / " + lista.length : "PUSTO";
+    tag.className = "tag " + (nowe ? "info" : "ok");
+    document.getElementById("zglLista").innerHTML = lista.slice(-5).reverse().map(function (x) {
+      return '<div class="dane">' +
+        '<span class="tag ' + (x.status === "nowe" ? "info" : "ok") + '">' + esc(x.status.toUpperCase()) + "</span> " +
+        "<b>" + esc(x.imie) + "</b> · " + esc(x.typ) + ": " + esc(x.tresc) +
+        (x.odpowiedz ? '<br><span class="meta">↳ ' + esc(x.odpowiedz) + "</span>" : "") +
+        "</div>";
+    }).join("");
+  }
+
+  /* ── paczka OS: eksport/import między originami (HUB ↔ HUD) ── */
+  var RANGA = { nowe: 0, przyjete: 1, zamkniete: 2 };
+  function zbudujPaczke() {
+    var klucze = {};
+    Object.keys(K).forEach(function (n) { klucze[K[n]] = czytaj(K[n]); });
+    return { typ: "alterbake-os-paczka", wersja: "2026-07-14",
+      data: new Date().toISOString(), zrodlo: "portal", klucze: klucze };
+  }
+  function scalZgloszenia(lokalne, zPliku) {
+    var poId = {};
+    (lokalne || []).forEach(function (z) { poId[z.id] = z; });
+    (zPliku || []).forEach(function (z) {
+      var m = poId[z.id];
+      /* treść nietykalna: nowy wpis wchodzi cały; istniejący — tylko status w przód */
+      if (!m) { poId[z.id] = z; return; }
+      if ((RANGA[z.status] || 0) > (RANGA[m.status] || 0)) {
+        m.status = z.status;
+        if (z.odpowiedz !== undefined) m.odpowiedz = z.odpowiedz;
+      }
+    });
+    return Object.keys(poId).map(function (id) { return poId[id]; })
+      .sort(function (a, b) { return String(a.data).localeCompare(String(b.data)); });
+  }
+  function scalWyniki(lokalne, zPliku) {
+    var widziane = {}, razem = [];
+    (lokalne || []).concat(zPliku || []).forEach(function (w) {
+      var k = JSON.stringify(w);
+      if (widziane[k]) return;
+      widziane[k] = true; razem.push(w);
+    });
+    razem.sort(function (a, b) { return String(a.data).localeCompare(String(b.data)); });
+    return razem.slice(-50); /* limit jak w appkach Work Profile */
+  }
+  function importujPaczke(paczka, zaznaczone) {
+    var ile = 0;
+    /* logi append-only scalamy zawsze bezpiecznie */
+    if (paczka.klucze[K.zgloszenia]) {
+      var lok = czytaj(K.zgloszenia) || { wersja: 1, zgloszenia: [] };
+      lok.zgloszenia = scalZgloszenia(lok.zgloszenia, paczka.klucze[K.zgloszenia].zgloszenia);
+      zapisz(K.zgloszenia, lok); ile++;
+    }
+    if (paczka.klucze[K.workprofile]) {
+      zapisz(K.workprofile, scalWyniki(czytaj(K.workprofile), paczka.klucze[K.workprofile])); ile++;
+    }
+    if (paczka.klucze[K.zespol]) {
+      var lokR = czytaj(K.zespol), plikR = paczka.klucze[K.zespol];
+      if (!lokR || String(plikR.zaktualizowano) > String(lokR.zaktualizowano)) { zapisz(K.zespol, plikR); ile++; }
+    }
+    /* stany całościowe tylko za zgodą (checkbox) — zastępują, nie scalają */
+    [K.planer, K.platforma, K.stock].forEach(function (k) {
+      if (zaznaczone[k] && paczka.klucze[k]) { zapisz(k, paczka.klucze[k]); ile++; }
+    });
+    return ile;
+  }
+  function pokazImport(paczka) {
+    var host = document.getElementById("importPodglad");
+    var pelne = [K.planer, K.platforma, K.stock].filter(function (k) { return paczka.klucze[k]; });
+    host.innerHTML = '<div class="notka">Paczka z ' + esc(String(paczka.data).slice(0, 16).replace("T", " ")) +
+      " (źródło: " + esc(paczka.zrodlo || "?") + "). Logi (zgłoszenia, wyniki testów, rejestr) scalę bezpiecznie. " +
+      (pelne.length ? "Stany całościowe zastąpią lokalne — zaznacz, które wgrać:" : "") + "</div>" +
+      pelne.map(function (k) {
+        var mamy = !!czytaj(k);
+        return '<label class="imp-klucz"><input type="checkbox" data-imp="' + esc(k) + '"' + (mamy ? "" : " checked") + "> " +
+          esc(k) + (mamy ? ' <span class="meta">(lokalnie już są dane — zastąpić?)</span>' : ' <span class="meta">(lokalnie brak)</span>') + "</label>";
+      }).join("") +
+      '<div class="wiersz" style="margin-top:8px"><button class="glowny" id="importOk">WGRAJ</button>' +
+      ' <button id="importAnuluj">ANULUJ</button></div>';
+    document.getElementById("importOk").onclick = function () {
+      var zazn = {};
+      host.querySelectorAll("[data-imp]").forEach(function (c) { zazn[c.dataset.imp] = c.checked; });
+      var ile = importujPaczke(paczka, zazn);
+      host.innerHTML = "";
+      toast("Wgrano paczkę (" + ile + " kluczy)."); renderWszystko();
+    };
+    document.getElementById("importAnuluj").onclick = function () { host.innerHTML = ""; };
+  }
+
+  function renderAppki() {
+    document.getElementById("appki").innerHTML = APPKI.map(function (a) {
+      return '<div class="wiersz" style="padding:5px 0"><a class="link" href="' + a.url + '">' +
+        esc(a.nazwa) + '</a><span class="rozdziel meta">' + esc(a.pisze) + "</span></div>";
+    }).join("");
+  }
+
+  function renderWszystko() {
+    renderZrodla(); renderBraki(); renderZespol(); renderZgl(); renderAppki();
+  }
+
+  /* ── zdarzenia ── */
+  document.getElementById("odswiez").addEventListener("click", function () {
+    renderWszystko(); toast("Odświeżono.");
+  });
+  document.getElementById("generujZespol").addEventListener("click", generujZespol);
+  document.getElementById("zespolTabela").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-modul]");
+    if (b) przelaczKierownika(b.dataset.id, b.dataset.modul);
+  });
+  document.getElementById("zglForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target;
+    dodajZgloszenie(f.imie.value.trim(), f.typ.value, f.tresc.value.trim());
+    f.reset(); toast("Zgłoszenie dodane."); renderWszystko();
+  });
+  document.getElementById("eksportPaczki").addEventListener("click", function () {
+    var blob = new Blob([JSON.stringify(zbudujPaczke(), null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "alterbake_os_paczka_" + dzis() + ".json";
+    a.click(); URL.revokeObjectURL(a.href);
+    toast("Paczka pobrana — wgraj ją w HUD.");
+  });
+  document.getElementById("importPaczkiBtn").addEventListener("click", function () {
+    document.getElementById("importPaczki").click();
+  });
+  document.getElementById("importPaczki").addEventListener("change", function (e) {
+    var plik = e.target.files[0]; e.target.value = "";
+    if (!plik) return;
+    plik.text().then(function (t) {
+      var p;
+      try { p = JSON.parse(t); } catch (err) { toast("To nie jest poprawny JSON."); return; }
+      if (!p || p.typ !== "alterbake-os-paczka" || !p.klucze) { toast("To nie jest paczka Alterbake OS."); return; }
+      pokazImport(p);
+    });
+  });
+  window.addEventListener("focus", renderWszystko);
+
+  renderWszystko();
+})();
+</script>
+</body>
+</html>
