@@ -175,14 +175,33 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
     zgloszenia: "alterbake_zgloszenia_v1",
     stock:      "alterbake-stock-v1"
   };
+  /* Dwa originy: GitHub Pages (appki w osobnych repo) i HA Green /local/
+     (bundle z tools/build-hagreen.mjs — appki w katalogach obok os/). */
   var BAZA = "https://alterbakegliwice-afk.github.io";
+  var NA_GITHUB = /\.github\.io$/.test(location.hostname);
+  var L = NA_GITHUB ? {
+    planer: "../app/index.html",
+    panel: BAZA + "/Panel-szkoleniowy/",
+    mapa: BAZA + "/alterbake-work-profile/",
+    profil: BAZA + "/alterbake-work-profile/profil-pracy-mvp.html",
+    menu: BAZA + "/alterbake-menu-board/",
+    hud: null /* HUD jest prywatny — nie ma go na github.io */
+  } : {
+    planer: "../planer/app/index.html",
+    panel: "../panel/",
+    mapa: "../work-profile/index.html",
+    profil: "../work-profile/profil-pracy-mvp.html",
+    menu: "../menu/",
+    hud: "../hud/"
+  };
   var APPKI = [
-    { nazwa: "Planer Produkcji (Cukiernia + Piekarnia)", url: "../app/index.html", pisze: K.planer },
-    { nazwa: "Panel Szkoleniowy", url: BAZA + "/Panel-szkoleniowy/", pisze: K.platforma },
-    { nazwa: "Work Profile · Mapa Potencjału", url: BAZA + "/alterbake-work-profile/", pisze: K.workprofile },
-    { nazwa: "Work Profile · Profil Pracy", url: BAZA + "/alterbake-work-profile/profil-pracy-mvp.html", pisze: K.workprofile },
-    { nazwa: "Menu Board (kiosk iPad)", url: BAZA + "/alterbake-menu-board/", pisze: K.stock }
+    { nazwa: "Planer Produkcji (Cukiernia + Piekarnia)", url: L.planer, pisze: K.planer },
+    { nazwa: "Panel Szkoleniowy", url: L.panel, pisze: K.platforma },
+    { nazwa: "Work Profile · Mapa Potencjału", url: L.mapa, pisze: K.workprofile },
+    { nazwa: "Work Profile · Profil Pracy", url: L.profil, pisze: K.workprofile },
+    { nazwa: "Menu Board (kiosk iPad)", url: L.menu, pisze: K.stock }
   ];
+  if (L.hud) APPKI.unshift({ nazwa: "Command HUD (konsola właściciela)", url: L.hud, pisze: "czyta wszystkie klucze" });
 
   function czytaj(k) {
     try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : null; }
