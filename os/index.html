@@ -404,9 +404,12 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
       data: new Date().toISOString(), zrodlo: "portal", klucze: klucze };
   }
   function scalZgloszenia(lokalne, zPliku) {
+    /* wejście z pliku jest niezaufane: nie-tablica → pusta, wpis bez id → pomiń */
+    var tab = function (x) { return Array.isArray(x) ? x : []; };
     var poId = {};
-    (lokalne || []).forEach(function (z) { poId[z.id] = z; });
-    (zPliku || []).forEach(function (z) {
+    tab(lokalne).forEach(function (z) { if (z && z.id) poId[z.id] = z; });
+    tab(zPliku).forEach(function (z) {
+      if (!z || !z.id) return;
       var m = poId[z.id];
       /* treść nietykalna: nowy wpis wchodzi cały; istniejący — tylko status w przód */
       if (!m) { poId[z.id] = z; return; }
@@ -419,8 +422,9 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
       .sort(function (a, b) { return String(a.data).localeCompare(String(b.data)); });
   }
   function scalWyniki(lokalne, zPliku) {
+    var tab = function (x) { return Array.isArray(x) ? x : []; };
     var widziane = {}, razem = [];
-    (lokalne || []).concat(zPliku || []).forEach(function (w) {
+    tab(lokalne).concat(tab(zPliku)).forEach(function (w) {
       var k = JSON.stringify(w);
       if (widziane[k]) return;
       widziane[k] = true; razem.push(w);
@@ -465,7 +469,9 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
     document.getElementById("importOk").onclick = function () {
       var zazn = {};
       host.querySelectorAll("[data-imp]").forEach(function (c) { zazn[c.dataset.imp] = c.checked; });
-      var ile = importujPaczke(paczka, zazn);
+      var ile;
+      try { ile = importujPaczke(paczka, zazn); }
+      catch (err) { host.innerHTML = ""; toast("Paczka uszkodzona — nic nie wgrano."); return; }
       host.innerHTML = "";
       toast("Wgrano paczkę (" + ile + " kluczy)."); renderWszystko();
     };
