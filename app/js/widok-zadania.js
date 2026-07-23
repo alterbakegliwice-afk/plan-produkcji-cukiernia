@@ -5,6 +5,8 @@ window.WidokZadania = {
   render(el) {
     const zespol = Store.stan.ustawienia.zespol;
     const zadania = Store.stan.zadania.filter(z => z.data === this.data);
+    // delegowanie tylko dla Właściciela/kierownika; pracownik odhacza WŁASNE zadania
+    const edycja = Uprawnienia.mozeEdytowac();
 
     let html = '<div class="rzad" style="margin-bottom:10px">' +
       '<button class="btn btn-ikona" data-akcja="wstecz">‹</button>' +
@@ -12,9 +14,11 @@ window.WidokZadania = {
       '<div class="wyciszony maly">zadania zespołu</div></div>' +
       '<button class="btn btn-ikona" data-akcja="naprzod">›</button></div>';
 
-    html += '<div class="rzad" style="margin-bottom:12px">' +
-      '<button class="btn btn-glowny" data-akcja="szablon">+ Z szablonu</button>' +
-      '<button class="btn" data-akcja="wlasne">+ Własne</button></div>';
+    html += edycja
+      ? '<div class="rzad" style="margin-bottom:12px">' +
+        '<button class="btn btn-glowny" data-akcja="szablon">+ Z szablonu</button>' +
+        '<button class="btn" data-akcja="wlasne">+ Własne</button></div>'
+      : '<p class="wyciszony maly" style="margin-bottom:12px">👁 Podgląd — zadania deleguje Właściciel lub kierownik. Odhaczasz tylko swoje.</p>';
 
     for (const os of zespol) {
       const moje = zadania.filter(z => z.osoba === os.id);
@@ -29,13 +33,17 @@ window.WidokZadania = {
         html += '<div class="ostrzezenie">⚠️ Przeciążenie: ' + AB.min(otwarteMin) + " zadań przy zmianie " + AB.min(zmiana) + ".</div>";
       if (!moje.length) html += '<p class="wyciszony maly" style="margin:8px 0 0">Brak zadań.</p>';
       for (const z of moje) {
+        const mogeOdhaczyc = edycja || Uprawnienia.czyMojeZadanie(z);
         html += '<div class="zadanie ' + (z.status === "zrobione" ? "zrobione" : "") + '">' +
-          '<input type="checkbox" data-zadanie="' + z.id + '" ' + (z.status === "zrobione" ? "checked" : "") + ">" +
+          '<input type="checkbox" data-zadanie="' + z.id + '" ' + (z.status === "zrobione" ? "checked" : "") +
+          (mogeOdhaczyc ? "" : " disabled") + ">" +
           '<div class="tresc" style="flex:1"><div>' + AB.esc(z.tytul) + "</div>" +
           '<div class="wyciszony maly">' + (z.czas_min ? "~" + AB.min(z.czas_min) : "") +
           (z.zrodlo ? " · " + AB.esc(z.zrodlo) : "") + "</div></div>" +
-          '<button class="btn btn-maly btn-cichy" data-przenies="' + z.id + '" title="przenieś do innej osoby">⇄</button>' +
-          '<button class="btn btn-maly btn-cichy" data-usun="' + z.id + '" style="color:var(--blad)">✕</button></div>';
+          (edycja
+            ? '<button class="btn btn-maly btn-cichy" data-przenies="' + z.id + '" title="przenieś do innej osoby">⇄</button>' +
+              '<button class="btn btn-maly btn-cichy" data-usun="' + z.id + '" style="color:var(--blad)">✕</button>'
+            : "") + "</div>";
       }
       html += "</div>";
     }
@@ -49,7 +57,13 @@ window.WidokZadania = {
       const id = e.target.dataset.zadanie;
       if (id) {
         const z = Store.stan.zadania.find(x => x.id === id);
-        if (z) { z.status = e.target.checked ? "zrobione" : "otwarte"; Store.zapisz(); App.render(); }
+        if (!z) return;
+        if (!Uprawnienia.mozeEdytowac() && !Uprawnienia.czyMojeZadanie(z)) {
+          AB.toast("Odhaczasz tylko własne zadania", "blad");
+          App.render();
+          return;
+        }
+        z.status = e.target.checked ? "zrobione" : "otwarte"; Store.zapisz(); App.render();
       }
     });
   },
@@ -57,6 +71,13 @@ window.WidokZadania = {
   _klik(e) {
     const cel = e.target.closest("[data-akcja],[data-usun],[data-przenies]");
     if (!cel) return;
+    // druga linia obrony (akcje delegowania są też ukryte w renderze)
+    const edycyjne = cel.dataset.usun || cel.dataset.przenies ||
+      cel.dataset.akcja === "szablon" || cel.dataset.akcja === "wlasne";
+    if (edycyjne && !Uprawnienia.mozeEdytowac()) {
+      AB.toast("Zadania deleguje Właściciel lub kierownik modułu", "blad");
+      return;
+    }
     if (cel.dataset.usun) {
       Store.stan.zadania = Store.stan.zadania.filter(z => z.id !== cel.dataset.usun);
       Store.zapisz(); App.render(); return;

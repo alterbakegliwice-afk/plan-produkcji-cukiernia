@@ -56,7 +56,10 @@
       nazwa: String((os && os.nazwa) || "Osoba " + (i + 1)).slice(0, 40),
       rola: (os && os.rola) === "szef" ? "szef" : "pomoc",
       od: CZAS_RE.test(os && os.od) ? os.od : "07:00",
-      do: CZAS_RE.test(os && os.do) ? os.do : "14:00"
+      do: CZAS_RE.test(os && os.do) ? os.do : "14:00",
+      // powiązanie z profilem pracownika z Panelu Szkoleniowego (rejestr
+      // alterbake_zespol_v1) — podstawa widoku „Mój dzień" i własności zadań
+      id_prac: typeof (os && os.id_prac) === "string" ? os.id_prac : ""
     }));
     for (const key of ["zadania", "inspiracje", "czat"]) if (!Array.isArray(s[key])) s[key] = [];
     if (!s.plan || typeof s.plan !== "object") s.plan = {};

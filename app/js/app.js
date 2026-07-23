@@ -23,6 +23,15 @@ window.App = {
         WidokPlan.zmienOsobe(WidokPlan.zaznaczony, e.target.value);
       }
     });
+    // gating uprawnień: gdy Panel Szkoleniowy wystawił rejestr zespołu,
+    // wejście wymaga wyboru profilu (PIN, jeśli ustawiony)
+    if (Uprawnienia.aktywne()) {
+      const prawa = document.querySelector(".prawa");
+      const wyjdz = AB.el('<button class="btn btn-ikona btn-cichy" id="btn-wyloguj" aria-label="zmień profil">👤</button>');
+      wyjdz.addEventListener("click", () => Uprawnienia.wyloguj());
+      prawa.insertBefore(wyjdz, prawa.firstChild);
+      if (!Uprawnienia.sesja()) Uprawnienia.ekranLogowania(() => this.render());
+    }
     this.render();
     if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
       navigator.serviceWorker.register("sw.js").catch(() => {});
@@ -55,6 +64,13 @@ window.App = {
     const btn = document.querySelector("#btn-modul");
     // ikona pokazuje moduł, DO którego przełączysz
     if (btn) btn.textContent = Store.modul() === "cukiernia" ? "🥖" : "🍰";
+    const pod = document.querySelector(".pod");
+    if (pod && Uprawnienia.aktywne()) {
+      const kto = Uprawnienia.opisSesji();
+      pod.textContent = kto
+        ? kto + (Uprawnienia.mozeEdytowac() ? " · edycja" : " · podgląd")
+        : "planer produkcji · stara piekarnia na nowo";
+    }
   },
 
   render() {
@@ -76,16 +92,30 @@ window.App = {
   },
 
   ustawienia() {
+    if (!Uprawnienia.mozeEdytowac()) {
+      AB.toast("Ustawienia zmienia Właściciel lub kierownik modułu", "blad");
+      return;
+    }
     const u = Store.stan.ustawienia;
+    const rejestr = Uprawnienia.listaRejestru();
+    const wyborProfilu = (os, i) => {
+      if (!rejestr.length) return "";
+      return '<select data-prac="' + i + '" style="width:auto;min-height:30px;padding:2px 6px;font-size:.85em">' +
+        '<option value="">— bez profilu —</option>' +
+        rejestr.map(p => '<option value="' + AB.esc(p.id_prac) + '"' + (os.id_prac === p.id_prac ? " selected" : "") + ">" +
+          AB.esc(p.imie) + "</option>").join("") + "</select>";
+    };
     const m = AB.el('<div class="modal-tlo"><div class="modal"><h2>⚙️ Ustawienia</h2>' +
       '<h3>Dzień pracy</h3><div class="rzad">' +
       '<label class="pole" style="flex:1"><span>Start</span><input type="time" id="u-od" value="' + AB.esc(u.dzienOd) + '"></label>' +
       '<label class="pole" style="flex:1"><span>Koniec</span><input type="time" id="u-do" value="' + AB.esc(u.dzienDo) + '"></label></div>' +
       "<h3>Zespół</h3>" +
+      (rejestr.length ? '<p class="maly wyciszony">Powiąż osoby z profilami z Panelu Szkoleniowego — wtedy pracownik zobaczy swoje zadania i plan w aplikacji pracownika („Mój dzień").</p>' : "") +
       u.zespol.map((os, i) =>
         '<div class="rzad" style="margin-bottom:6px"><b style="width:70px">' + AB.esc(os.nazwa) + "</b>" +
         '<input type="time" data-zm="od" data-i="' + i + '" value="' + AB.esc(os.od) + '" style="width:auto">–' +
-        '<input type="time" data-zm="do" data-i="' + i + '" value="' + AB.esc(os.do) + '" style="width:auto"></div>').join("") +
+        '<input type="time" data-zm="do" data-i="' + i + '" value="' + AB.esc(os.do) + '" style="width:auto">' +
+        wyborProfilu(os, i) + "</div>").join("") +
       '<h3 style="margin-top:14px">Sous Chef online (opcjonalnie)</h3>' +
       '<p class="maly wyciszony">Tryb lokalny działa bez internetu. Tryb online łączy się z Claude API — potrzebny własny klucz z console.anthropic.com. Klucz zostaje tylko w tym telefonie (localStorage). Uwaga: klucz w przeglądarce jest widoczny dla każdego z dostępem do urządzenia — używaj klucza z niskim limitem wydatków.</p>' +
       '<label class="pole"><span>Klucz API</span><input type="password" id="u-klucz" value="' + AB.esc(u.apiKey || "") + '" placeholder="sk-ant-…"></label>' +
@@ -109,6 +139,10 @@ window.App = {
         m.querySelectorAll("[data-zm]").forEach(inp => {
           const os = u.zespol[Number(inp.dataset.i)];
           if (os && inp.value) os[inp.dataset.zm] = inp.value;
+        });
+        m.querySelectorAll("select[data-prac]").forEach(sel => {
+          const os = u.zespol[Number(sel.dataset.prac)];
+          if (os) os.id_prac = sel.value;
         });
         u.apiKey = m.querySelector("#u-klucz").value.trim();
         u.trybOnline = m.querySelector("#u-online").checked;
