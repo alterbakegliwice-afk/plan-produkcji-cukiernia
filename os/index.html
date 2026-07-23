@@ -112,11 +112,12 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
   <div class="naglowek-k">
     <span class="tytul">alterbake_zespol_v1</span>
     <span class="tag" id="zespolTag"></span>
-    <button class="rozdziel glowny" id="generujZespol">GENERUJ Z PANELU SZKOLENIOWEGO</button>
+    <button class="rozdziel glowny" id="generujZespol">GENERUJ AWARYJNIE Z PANELU</button>
   </div>
-  <div class="meta">HUD (moduł ZESPÓŁ) czyta ten rejestr. Pisze go wyłącznie ten portal —
-  na podstawie profili z Panelu Szkoleniowego. Odznacz/zaznacz KIEROWNIK, by nadać prawo
-  edycji harmonogramu w Planerze.</div>
+  <div class="meta">HUD (moduł ZESPÓŁ) i Planer czytają ten rejestr. Właścicielem klucza
+  jest Panel Szkoleniowy (lustro pracowników przy każdym zapisie stanu — SPEC §2).
+  Portal generuje rejestr tylko awaryjnie, gdy lustra Panelu jeszcze nie ma na tym
+  urządzeniu, i nigdy go nie nadpisuje.</div>
   <div id="zespolTabela"></div>
 </div>
 
@@ -296,7 +297,7 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
   function renderBraki() {
     var braki = [];
     if (!czytaj(K.platforma)) braki.push('Załóż profile pracowników: <a class="link" href="' + BAZA + '/Panel-szkoleniowy/">Panel Szkoleniowy → Konfiguracja</a>.');
-    if (!czytaj(K.zespol)) braki.push("Wygeneruj rejestr zespołu dla HUD (przycisk niżej) — bez niego moduł ZESPÓŁ w HUD pokazuje BRAK REJESTRU.");
+    if (!czytaj(K.zespol)) braki.push('Brak rejestru zespołu — zapisz stan w <a class="link" href="' + BAZA + '/Panel-szkoleniowy/">Panelu Szkoleniowym</a> (Panel tworzy lustro automatycznie) albo wygeneruj awaryjnie przyciskiem niżej.');
     if (!czytaj(K.workprofile)) braki.push('Zrób pierwsze testy: <a class="link" href="' + BAZA + '/alterbake-work-profile/">Mapa Potencjału</a> i <a class="link" href="' + BAZA + '/alterbake-work-profile/profil-pracy-mvp.html">Profil Pracy</a>.');
     var p = czytaj(K.planer);
     if (!p) braki.push('Ułóż pierwszy plan dnia w <a class="link" href="../app/index.html">Planerze Produkcji</a>.');
@@ -310,9 +311,18 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
       : "<li>Wszystkie źródła na tym urządzeniu mają dane. ✔</li>";
   }
 
-  /* ── rejestr zespołu: generacja z Panelu + prawa KIEROWNIK ── */
+  /* ── rejestr zespołu ──
+     WŁAŚCICIELEM klucza jest Panel Szkoleniowy (SPEC §2: „pisze WYŁĄCZNIE
+     Panel" — lustro zapisywane przy każdym zapisie stanu). Portal generuje
+     rejestr TYLKO awaryjnie, gdy lustra Panelu jeszcze nie ma na tym
+     urządzeniu; lustra Panelu nigdy nie nadpisuje. */
   var MODULY_KIER = ["cukiernia", "piekarnia"];
+  function rejestrPanelu(r) { return !!r && r.zrodlo !== "alterbake-os-portal"; }
   function generujZespol() {
+    var istnieje = czytaj(K.zespol);
+    if (rejestrPanelu(istnieje)) {
+      toast("Rejestr prowadzi Panel Szkoleniowy — portal go nie nadpisuje."); return;
+    }
     var s = czytaj(K.platforma);
     if (!s || !Array.isArray(s.pracownicy) || !s.pracownicy.length) {
       toast("Najpierw załóż profile w Panelu Szkoleniowym."); return;
@@ -353,9 +363,13 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
   }
   function renderZespol() {
     var r = czytaj(K.zespol);
+    var panelOwner = rejestrPanelu(r);
     var tag = document.getElementById("zespolTag");
-    tag.textContent = r ? r.pracownicy.length + " PROFILI" : "BRAK";
+    tag.textContent = r ? r.pracownicy.length + " PROFILI" + (panelOwner ? " · PANEL" : " · AWARYJNY") : "BRAK";
     tag.className = "tag " + (r ? "ok" : "brak");
+    /* generator i przełączniki KIEROWNIK tylko dla rejestru awaryjnego —
+       lustrem Panelu (w tym prawami kierownika) zarządza Panel (Konfiguracja) */
+    document.getElementById("generujZespol").hidden = panelOwner;
     var host = document.getElementById("zespolTabela");
     if (!r) { host.innerHTML = ""; return; }
     host.innerHTML = "<table><thead><tr><th>ID</th><th>IMIĘ</th><th>ROLA</th><th>KIEROWNIK</th></tr></thead><tbody>" +
@@ -363,19 +377,29 @@ form.zgl textarea { min-height: 64px; resize: vertical; }
         return "<tr><td>" + esc(p.id_prac) + "</td><td>" + esc(p.imie) + "</td><td>" + esc(p.rola) + "</td><td>" +
           MODULY_KIER.map(function (m) {
             var on = (p.kierownik || []).indexOf(m) >= 0;
+            if (panelOwner) return on ? '<span class="kier on">' + m.toUpperCase() + "</span>" : "";
             return '<button class="kier' + (on ? " on" : "") + '" data-id="' + esc(p.id_prac) +
               '" data-modul="' + m + '">' + m.toUpperCase() + "</button>";
           }).join(" ") + "</td></tr>";
-      }).join("") + "</tbody></table>";
+      }).join("") + "</tbody></table>" +
+      (panelOwner ? '<div class="notka">Rejestrem (w tym prawami KIEROWNIK) zarządza Panel Szkoleniowy — Konfiguracja.</div>' : "");
   }
 
   /* ── zgłoszenia: dodawanie (append-only) + podgląd ── */
   function dodajZgloszenie(imie, typ, tresc) {
     var z = czytaj(K.zgloszenia) || { wersja: 1, zgloszenia: [] };
+    /* kształt wg SPEC-APLIKACJA-PRACOWNIKA §2 (filtrujZgloszenia w Panelu
+       wymaga pól id_prac i odpowiedz jako stringów — bez nich wpis znika
+       z UI Panelu); id_prac dobieramy z rejestru po imieniu, gdy się da */
+    var rej = czytaj(K.zespol);
+    var os = rej && rej.pracownicy && rej.pracownicy.find(function (p) {
+      return (p.imie || "").toLowerCase() === imie.toLowerCase();
+    });
     z.zgloszenia.push({
       id: "zg-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7),
+      id_prac: os ? os.id_prac : "",
       data: new Date().toISOString(),
-      imie: imie, typ: typ, tresc: tresc, status: "nowe"
+      imie: imie, typ: typ, tresc: tresc, status: "nowe", odpowiedz: ""
     });
     zapisz(K.zgloszenia, z);
   }
