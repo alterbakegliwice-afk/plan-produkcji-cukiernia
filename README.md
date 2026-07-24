@@ -1,5 +1,12 @@
 # 🥐 Alterbake · Planer Produkcji
 
+> **⚠️ ZMIGROWANO DO MONOREPO ALTERBAKE OS (2026-07-24).**
+> Kod tego repozytorium żyje teraz w `alterbake-ai-dashboard` w katalogu `apps/planer/` (aplikacja) i `apps/os/` (portal OS)
+> (gałąź konsolidacyjna `claude/alterbake-routing-consolidation-lfze3v`; po scaleniu — `main`),
+> pod wspólną powłoką z routingiem `#/`. Tam prowadź dalszy rozwój — to repozytorium
+> pozostaje archiwum historii sprzed konsolidacji.
+
+
 Mobilne narzędzie do planowania produkcji dla **Alterbake S.C.** (Gliwice, „stara piekarnia na nowo”) — w **dwóch modułach**:
 
 - 🍰 **Cukiernia** (Oliwia) — 18 produktów C-001…C-018, skalowanie partiami
